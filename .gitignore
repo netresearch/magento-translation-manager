@@ -7,8 +7,8 @@ nbproject
 .project
 .settings
 .directory
-composer.lock
-vendor/
-test/
+composer.phar
+/vendor/
+/test/
 /public/export/
 /config/autoload/db.local.php
