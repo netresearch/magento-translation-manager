@@ -35,7 +35,7 @@ class AjaxController extends Base {
             'new_state' => null,
         );
         $translationId = (int)$this->params()->fromPost('translation_id');
-        $translation = $this->getResourceTranslation()->getTranslation($translationId);
+        $translation = $this->_translationTable->getTranslation($translationId);
         if (false === $translation) {
             // translation does not exist
 
@@ -44,7 +44,7 @@ class AjaxController extends Base {
         }
 
         $translation->setUnclearTranslation(!$translation->getUnclearTranslation());
-        $success = $this->getResourceTranslation()->saveTranslation($translation);
+        $success = $this->_translationTable->saveTranslation($translation);
 
         if (false === $success) {
             // error saving translation

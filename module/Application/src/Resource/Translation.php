@@ -1,7 +1,6 @@
 <?php
 namespace Application\Resource;
 
-use Application\Controller\IndexController;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Expression;
@@ -9,6 +8,7 @@ use Zend\Db\ResultSet\ResultSet;
 use Application\Model;
 
 class Translation extends Base {
+    const DEFAULT_ENTRIES_PER_PAGE = 100;
 
     protected $table = 'translation';
 
@@ -49,86 +49,127 @@ class Translation extends Base {
     }
 
     /**
-     * count translations with given filter
+     * Count translations with given filte.r
      *
-     * @param string $locale - locale to select
-     * @param string|null $file - file to select (null = all files)
-     * @param boolean $filterUnclear - filter only unclear translations
-     * @return int - number of translations with this filter
+     * @param string      $locale        Locale to select
+     * @param string|null $file          File to select (null = all files)
+     * @param boolean     $filterUnclear Filter only unclear translations
+     *
+     * @return int Number of translations with this filter
      */
-    public function countByLanguageAndFile($locale, $file = null, $filterUnclear = false)
-    {
+    public function countByLanguageAndFile(
+        $locale,
+        $file          = null,
+        $filterUnclear = false
+    ) {
         // prepare base query
-        $sql = new Sql($this->getAdapter());
-        $select = $sql->select($this->table);
-        $select = $this->prepareSqlByLanguageAndFile($select, $locale, $file, $filterUnclear);
+        $sql    = new Sql($this->getAdapter());
+        $select = $sql->select(' ')
+            ->columns([
+                'total' => new Expression('FOUND_ROWS()'),
+            ]);
 
-        // add count
-        $select->reset('columns')->columns(array('count' => new Expression('COUNT(*)')));
+        // Update the select statement specification so that we don't incorporate the FROM clause
+        $select->setSpecification(Select::SELECT, array(
+            'SELECT %1$s' => array(
+                array(1 => '%1$s', 2 => '%1$s AS %2$s', 'combinedby' => ', '),
+                null
+            )
+        ));
 
-        $statement  = $sql->prepareStatementForSqlObject($select);
-        $resultSet = $statement->execute();
+        $statement = $sql->prepareStatementForSqlObject($select);
+        $result    = $statement->execute();
 
-        $result = $resultSet->current();
+        return (int) ($result->current())['total'];
 
-        return (int)$result['count'];
+//         $select = $sql->select($this->table);
+//         $select = $this->prepareSqlByLanguageAndFile($select, $locale, $file, $filterUnclear);
+
+//         // add count
+//         $select->reset('columns')->columns(array('count' => new Expression('COUNT(*)')));
+
+//         $statement  = $sql->prepareStatementForSqlObject($select);
+//         $resultSet = $statement->execute();
+
+//         $result = $resultSet->current();
+
+//         return (int)$result['count'];
     }
 
-
     /**
-     * search all translations by given locale and file
+     * Search all translations by given locale and file.
      *
-     * @param string $locale - locale to select
-     * @param string|null $file - file to select (null = all files)
-     * @param boolean $filterUnclear - filter only unclear translations
-     * @param int|null $elementsPerPage - entries to show per page (null = all entries)
-     * @param int $page - page to show
+     * @param string      $locale          Locale to select
+     * @param string|null $file            File to select (null = all files)
+     * @param boolean     $filterUnclear   Filter only unclear translations
+     * @param int|null    $elementsPerPage Entries to show per page (null = all entries)
+     * @param int         $page            Page to show
+     *
      * @return Model\Translation[]
      */
-    public function fetchByLanguageAndFile($locale, $file = null, $filterUnclear = false, $elementsPerPage = IndexController::DEFAULT_ENTRIES_PER_PAGE, $page = 1)
-    {
+    public function fetchByLanguageAndFile(
+        $locale,
+        $file            = null,
+        $filterUnclear   = false,
+        $elementsPerPage = self::DEFAULT_ENTRIES_PER_PAGE,
+        $page            = 1
+    ) {
         $sql = new Sql($this->getAdapter());
+
         $select = $sql->select($this->table);
+        $select->quantifier(new Expression('SQL_CALC_FOUND_ROWS'));
+
         $select = $this->prepareSqlByLanguageAndFile($select, $locale, $file, $filterUnclear);
 
         if (null !== $elementsPerPage) {
             // react to pagination
-            $select->limit((int)$elementsPerPage)->offset(($page - 1) * $elementsPerPage);
+            $select->limit((int) $elementsPerPage)
+                ->offset(($page - 1) * $elementsPerPage);
         }
 
-        $statement  = $sql->prepareStatementForSqlObject($select);
-
+        $statement = $sql->prepareStatementForSqlObject($select);
         $resultSet = $statement->execute();
-        //$entities = $this->_prepareCollection($resultSet);
+
+        /*
+
+        SELECT SQL_CALC_FOUND_ROWS `translation`.*, `translation_base`.*
+          FROM `translation`
+    RIGHT JOIN `translation_base` ON translation.base_id = translation_base.base_id
+           AND (locale = 'de_DE' OR locale IS NULL)
+         ORDER BY `translation_id` ASC
+         LIMIT 10
+
+        */
+
         $entities = array();
-        foreach ($resultSet as $row) {
-            $entities[] = $row;
+        while ($resultSet->valid()) {
+            $entities[] = $resultSet->current();
+            $resultSet->next();
         }
 
         return $entities;
     }
 
     /**
-     * prepare base SQL for grid filtered by language and file
+     * Prepare base SQL for grid filtered by language and file.
      *
-     * @param Select $select - empty Select object
-     * @param string $locale - locale to filter
-     * @param string|null $file - filename to filter
-     * @param bool $filterUnclear - filter only unclear translations
-     * @return Select - prepared query
+     * @param Select      $select        Empty Select object
+     * @param string      $locale        Locale to filter
+     * @param string|null $file          Filename to filter
+     * @param bool        $filterUnclear Filter only unclear translations
+     *
+     * @return Select Prepared query
      */
     protected function prepareSqlByLanguageAndFile($select, $locale, $file = null, $filterUnclear = false)
     {
-        // we need table object for quoteinto
-
         $select->order('translation_id ASC');
 
         $joinCondition  = $this->table . '.base_id = translation_base.base_id ';
-        $joinCondition .= " AND locale = " . $this->adapter->getPlatform()->quoteValue($locale) . ' OR locale IS NULL ';
+        $joinCondition .= " AND locale = " . $this->adapter->getPlatform()->quoteValue($locale); // . ' OR locale IS NULL ';
         // quoteInto doesn't exist anymore and $this->adapter->getPlatform()->quoteValue() not working
         $select->join('translation_base', new Expression($joinCondition), '*', Select::JOIN_RIGHT);
 
-        if (null != $file) {
+        if (null !== $file) {
             $select->join(
                 'translation_file',
                 'translation_base.translation_file_id = translation_file.translation_file_id',
@@ -137,7 +178,7 @@ class Translation extends Base {
             $select->where(array('filename' => $file));
         }
 
-        if (true == $filterUnclear) {
+        if (true === $filterUnclear) {
             $select->where(array('unclear_translation' => 1));
         }
 

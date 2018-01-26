@@ -154,7 +154,7 @@ use Application\Model\Translation;
                         <?php $base = $translationBase[$translation['base_id']] ?>
                         <?php $rowName = 'row' . $translation['base_id']; ?>
                         <tr id="<?php echo $rowName ?>">
-                            <td><?php echo $this->escapeHtml($base ->getOriginSource()) ?></td>
+                            <td><?php echo $this->escapeHtml($base->getOriginSource()) ?></td>
                             <td><?php echo $this->escapeHtml($translation['current_translation']) ?></td>
                             <td class="text-center">
                                 <?php if ((bool)$translation['unclear_translation']): ?>

@@ -16,8 +16,8 @@ class AdminController extends Base
     {
         // prepare view
         $view =  new ViewModel(array(
-            'translationFiles'     => $this->getResourceTranslationFile()->fetchAll(),
-            'supportedLocales'     => $this->getSupportedLocales(),
+            'translationFiles'     => $this->_translationFileTable->fetchAll(),
+            'supportedLocales'     => $this->_supportedLocale->fetchAll(),
         ));
 
         return $view;
@@ -43,11 +43,11 @@ class AdminController extends Base
             $exportLocale = array();
         }
 
-        $translationBase = $this->getResourceTranslationBase()->fetchAll();
+        $translationBase = $this->_translationBaseTable->fetchAll();
 
         foreach ($exportLocale as $locale) {
             foreach ($exportFile as $fileName) {
-                $translations = $this->getResourceTranslation()->fetchByLanguageAndFile($locale, $fileName);
+                $translations = $this->_translationTable->fetchByLanguageAndFile($locale, $fileName);
 
                 // prepare file to output in export folder
                 $outputDirectory = 'public/' . self::EXPORT_PATH . "$locale/";

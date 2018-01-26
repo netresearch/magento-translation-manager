@@ -8,8 +8,6 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends Base
 {
-    const DEFAULT_ENTRIES_PER_PAGE = 100;
-
     /**
      * @var string - current locale selected by user
      */
@@ -58,8 +56,27 @@ class IndexController extends Base
         // prepare pagination
         $page = $this->params()->fromQuery('page') ?: 1;
         $maxPage = 1;
-        $elementsPerPage = $this->params()->fromQuery('epp') ?: self::DEFAULT_ENTRIES_PER_PAGE;
-        $translationsCount = $this->getResourceTranslation()->countByLanguageAndFile($this->_currentLocale, $currentFile, $currentFilterUnclear);
+        $elementsPerPage = $this->params()->fromQuery('epp') ?: \Application\Resource\Translation::DEFAULT_ENTRIES_PER_PAGE;
+
+// $s = microtime(true);
+        $translations = $this->_translationTable
+            ->fetchByLanguageAndFile(
+                $this->_currentLocale,
+                $currentFile,
+                $currentFilterUnclear,
+                $elementsPerPage,
+                $page
+            );
+// $e = microtime(true);
+// var_dump($e - $s);
+
+// $s = microtime(true);
+        $translationsCount = $this->_translationTable
+            ->countByLanguageAndFile($this->_currentLocale, $currentFile, $currentFilterUnclear);
+// $e = microtime(true);
+// var_dump($e - $s);
+// var_dump($translationsCount);
+// exit;
         if ('all' == $elementsPerPage) {
             // show all entries on one page
             $elementsPerPage = null;
@@ -74,17 +91,23 @@ class IndexController extends Base
             $page = $maxPage;
         }
 
+// $s = microtime(true);
+// $this->_translationTable->fetchByLanguageAndFile(
+//                 $this->_currentLocale, $currentFile, $currentFilterUnclear, $elementsPerPage, $page
+//             );
+// $e = microtime(true);
+// var_dump($e - $s);
+// exit;
+
         // prepare view
         $view =  new ViewModel(array(
-            'supportedLocales'     => $this->getSupportedLocales(),
-            'translations'         => $this->getResourceTranslation()->fetchByLanguageAndFile(
-                $this->_currentLocale, $currentFile, $currentFilterUnclear, $elementsPerPage, $page
-            ),
-            'translationBase'      => $this->getResourceTranslationBase()->fetchAll(),
-            'translationFiles'     => $this->getResourceTranslationFile()->fetchAll(),
+            'supportedLocales'     => $this->_supportedLocale->fetchAll(),
+            'translations'         => $translations,
+            'translationBase'      => $this->_translationBaseTable->fetchAll(),
+            'translationFiles'     => $this->_translationFileTable->fetchAll(),
             'translationsCount'    => $translationsCount,
             'currentLocale'        => $this->_currentLocale,
-            'currentFile'          => (array)$currentFile,
+            'currentFile'          => (array) $currentFile,
             'currentFilterUnclear' => $currentFilterUnclear,
             'currentPage'          => $page,
             'currentEPP'           => $elementsPerPage,
@@ -107,7 +130,7 @@ class IndexController extends Base
     {
         $this->init();
         $baseId = $this->params('base_id');
-        $baseTranslation = $this->getResourceTranslationBase()->getTranslationBase($baseId);
+        $baseTranslation = $this->_translationBaseTable->getTranslationBase($baseId);
 
         // save data
         if ($this->params()->fromPost('rowid')) {
@@ -170,7 +193,7 @@ class IndexController extends Base
         }
 
         // prepare previous and next item
-        $allBaseIds = $this->getResourceTranslationBase()->fetchIds();
+        $allBaseIds = $this->_translationBaseTable->fetchIds();
         $currentKey = array_search($baseId, $allBaseIds);
         $previousKey = $currentKey - 1;
         $nextKey = $currentKey + 1;
@@ -182,18 +205,18 @@ class IndexController extends Base
             $nextKey = 0;
         }
 
-        $translations = $this->getResourceTranslation()->fetchByBaseId($baseId);
+        $translations = $this->_translationTable->fetchByBaseId($baseId);
 
         return new ViewModel(array(
-            'supportedLocales'     => $this->getSupportedLocales(),
+            'supportedLocales'     => $this->_supportedLocale->fetchAll(),
             'currentLocale'        => $this->_currentLocale,
-            'currentTranslationFile' => $this->getResourceTranslationFile()->getTranslationFile(
+            'currentTranslationFile' => $this->_translationFileTable->getTranslationFile(
                 $baseTranslation->getTranslationFileId()
             )->getFilename(),
             'messages'             => $this->_messages,
             'baseTranslation'      => $baseTranslation,
             'translations'         => $translations,
-            'suggestions'          => $this->getResourceSuggestion()->fetchByTranslationId(
+            'suggestions'          => $this->_suggestionTable->fetchByTranslationId(
                 $translations[$this->_currentLocale]->getTranslationId()
             ),
             'previousItemId'       => $allBaseIds[$previousKey],
@@ -283,7 +306,7 @@ class IndexController extends Base
 
         $translation = null;
         if (isset($element['id'])) {
-            $translation = $this->getResourceTranslation()->getTranslation($element['translation_id']);
+            $translation = $this->_translationTable->getTranslation($element['translation_id']);
             if (false == $translation) {
                 $translation = new Translation();
             }
@@ -292,7 +315,7 @@ class IndexController extends Base
             $translation = new Translation($element);
         }
 
-        $success = $this->getResourceTranslation()->saveTranslation($translation);
+        $success = $this->_translationTable->saveTranslation($translation);
 
         return $success;
     }
@@ -312,7 +335,7 @@ class IndexController extends Base
             'suggestedTranslation' => $content,
         ));
 
-        $result = $this->getResourceSuggestion()->saveSuggestion($suggestion);
+        $result = $this->_suggestionTable->saveSuggestion($suggestion);
 
         return boolval($result);
     }

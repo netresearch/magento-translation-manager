@@ -11,7 +11,7 @@ return array(
     'router' => array(
         'routes' => array(
             'admin' => array(
-                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'type' => 'Zend\Router\Http\Segment',
                 'options' => array(
                     'route'    => '/admin/[:action][/:base_id]',
                     'defaults' => array(
@@ -21,7 +21,7 @@ return array(
                 ),
             ),
             'home' => array(
-                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'type' => 'Zend\Router\Http\Segment',
                 'options' => array(
                     'route'    => '/',
                     'defaults' => array(
@@ -31,7 +31,7 @@ return array(
                 ),
             ),
             'index' => array(
-                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'type' => 'Zend\Router\Http\Segment',
                 'options' => array(
                     'route'    => '/index/[:action][/:base_id]',
                     'defaults' => array(
@@ -41,7 +41,7 @@ return array(
                 ),
             ),
             'ajax' => array(
-                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'type' => 'Zend\Router\Http\Segment',
                 'options' => array(
                     'route'    => '/ajax/[:action][/:base_id]',
                     'defaults' => array(
@@ -103,11 +103,11 @@ return array(
         ),
     ),
     'controllers' => array(
-        'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController',
-            'Application\Controller\Admin' => 'Application\Controller\AdminController',
-            'Application\Controller\Ajax'  => 'Application\Controller\AjaxController',
-        ),
+        'factories' => [
+            'Application\Controller\Index' => 'Application\Factory\IndexControllerFactory',
+            'Application\Controller\Admin' => 'Application\Factory\AdminControllerFactory',
+            'Application\Controller\Ajax'  => 'Application\Factory\AjaxControllerFactory',
+        ],
     ),
     'view_manager' => array(
         'display_not_found_reason' => true,
