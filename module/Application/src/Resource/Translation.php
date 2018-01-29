@@ -1,55 +1,34 @@
 <?php
 namespace Application\Resource;
 
-use Zend\Db\Sql\Select;
-use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Expression;
 use Zend\Db\ResultSet\ResultSet;
 use Application\Model;
 
-class Translation extends Base {
+use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Sql;
+
+
+class Translation extends Base
+{
     const DEFAULT_ENTRIES_PER_PAGE = 100;
 
-    protected $table = 'translation';
-
     /**
-     * prepare array of all translations
+     * Get all records from "translation" table.
      *
-     * @param ResultSet $resultSet
-     * @return Model\Translation[] with index translation_id
+     * @return \Application\ResultSet\Translation
      */
-    protected function _prepareCollection($resultSet)
+    public function fetchAll()
     {
-        $entities = array();
-        foreach ($resultSet as $row) {
-            $entity = new Model\Translation(array(
-                'translationId'        => $row['translation_id'],
-                'baseId'               => $row['base_id'],
-                'locale'               => $row['locale'],
-                'currentTranslation'   => $row['current_translation'],
-                'unclearTranslation'   => $row['unclear_translation'],
-            ));
-            $entities[$row['translation_id']] = $entity;
-        }
-        return $entities;
+        return $this->tableGateway
+            ->select(function (Select $select) {
+                $select->order('base_id ASC');
+            });
     }
 
     /**
-     * read all translations
-     *
-     * @return Model\Translation[]
-     */
-    public function fetchAll() {
-        $resultSet = $this->select(function (Select $select) {
-            $select->order('base_id ASC');
-        });
-        $entities = $this->_prepareCollection($resultSet);
-
-        return $entities;
-    }
-
-    /**
-     * Count translations with given filte.r
+     * Count translations with given filter.
      *
      * @param string      $locale        Locale to select
      * @param string|null $file          File to select (null = all files)
@@ -62,38 +41,19 @@ class Translation extends Base {
         $file          = null,
         $filterUnclear = false
     ) {
-        // prepare base query
-        $sql    = new Sql($this->getAdapter());
-        $select = $sql->select(' ')
-            ->columns([
-                'total' => new Expression('FOUND_ROWS()'),
-            ]);
+        $sql    = $this->tableGateway->getSql();
+        $select = $sql->select();
+        $select = $this->prepareSqlByLanguageAndFile($select, $locale, $file, $filterUnclear);
 
-        // Update the select statement specification so that we don't incorporate the FROM clause
-        $select->setSpecification(Select::SELECT, array(
-            'SELECT %1$s' => array(
-                array(1 => '%1$s', 2 => '%1$s AS %2$s', 'combinedby' => ', '),
-                null
-            )
-        ));
+        // Add count
+        $select->reset(Select::COLUMNS)
+            ->columns(array('count' => new Expression('COUNT(*)')));
 
         $statement = $sql->prepareStatementForSqlObject($select);
-        $result    = $statement->execute();
+        $resultSet = $statement->execute();
+        $result    = $resultSet->current();
 
-        return (int) ($result->current())['total'];
-
-//         $select = $sql->select($this->table);
-//         $select = $this->prepareSqlByLanguageAndFile($select, $locale, $file, $filterUnclear);
-
-//         // add count
-//         $select->reset('columns')->columns(array('count' => new Expression('COUNT(*)')));
-
-//         $statement  = $sql->prepareStatementForSqlObject($select);
-//         $resultSet = $statement->execute();
-
-//         $result = $resultSet->current();
-
-//         return (int)$result['count'];
+        return (int) $result['count'];
     }
 
     /**
@@ -114,40 +74,16 @@ class Translation extends Base {
         $elementsPerPage = self::DEFAULT_ENTRIES_PER_PAGE,
         $page            = 1
     ) {
-        $sql = new Sql($this->getAdapter());
+        return $this->tableGateway
+            ->select(function (Select $select) use ($locale, $file, $filterUnclear, $elementsPerPage, $page) {
+                $this->prepareSqlByLanguageAndFile($select, $locale, $file, $filterUnclear);
 
-        $select = $sql->select($this->table);
-        $select->quantifier(new Expression('SQL_CALC_FOUND_ROWS'));
-
-        $select = $this->prepareSqlByLanguageAndFile($select, $locale, $file, $filterUnclear);
-
-        if (null !== $elementsPerPage) {
-            // react to pagination
-            $select->limit((int) $elementsPerPage)
-                ->offset(($page - 1) * $elementsPerPage);
-        }
-
-        $statement = $sql->prepareStatementForSqlObject($select);
-        $resultSet = $statement->execute();
-
-        /*
-
-        SELECT SQL_CALC_FOUND_ROWS `translation`.*, `translation_base`.*
-          FROM `translation`
-    RIGHT JOIN `translation_base` ON translation.base_id = translation_base.base_id
-           AND (locale = 'de_DE' OR locale IS NULL)
-         ORDER BY `translation_id` ASC
-         LIMIT 10
-
-        */
-
-        $entities = array();
-        while ($resultSet->valid()) {
-            $entities[] = $resultSet->current();
-            $resultSet->next();
-        }
-
-        return $entities;
+                if (null !== $elementsPerPage) {
+                    // React to pagination
+                    $select->limit((int) $elementsPerPage)
+                        ->offset(($page - 1) * ((int) $elementsPerPage));
+                }
+            });
     }
 
     /**
@@ -160,140 +96,113 @@ class Translation extends Base {
      *
      * @return Select Prepared query
      */
-    protected function prepareSqlByLanguageAndFile($select, $locale, $file = null, $filterUnclear = false)
+    private function prepareSqlByLanguageAndFile(Select $select, $locale, $file = null, $filterUnclear = false)
     {
-        $select->order('translation_id ASC');
+        $select->order('translation.translation_id ASC');
 
-        $joinCondition  = $this->table . '.base_id = translation_base.base_id ';
-        $joinCondition .= " AND locale = " . $this->adapter->getPlatform()->quoteValue($locale); // . ' OR locale IS NULL ';
+        $joinCondition  = $this->tableGateway->getTable() . '.base_id = translation_base.base_id';
+        $joinCondition .= ' AND translation.locale = ' . $this->tableGateway->getAdapter()->getPlatform()->quoteValue($locale); // . ' OR locale IS NULL ';
+
         // quoteInto doesn't exist anymore and $this->adapter->getPlatform()->quoteValue() not working
-        $select->join('translation_base', new Expression($joinCondition), '*', Select::JOIN_RIGHT);
+        $select->join('translation_base', new Expression($joinCondition), array(), Select::JOIN_LEFT);
 
         if (null !== $file) {
             $select->join(
                 'translation_file',
                 'translation_base.translation_file_id = translation_file.translation_file_id',
-                '*'
+                array()
             );
-            $select->where(array('filename' => $file));
+
+            $select->where(array('translation_file.filename' => $file));
         }
 
-        if (true === $filterUnclear) {
-            $select->where(array('unclear_translation' => 1));
+        if ($filterUnclear) {
+//             $select->where(array('translation.unclear_translation' => 1));
         }
 
         return $select;
     }
 
-
     /**
-     * get translated strings of base translation ordered by locale
+     * Get translated strings of base translation ordered by locale.
      *
      * @param int $baseId
-     * @return Model\Translation[] with index locale
+     *
+     * @return \Application\ResultSet\Translation
      */
     public function fetchByBaseId($baseId)
     {
-        $sql = new Sql($this->getAdapter());
-        $select = $sql->select($this->table);
-        $select->where(array('base_id' => $baseId));
-        $select->order('locale ASC');
-
-        $statement  = $sql->prepareStatementForSqlObject($select);
-
-        $resultSet = $statement->execute();
-        //$entities = $this->_prepareCollection($resultSet);
-        $languages = array();
-        foreach ($resultSet as $row) {
-            $locale = $row['locale'];
-            $languages[$locale] = new Model\Translation(array(
-                'translationId'        => $row['translation_id'],
-                'baseId'               => $row['base_id'],
-                'locale'               => $row['locale'],
-                'currentTranslation'   => $row['current_translation'],
-                'unclearTranslation'   => $row['unclear_translation'],
-            ));
-        }
-        $supportedLocale = new SupportedLocale($this->adapter);
-        $supportedLocale = $supportedLocale->fetchAll();
-
-        foreach ($supportedLocale as $locale) {
-            if (!array_key_exists($locale, $languages)) {
-                $languages[$locale] = new Model\Translation();
-            }
-        }
-
-        return $languages;
+        return $this->tableGateway
+            ->select(function (Select $select) use ($baseId) {
+                $select->where(array('base_id' => $baseId));
+                $select->order('locale ASC');
+            });
     }
 
     /**
-     * get translation by ID
+     * Get a single record from "translation" table by its record id.
      *
-     * @param int $translationId
-     * @return Model\Translation|bool - false if no Translation can be found
+     * @param int $id ID of record
+     *
+     * @return \Application\Model\Translation
+     * @throws \Exception
      */
-    public function getTranslation($translationId) {
-        $row = $this->select(array('translation_id' => (int) $translationId))->current();
-        if (!$row) {
-            return false;
+    public function getTranslation($id)
+    {
+        $record = $this->tableGateway
+            ->select(array('translation_id' => (int) $id))
+            ->current();
+
+        if (!$record) {
+            throw new \Exception('Could not find row <' . $id . '>');
         }
 
-        $translation = new Model\Translation(array(
-            'translationId'        => $row->translation_id,
-            'baseId'               => $row->base_id,
-            'locale'               => $row->locale,
-            'currentTranslation'   => $row->current_translation,
-            'unclearTranslation'   => $row->unclear_translation,
-        ));
-
-        return $translation;
+        return $record;
     }
 
     /**
-     * save or update translation
+     * Save or update record.
      *
-     * @param Model\Translation $translation
-     * @return bool|int - id of translation on success, false on failure
+     * @param \Application\Model\TranslationBase $translationBase Instance
+     *
+     * @return bool|int ID of record on success, FALSE on failure
+     * @throws \Exception
      */
-    public function saveTranslation(Model\Translation $translation) {
-        $data = array(
-            'translation_id'        => $translation->getTranslationId(),
-            'base_id'               => $translation->getBaseId(),
-            'locale'                => $translation->getLocale(),
-            'current_translation'   => $translation->getCurrentTranslation(),
-            'unclear_translation'   => (int)$translation->getUnclearTranslation(),
-        );
+    public function saveTranslation(\Application\Model\Translation $translation)
+    {
+        $data = $translation->toArray();
+        $id   = (int) $translation->getTranslationId();
 
-        $id = (int) $translation->getTranslationId();
-
-        if ($id == 0) {
-            // insert translation
-            if (!$this->insert($data)) {
+        if ($id === 0) {
+            // Insert record
+            if (!$this->tableGateway->insert($data)) {
                 return false;
             }
+
             return $this->getLastInsertValue();
-
-        } elseif ($this->getTranslation($id)) {
-            // update translation
-            if (!$this->update($data, array('translation_id' => $id))) {
-                return false;
-            }
-            return $id;
-
         } else {
-            // unknown translation
-            return false;
+            if ($this->getTranslation($id)) {
+                // Update record
+                if (!$this->tableGateway->update($data, array('translation_id' => $id))) {
+                    return false;
+                }
+
+                return $id;
+            } else {
+                throw new \Exception('Record id does not exist');
+            }
         }
     }
 
     /**
-     * delete translation by id
+     * Delete record by ID.
      *
-     * @param int $translationId
-     * @return int - number of deleted translations (should be one, because of PK)
+     * @param int $id Record id
+     *
+     * @return int Number of deleted records (should be one, because of PK)
      */
-    public function deleteTranslation($translationId) {
-        return $this->delete(array('translation_id' => (int) $translationId));
+    public function deleteTranslation($id)
+    {
+        return $this->tableGateway->delete(array('translation_id' => (int) $id));
     }
-
 }

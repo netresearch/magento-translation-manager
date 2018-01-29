@@ -104,9 +104,9 @@ return array(
     ),
     'controllers' => array(
         'factories' => [
-            'Application\Controller\Index' => 'Application\Factory\IndexControllerFactory',
-            'Application\Controller\Admin' => 'Application\Factory\AdminControllerFactory',
-            'Application\Controller\Ajax'  => 'Application\Factory\AjaxControllerFactory',
+            'Application\Controller\Index' => '\Application\Factory\IndexControllerFactory',
+            'Application\Controller\Admin' => '\Application\Factory\AdminControllerFactory',
+            'Application\Controller\Ajax'  => '\Application\Factory\AjaxControllerFactory',
         ],
     ),
     'view_manager' => array(

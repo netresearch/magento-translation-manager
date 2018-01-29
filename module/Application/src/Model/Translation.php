@@ -2,61 +2,87 @@
 
 namespace Application\Model;
 
-class Translation extends Base {
+class Translation extends Base
+{
+    /**
+     * @var int
+     */
+    private $translationId;
 
-    /* @var int $_translationId */
-    protected $_translationId = null;
-    /* @var int $_baseId */
-    protected $_baseId = null;
-    /* @var string $_locale */
-    protected $_locale = null;
-    /* @var string $_currentTranslation */
-    protected $_currentTranslation = null;
-    /* @var boolean $_unclearTranslation */
-    protected $_unclearTranslation = null;
+    /**
+     * @var int
+     */
+    private $baseId;
 
-    public function getTranslationId() {
-        return $this->_translationId;
+    /**
+     * @var string
+     */
+    private $locale;
+
+    /**
+     * @var string
+     */
+    private $currentTranslation;
+
+    /**
+     * @var bool
+     */
+    private $unclearTranslation;
+
+    /**
+     * This method simply copies the data from the passed in array to our entities properties.
+     *
+     * @param array $data Data from database
+     *
+     * @return void
+     */
+    public function exchangeArray(array $data)
+    {
+        $this->translationId      = (!empty($data['translation_id'])) ? ((int) $data['translation_id']) : null;
+        $this->baseId             = (!empty($data['base_id'])) ? ((int) $data['base_id']) : null;
+        $this->locale             = (!empty($data['locale'])) ? $data['locale'] : null;
+        $this->currentTranslation = (!empty($data['current_translation'])) ? $data['current_translation'] : null;
+        $this->unclearTranslation = (!empty($data['unclear_translation'])) ? ((bool) $data['unclear_translation']) : null;
     }
 
-    public function setTranslationId($translationId) {
-        $this->_translationId = $translationId;
-        return $this;
+    /**
+     * Cast model to array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'translation_id'      => $this->translationId,
+            'base_id'             => $this->baseId,
+            'locale'              => $this->locale,
+            'current_translation' => $this->currentTranslation,
+            'unclear_translation' => (int) $this->unclearTranslation,
+        );
     }
 
-    public function getBaseId() {
-        return $this->_baseId;
+    public function getTranslationId()
+    {
+        return $this->translationId;
     }
 
-    public function setBaseId($baseId) {
-        $this->_baseId = (int)$baseId;
-        return $this;
+    public function getBaseId()
+    {
+        return $this->baseId;
     }
 
-    public function getLocale() {
-        return $this->_locale;
+    public function getLocale()
+    {
+        return $this->locale;
     }
 
-    public function setLocale($locale) {
-        $this->_locale = $locale;
-        return $this;
+    public function getCurrentTranslation()
+    {
+        return $this->currentTranslation;
     }
 
-    public function getCurrentTranslation() {
-        return $this->_currentTranslation;
-    }
-
-    public function setCurrentTranslation($currentTranslation) {
-        $this->_currentTranslation = $currentTranslation;
-        return $this;
-    }
-
-    public function getUnclearTranslation() {
-        return $this->_unclearTranslation;
-    }
-
-    public function setUnclearTranslation($unclearTranslation) {
-        $this->_unclearTranslation = (bool)$unclearTranslation;
-        return $this;
+    public function getUnclearTranslation()
+    {
+        return $this->unclearTranslation;
     }
 }

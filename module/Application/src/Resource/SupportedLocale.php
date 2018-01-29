@@ -1,27 +1,24 @@
 <?php
 namespace Application\Resource;
 
+use Application\Model;
+
+use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Sql;
 
-class SupportedLocale extends Base {
-
-    protected $table = 'supported_locale';
-
+class SupportedLocale extends Base
+{
     /**
-     * read all possible locales
+     * Get all records from "supported_locale" table.
      *
-     * @return string[] locale strings (e.g. de_DE)
+     * @return \Application\ResultSet\SupportedLocale
      */
-    public function fetchAll() {
-        $resultSet = $this->select(function (Select $select) {
-            $select->order('locale ASC');
-        });
-
-        $locales = array();
-        foreach ($resultSet as $row) {
-            $locales[] = $row->locale;
-        }
-
-        return $locales;
+    public function fetchAll()
+    {
+        return $this->tableGateway
+            ->select(function (Select $select) {
+                $select->order('locale ASC');
+            });
     }
 }

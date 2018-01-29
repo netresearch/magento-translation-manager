@@ -1,169 +1,107 @@
 <?php
 namespace Application\Resource;
 
-use Zend\Db\Sql\Select;
-use Zend\Db\Sql\Sql;
 use Application\Model;
 
-class Suggestion extends Base {
+use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Sql;
 
-    protected $table = 'suggestion';
-
+class Suggestion extends Base
+{
     /**
-     * prepare array of all suggestions
+     * Get all records from "suggestion" table.
      *
-     * @param ResultSet $resultSet
-     * @return Model\Suggestion[] with index suggestion_id
+     * @return \Application\ResultSet\Suggestion
      */
-    protected function _prepareCollection($resultSet)
+    public function fetchAll()
     {
-        $entities = array();
-        foreach ($resultSet as $row) {
-            $entity = new Model\Suggestion(array(
-                'suggestionId'         => $row['suggestion_id'],
-                'translationId'        => $row['translation_id'],
-                'suggestedTranslation' => $row['suggested_translation'],
-            ));
-            $entities[$row['suggestion_id']] = $entity;
-        }
-        return $entities;
+        return $this->tableGateway
+            ->select(function (Select $select) {
+                $select->order('suggestion_id ASC');
+            });
     }
 
     /**
-     * read all suggestions
-     *
-     * @return Model\Suggestion[]
-     */
-    public function fetchAll() {
-        $resultSet = $this->select(function (Select $select) {
-            $select->order('suggestion_id ASC');
-        });
-        $entities = $this->_prepareCollection($resultSet);
-
-        return $entities;
-    }
-
-    /**
-     * get suggestion by id
-     *
-     * @param int $suggestionId
-     * @return Suggestion | false if not exists
-     */
-    public function fetchSuggestionById($suggestionId)
-    {
-        $sql = new Sql($this->getAdapter());
-        $select = $sql->select($this->table);
-        $select->where(array('suggestion_id' => $suggestionId));
-        $select->order('suggestion_id ASC');
-
-        $statement  = $sql->prepareStatementForSqlObject($select);
-
-        $resultSet = $statement->execute();
-
-        if (isset($resultSet[0])) {
-            $row = $resultSet[0];
-            return new Model\Suggestion(array(
-                'suggestionId'         => $row['suggestion_id'],
-                'translationId'        => $row['translation_id'],
-                'suggestedTranslation' => $row['suggested_translation'],
-            ));
-        }
-
-        return false;
-    }
-
-    /**
-     * save or update suggestion
-     *
-     * @param Model\Suggestion $suggestion
-     * @return bool|int - ID of suggestion on success, false on failure
-     */
-    public function saveSuggestion(Model\Suggestion $suggestion) {
-        $data = array(
-            'suggestion_id'         => $suggestion->getSuggestionId(),
-            'translation_id'        => $suggestion->getTranslationId(),
-            'suggested_translation' => $suggestion->getSuggestedTranslation(),
-        );
-
-        $id = (int) $suggestion->getSuggestionId();
-
-        if ($id == 0) {
-            // insert suggestion
-            if (!$this->insert($data))
-                return false;
-            return $this->getLastInsertValue();
-
-        } elseif ($this->getSuggestion($id)) {
-            // update suggestion
-            if (!$this->update($data, array('suggestion_id' => $id))) {
-                return false;
-            }
-            return $id;
-
-        } else {
-            // unknown suggestion
-            return false;
-        }
-    }
-
-    /**
-     * get suggestion by ID
-     *
-     * @param $suggestionId
-     * @return Model\Suggestion|bool - false on failure
-     */
-    public function getSuggestion($suggestionId) {
-        $row = $this->select(array('suggestion_id' => (int) $suggestionId))->current();
-        if (!$row) {
-            return false;
-        }
-
-        $suggestion = new Model\Suggestion(array(
-            'suggestionId'            => $row->suggestion_id,
-            'translationId'           => $row->translation_id,
-            'suggestedTranslation'    => $row->suggested_translation,
-        ));
-
-        return $suggestion;
-    }
-
-    /**
-     * delete suggestion by ID
-     *
-     * @param int $suggestionId
-     * @return int - number of deleted suggestions (should be one, because of PK)
-     */
-    public function deleteSuggestion($suggestionId) {
-        return $this->delete(array('suggestion_id' => (int) $suggestionId));
-    }
-
-    /**
-     * get suggestions of a translation
+     * Get all suggestions of a translation.
      *
      * @param int $translationId
-     * @return array of Suggestions (index = suggestion_id)
+     *
+     * @return \Application\ResultSet\Suggestion
      */
     public function fetchByTranslationId($translationId)
     {
-        $sql = new Sql($this->getAdapter());
-        $select = $sql->select($this->table);
-        $select->where(array('translation_id' => $translationId));
-        $select->order('suggestion_id ASC');
+        return $this->tableGateway
+            ->select(function (Select $select) use ($translationId) {
+                $select->where(array('translation_id' => $translationId));
+                $select->order('suggestion_id ASC');
+            });
+    }
 
-        $statement  = $sql->prepareStatementForSqlObject($select);
+    /**
+     * Get a single record from "suggestion" table by its record id.
+     *
+     * @param int $id ID of record
+     *
+     * @return \Application\Model\Suggestion
+     * @throws \Exception
+     */
+    public function getSuggestion($id)
+    {
+        $record = $this->tableGateway
+            ->select(array('suggestion_id' => (int) $id))
+            ->current();
 
-        $resultSet = $statement->execute();
-
-        $suggestions = array();
-        foreach ($resultSet as $row) {
-            $suggestionId = $row['suggestion_id'];
-            $suggestions[$suggestionId] = new Model\Suggestion(array(
-                'suggestionId'         => $row['suggestion_id'],
-                'translationId'        => $row['translation_id'],
-                'suggestedTranslation' => $row['suggested_translation'],
-            ));
+        if (!$record) {
+            throw new \Exception('Could not find row <' . $id . '>');
         }
 
-        return $suggestions;
+        return $record;
+    }
+
+    /**
+     * Save or update record.
+     *
+     * @param \Application\Model\Suggestion $suggestion Instance
+     *
+     * @return bool|int ID of record on success, FALSE on failure
+     * @throws \Exception
+     */
+    public function saveSuggestion(\Application\Model\Suggestion $suggestion)
+    {
+        $data = $suggestion->toArray();
+        $id   = (int) $suggestion->getSuggestionId();
+
+        if ($id === 0) {
+            // Insert record
+            if (!$this->tableGateway->insert($data)) {
+                return false;
+            }
+
+            return $this->getLastInsertValue();
+        } else {
+            if ($this->getSuggestion($id)) {
+                // Update record
+                if (!$this->tableGateway->update($data, array('suggestion_id' => $id))) {
+                    return false;
+                }
+
+                return $id;
+            } else {
+                throw new \Exception('Record id does not exist');
+            }
+        }
+    }
+
+    /**
+     * Delete record by ID.
+     *
+     * @param int $id Record id
+     *
+     * @return int Number of deleted records (should be one, because of PK)
+     */
+    public function deleteSuggestion($id)
+    {
+        return $this->tableGateway->delete(array('suggestion_id' => (int) $id));
     }
 }

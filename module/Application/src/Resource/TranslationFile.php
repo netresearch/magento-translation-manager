@@ -1,50 +1,45 @@
 <?php
 namespace Application\Resource;
 
-use Zend\Db\Sql\Select;
 use Application\Model;
 
-class TranslationFile extends Base {
+use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Sql;
 
-    protected $table = 'translation_file';
-
+class TranslationFile extends Base
+{
     /**
-     * get all file names
+     * Get all records from "translation_file" table.
      *
-     * @return string[] - file names
+     * @return \Application\ResultSet\TranslationFile
      */
-    public function fetchAll() {
-        $resultSet = $this->select(function (Select $select) {
-            $select->order('filename ASC');
-        });
-
-        $filenames = array();
-        foreach ($resultSet as $row) {
-            $filenames[] = $row->filename;
-        }
-
-        return $filenames;
+    public function fetchAll()
+    {
+        return $this->tableGateway
+            ->select(function (Select $select) {
+                $select->order('filename ASC');
+            });
     }
 
     /**
-     * get translation file name by ID
+     * Get a single record from "translation_file" table by its record id.
      *
-     * @param int $translationFileId - ID of translation file
-     * @return Model\TranslationFile|false when nothing exists
+     * @param int $id ID of record
+     *
+     * @return \Application\Model\TranslationFile
+     * @throws \Exception
      */
-    public function getTranslationFile($translationFileId) {
-        $row = $this->select(array('translation_file_id' => (int) $translationFileId))->current();
-        if (!$row) {
-            return false;
+    public function getTranslationFile($id)
+    {
+        $record = $this->tableGateway
+            ->select(array('translation_file_id' => (int) $id))
+            ->current();
+
+        if (!$record) {
+            throw new \Exception('Could not find row <' . $id . '>');
         }
 
-        $translationFile = new Model\TranslationFile(array(
-            'translationFileId'    => $row->translation_file_id,
-            'filename'             => $row->filename,
-            'sourcePath'           => $row->source_path,
-            'destinationPath'      => $row->destination_path,
-        ));
-
-        return $translationFile;
+        return $record;
     }
 }

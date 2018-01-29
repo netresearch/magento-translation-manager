@@ -2,44 +2,49 @@
 
 namespace Application\Model;
 
-class Suggestion extends Base {
-
-    /* @var int $_suggestionId */
-    protected $_suggestionId = null;
-
-    /* @var int $_translationId */
-    protected $_translationId = null;
-
-    /* @var string $_suggestedTranslation */
-    protected $_suggestedTranslation = null;
-
+class Suggestion extends Base
+{
+    /**
+     * @var int
+     */
+    private $suggestionId;
 
     /**
-     * @param string $suggestedTranslation
-     * @return Suggestion $this
+     * @var int
      */
-    public function setSuggestedTranslation($suggestedTranslation)
+    private $translationId;
+
+    /**
+     * @var string
+     */
+    private $suggestedTranslation;
+
+    /**
+     * This method simply copies the data from the passed in array to our entities properties.
+     *
+     * @param array $data Data from database
+     *
+     * @return void
+     */
+    public function exchangeArray(array $data)
     {
-        $this->_suggestedTranslation = $suggestedTranslation;
-        return $this;
+        $this->suggestionId         = (!empty($data['suggestion_id'])) ? ((int) $data['suggestion_id']) : null;
+        $this->translationId        = (!empty($data['translation_id'])) ? ((int) $data['translation_id']) : null;
+        $this->suggestedTranslation = (!empty($data['suggested_translation'])) ? $data['suggested_translation'] : null;
     }
 
     /**
-     * @return string
+     * Cast model to array.
+     *
+     * @return array
      */
-    public function getSuggestedTranslation()
+    public function toArray()
     {
-        return $this->_suggestedTranslation;
-    }
-
-    /**
-     * @param int $suggestionId
-     * @return Suggestion $this
-     */
-    public function setSuggestionId($suggestionId)
-    {
-        $this->_suggestionId = $suggestionId;
-        return $this;
+        return array(
+            'suggestion_id'         => $this->suggestionId,
+            'translation_id'        => $this->translationId,
+            'suggested_translation' => $this->suggestedTranslation,
+        );
     }
 
     /**
@@ -47,17 +52,7 @@ class Suggestion extends Base {
      */
     public function getSuggestionId()
     {
-        return $this->_suggestionId;
-    }
-
-    /**
-     * @param int $translationId
-     * @return Suggestion $this
-     */
-    public function setTranslationId($translationId)
-    {
-        $this->_translationId = $translationId;
-        return $this;
+        return $this->suggestionId;
     }
 
     /**
@@ -65,6 +60,14 @@ class Suggestion extends Base {
      */
     public function getTranslationId()
     {
-        return $this->_translationId;
+        return $this->translationId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSuggestedTranslation()
+    {
+        return $this->suggestedTranslation;
     }
 }

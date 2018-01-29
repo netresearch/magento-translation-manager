@@ -2,10 +2,10 @@
 /**
  * @var $this Zend\View\Renderer\PhpRenderer
  *
- * @var string[] $supportedLocales
+ * @var \Application\ResultSet\SupportedLocale $supportedLocales
  * @var Translation[] $translations
  * @var TranslationBase[] $translationBase
- * @var string[] $translationFiles
+ * @var \Application\ResultSet\TranslationFile $translationFiles
  */
 ?>
 <h2>Admin dashboard</h2>
@@ -17,8 +17,8 @@
             <div class="form-group">
                 <label for="translationFile">Translation file</label>
                 <select class="form-control" id="translationFile" name="translation_file[]" multiple="multiple">
-                    <?php foreach ($translationFiles as $fileName): ?>
-                        <option value="<?php echo $fileName ?>"><?php echo $fileName //TODO escape ?></option>
+                    <?php foreach ($translationFiles as $translationFile): ?>
+                        <option value="<?php echo $translationFile->getFilename(); ?>"><?php echo $translationFile->getFilename(); //TODO escape ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -26,7 +26,7 @@
                 <label for="language">Language</label>
                 <select class="form-control" id="language" name="locale[]" multiple="multiple">
                     <?php foreach ($supportedLocales as $locale): ?>
-                        <option value="<?php echo $locale ?>"><?php echo $locale ?></option>
+                        <option value="<?php echo $locale->getLocale() ?>"><?php echo $locale->getLocale() ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>

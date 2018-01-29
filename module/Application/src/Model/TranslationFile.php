@@ -2,62 +2,63 @@
 
 namespace Application\Model;
 
-class TranslationFile extends Base {
-
-    /* @var int $_translationFileId */
-    protected $_translationFileId = null;
-
-    /* @var string $_filename */
-    protected $_filename = null;
-
-    /* @var string $_sourcePath */
-    protected $_sourcePath = null;
-
-    /* @var string $_destinationPath */
-    protected $_destinationPath = null;
+class TranslationFile extends Base
+{
+    /**
+     * @var int
+     */
+    private $translationFileId;
 
     /**
-     * @param int $translationFileId
-     * @return TranslationFile $this
+     * @var string
      */
-    public function setTranslationFileId($translationFileId) {
-        $this->_translationFileId = (int)$translationFileId;
-        return $this;
+    private $filename;
+
+    /**
+     * @var string
+     */
+    private $sourcePath;
+
+    /**
+     * @var string
+     */
+    private $destinationPath;
+
+    /**
+     * This method simply copies the data from the passed in array to our entities properties.
+     *
+     * @param array $data Data from database
+     *
+     * @return void
+     */
+    public function exchangeArray(array $data)
+    {
+        $this->translationFileId = (!empty($data['translation_file_id'])) ? ((int) $data['translation_file_id']) : null;
+        $this->filename          = (!empty($data['filename'])) ? $data['filename'] : null;
+        $this->sourcePath        = (!empty($data['source_path'])) ? $data['source_path'] : null;
+        $this->destinationPath   = (!empty($data['destination_path'])) ? $data['destination_path'] : null;
+    }
+
+    /**
+     * Cast model to array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'translation_file_id' => $this->translationFileId,
+            'filename'            => $this->filename,
+            'source_path'         => $this->sourcePath,
+            'destination_path'    => $this->destinationPath,
+        );
     }
 
     /**
      * @return int
      */
     public function getTranslationFileId() {
-        return $this->_translationFileId;
-    }
-
-    /**
-     * @param string $destinationPath
-     * @return TranslationFile $this
-     */
-    public function setDestinationPath($destinationPath)
-    {
-        $this->_destinationPath = $destinationPath;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDestinationPath()
-    {
-        return $this->_destinationPath;
-    }
-
-    /**
-     * @param string $filename
-     * @return TranslationFile $this
-     */
-    public function setFilename($filename)
-    {
-        $this->_filename = $filename;
-        return $this;
+        return $this->translationFileId;
     }
 
     /**
@@ -65,17 +66,7 @@ class TranslationFile extends Base {
      */
     public function getFilename()
     {
-        return $this->_filename;
-    }
-
-    /**
-     * @param string $sourcePath
-     * @return TranslationFile $this
-     */
-    public function setSourcePath($sourcePath)
-    {
-        $this->_sourcePath = $sourcePath;
-        return $this;
+        return $this->filename;
     }
 
     /**
@@ -83,6 +74,14 @@ class TranslationFile extends Base {
      */
     public function getSourcePath()
     {
-        return $this->_sourcePath;
+        return $this->sourcePath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDestinationPath()
+    {
+        return $this->destinationPath;
     }
 }

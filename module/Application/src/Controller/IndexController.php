@@ -47,10 +47,10 @@ class IndexController extends Base
         }
 
         // prepare filter
-        $currentFilterUnclear = (bool)$this->params()->fromQuery('filter_unclear_translation');
+        $currentFilterUnclear = (bool) $this->params()->fromQuery('filter_unclear_translation');
 
         if ($this->params()->fromQuery('file')) {
-            $currentFile = (array)$this->params()->fromQuery('file');
+            $currentFile = (array) $this->params()->fromQuery('file');
         }
 
         // prepare pagination
@@ -58,25 +58,9 @@ class IndexController extends Base
         $maxPage = 1;
         $elementsPerPage = $this->params()->fromQuery('epp') ?: \Application\Resource\Translation::DEFAULT_ENTRIES_PER_PAGE;
 
-// $s = microtime(true);
-        $translations = $this->_translationTable
-            ->fetchByLanguageAndFile(
-                $this->_currentLocale,
-                $currentFile,
-                $currentFilterUnclear,
-                $elementsPerPage,
-                $page
-            );
-// $e = microtime(true);
-// var_dump($e - $s);
-
-// $s = microtime(true);
         $translationsCount = $this->_translationTable
             ->countByLanguageAndFile($this->_currentLocale, $currentFile, $currentFilterUnclear);
-// $e = microtime(true);
-// var_dump($e - $s);
-// var_dump($translationsCount);
-// exit;
+
         if ('all' == $elementsPerPage) {
             // show all entries on one page
             $elementsPerPage = null;
@@ -87,22 +71,15 @@ class IndexController extends Base
         if ($page < 0) {
             $page = 0;
         }
+
         if ($page > $maxPage) {
             $page = $maxPage;
         }
 
-// $s = microtime(true);
-// $this->_translationTable->fetchByLanguageAndFile(
-//                 $this->_currentLocale, $currentFile, $currentFilterUnclear, $elementsPerPage, $page
-//             );
-// $e = microtime(true);
-// var_dump($e - $s);
-// exit;
-
         // prepare view
         $view =  new ViewModel(array(
             'supportedLocales'     => $this->_supportedLocale->fetchAll(),
-            'translations'         => $translations,
+            'translations'         => $this->_translationTable->fetchByLanguageAndFile($this->_currentLocale, $currentFile, $currentFilterUnclear, $elementsPerPage, $page),
             'translationBase'      => $this->_translationBaseTable->fetchAll(),
             'translationFiles'     => $this->_translationFileTable->fetchAll(),
             'translationsCount'    => $translationsCount,
@@ -193,7 +170,7 @@ class IndexController extends Base
         }
 
         // prepare previous and next item
-        $allBaseIds = $this->_translationBaseTable->fetchIds();
+        $allBaseIds = $this->_translationBaseTable->fetchAll()->getIds();
         $currentKey = array_search($baseId, $allBaseIds);
         $previousKey = $currentKey - 1;
         $nextKey = $currentKey + 1;
@@ -205,22 +182,19 @@ class IndexController extends Base
             $nextKey = 0;
         }
 
-        $translations = $this->_translationTable->fetchByBaseId($baseId);
+        $supportedLocales = $this->_supportedLocale->fetchAll();
+        $translations     = $this->_translationTable->fetchByBaseId($baseId)->groupByLocales($supportedLocales);
 
         return new ViewModel(array(
-            'supportedLocales'     => $this->_supportedLocale->fetchAll(),
-            'currentLocale'        => $this->_currentLocale,
-            'currentTranslationFile' => $this->_translationFileTable->getTranslationFile(
-                $baseTranslation->getTranslationFileId()
-            )->getFilename(),
-            'messages'             => $this->_messages,
-            'baseTranslation'      => $baseTranslation,
-            'translations'         => $translations,
-            'suggestions'          => $this->_suggestionTable->fetchByTranslationId(
-                $translations[$this->_currentLocale]->getTranslationId()
-            ),
-            'previousItemId'       => $allBaseIds[$previousKey],
-            'nextItemId'           => $allBaseIds[$nextKey],
+            'supportedLocales'       => $supportedLocales,
+            'currentLocale'          => $this->_currentLocale,
+            'currentTranslationFile' => $this->_translationFileTable->getTranslationFile($baseTranslation->getTranslationFileId())->getFilename(),
+            'messages'               => $this->_messages,
+            'baseTranslation'        => $baseTranslation,
+            'translations'           => $translations,
+            'suggestions'            => $this->_suggestionTable->fetchByTranslationId($translations[$this->_currentLocale]->getTranslationId()),
+            'previousItemId'         => $allBaseIds[$previousKey],
+            'nextItemId'             => $allBaseIds[$nextKey],
         ));
     }
 

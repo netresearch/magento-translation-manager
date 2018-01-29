@@ -9,8 +9,18 @@
 
 namespace Application;
 
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent;
+use \Zend\Mvc\ModuleRouteListener;
+use \Zend\Mvc\MvcEvent;
+use \Zend\ServiceManager\ServiceManager;
+use \Zend\Db\ResultSet\ResultSet;
+use \Zend\Db\TableGateway\TableGateway;
+
+use \Application\Model\Translation;
+use \Application\Model\TranslationBase;
+use \Application\Model\TranslationFile;
+use \Application\Model\SupportedLocale;
+use \Application\Model\Suggestion;
+
 
 class Module
 {
@@ -37,32 +47,86 @@ class Module
     public function getServiceConfig() {
         return array(
             'factories' => array(
-                'Application\Resource\SupportedLocale' => function($sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    $table = new Resource\SupportedLocale($dbAdapter);
-                    return $table;
+                // supported_locale table
+                'Application\Resource\SupportedLocale' => function (ServiceManager $sm) {
+                    $tableGateway = $sm->get('SupportedLocaleGateway');
+                    return new \Application\Resource\SupportedLocale($tableGateway);
                 },
-                'Application\Resource\Translation' => function($sm) {
+
+                'SupportedLocaleGateway' => function (ServiceManager $sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    $table = new Resource\Translation($dbAdapter);
-                    return $table;
+
+                    $resultSetPrototype = new \Application\ResultSet\SupportedLocale();
+                    $resultSetPrototype->setArrayObjectPrototype(new SupportedLocale());
+                    $resultSetPrototype->buffer();
+
+                    return new TableGateway('supported_locale', $dbAdapter, null, $resultSetPrototype);
                 },
-                'Application\Resource\TranslationBase' => function($sm) {
+
+                // translation table
+                'Application\Resource\Translation' => function (ServiceManager $sm) {
+                    $tableGateway = $sm->get('TranslationTableGateway');
+                    return new \Application\Resource\Translation($tableGateway);
+                },
+
+                'TranslationTableGateway' => function (ServiceManager $sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    $table = new Resource\TranslationBase($dbAdapter);
-                    return $table;
+
+                    $resultSetPrototype = new \Application\ResultSet\Translation();
+                    $resultSetPrototype->setArrayObjectPrototype(new Translation());
+                    $resultSetPrototype->buffer();
+
+                    return new TableGateway('translation', $dbAdapter, null, $resultSetPrototype);
                 },
-                'Application\Resource\TranslationFile' => function($sm) {
+
+                // translation_base table
+                'Application\Resource\TranslationBase' => function (ServiceManager $sm) {
+                    $tableGateway  = $sm->get('TranslationBaseTableGateway');
+                    return new \Application\Resource\TranslationBase($tableGateway);
+                },
+
+                'TranslationBaseTableGateway' => function (ServiceManager $sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    $table = new Resource\TranslationFile($dbAdapter);
-                    return $table;
+
+                    $resultSetPrototype = new \Application\ResultSet\TranslationBase();
+                    $resultSetPrototype->setArrayObjectPrototype(new TranslationBase());
+                    $resultSetPrototype->buffer();
+
+                    return new TableGateway('translation_base', $dbAdapter, null, $resultSetPrototype);
                 },
-                'Application\Resource\Suggestion' => function($sm) {
+
+                // translation_file table
+                'Application\Resource\TranslationFile' => function (ServiceManager $sm) {
+                    $tableGateway = $sm->get('TranslationFileTableGateway');
+                    return new \Application\Resource\TranslationFile($tableGateway);
+                },
+
+                'TranslationFileTableGateway' => function (ServiceManager $sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    $table = new Resource\Suggestion($dbAdapter);
-                    return $table;
+
+                    $resultSetPrototype = new \Application\ResultSet\TranslationFile();
+                    $resultSetPrototype->setArrayObjectPrototype(new TranslationFile());
+                    $resultSetPrototype->buffer();
+
+                    return new TableGateway('translation_file', $dbAdapter, null, $resultSetPrototype);
                 },
-            ),
+
+                // suggestion table
+                'Application\Resource\Suggestion' => function (ServiceManager $sm) {
+                    $tableGateway = $sm->get('SuggestionGateway');
+                    return new \Application\Resource\Suggestion($tableGateway);
+                },
+
+                'SuggestionGateway' => function (ServiceManager $sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+
+                    $resultSetPrototype = new \Application\ResultSet\Suggestion();
+                    $resultSetPrototype->setArrayObjectPrototype(new Suggestion());
+                    $resultSetPrototype->buffer();
+
+                    return new TableGateway('suggestion', $dbAdapter, null, $resultSetPrototype);
+                },
+             ),
         );
     }
 
@@ -76,6 +140,7 @@ class Module
         /** @var \Zend\Http\Request $request */
         $request = $e->getRequest();
         $headers = $request->getHeaders();
+
         if ($headers->has('Accept-Language')) {
             $availableLocales = explode(',', self::LOCALE_AVAILABLE);
             $locales = $headers->get('Accept-Language')->getPrioritized();

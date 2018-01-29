@@ -4,7 +4,8 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 
-class Base extends AbstractActionController {
+class Base extends AbstractActionController
+{
     const DEFAULT_LOCALE = 'de_DE';
 
     const MESSAGE_INFO = 'info';
@@ -15,29 +16,32 @@ class Base extends AbstractActionController {
     /**
      * @var array - system messages
      */
-    protected $_messages = array( /* type => array (message) */ );
+    protected $_messages = array();
 
     /**
-     * @var $_translationBaseTable \Application\Resource\TranslationBase
+     * @var \Application\Resource\TranslationBase
      */
-    protected $_translationBaseTable = null;
+    protected $_translationBaseTable;
+
     /**
-     * @var $_translationTable \Application\Resource\Translation
+     * @var \Application\Resource\Translation
      */
-    protected $_translationTable = null;
+    protected $_translationTable;
+
     /**
-     * @var $_translationTable \Application\Resource\TranslationFile
+     * @var \Application\Resource\TranslationFile
      */
-    protected $_translationFileTable = null;
+    protected $_translationFileTable;
+
     /**
-     * @var $_suggestionTable \Application\Resource\Suggestion
+     * @var \Application\Resource\Suggestion
      */
-    protected $_suggestionTable = null;
+    protected $_suggestionTable;
 
     /**
      * @var array - supported Locales
      */
-    protected $_supportedLocale = null;
+    protected $_supportedLocale;
 
     public function __construct(
         \Application\Resource\SupportedLocale $supportedLocale,
@@ -54,10 +58,10 @@ class Base extends AbstractActionController {
     }
 
     /**
-     * add message to system message queue
+     * Add message to system message queue.
      *
-     * @param $message - message to note
-     * @param string $level - message leven eg.g error or info
+     * @param string $message Message to note
+     * @param string $level   Message level eg.g error or info
      */
     protected function addMessage($message, $level = self::MESSAGE_INFO)
     {

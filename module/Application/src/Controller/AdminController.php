@@ -16,8 +16,8 @@ class AdminController extends Base
     {
         // prepare view
         $view =  new ViewModel(array(
-            'translationFiles'     => $this->_translationFileTable->fetchAll(),
-            'supportedLocales'     => $this->_supportedLocale->fetchAll(),
+            'translationFiles' => $this->_translationFileTable->fetchAll(),
+            'supportedLocales' => $this->_supportedLocale->fetchAll(),
         ));
 
         return $view;

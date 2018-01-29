@@ -1,133 +1,91 @@
 <?php
 namespace Application\Resource;
 
+use Application\Model;
+
+use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Sql;
-use Application\Model;
 
 class TranslationBase extends Base
 {
-
-    protected $table = 'translation_base';
-
     /**
-     * get all translation base
+     * Get all records from "translation_base" table.
      *
-     * @return Model\TranslationBase[] with index base_id
+     * @return \Application\ResultSet\TranslationBase
      */
     public function fetchAll()
     {
-        $resultSet = $this->select(function (Select $select) {
-            $select->order('base_id ASC');
-        });
-        $entities = array();
-        foreach ($resultSet as $row) {
-            $entity = new Model\TranslationBase(array(
-                'baseId'            => $row['base_id'],
-                'translationFileId' => $row['translation_file_id'],
-                'originSource'      => $row['origin_source'],
-                'notInUse'          => $row['not_in_use'],
-                'screenPath'        => $row['screen_path'],
-            ));
-            $entities[$row['base_id']] = $entity;
-        }
-
-        return $entities;
+        return $this->tableGateway
+            ->select(function (Select $select) {
+                $select->order('base_id ASC');
+            });
     }
 
     /**
-     * get IDs of all translation base entries
+     * Get a single record from "translation_base" table by its record id.
      *
-     * @return string[] - IDs of translation base entries
+     * @param int $id ID of record
+     *
+     * @return \Application\Model\TranslationBase
+     * @throws \Exception
      */
-    public function fetchIds()
+    public function getTranslationBase($id)
     {
-        $sql = new Sql($this->adapter);
-        $select = $sql->select($this->table);
-        $select->columns(array('base_id'));
-        $select->order(array('base_id' => 'ASC'));
+        $record = $this->tableGateway
+            ->select(array('base_id' => (int) $id))
+            ->current();
 
-        $statement  = $sql->prepareStatementForSqlObject($select);
-        $resultSet = $statement->execute();
-
-        $ids = array();
-
-        foreach ($resultSet as $row) {
-            $ids[] = $row['base_id'];
+        if (!$record) {
+            throw new \Exception('Could not find row <' . $id . '>');
         }
 
-        return $ids;
+        return $record;
     }
 
     /**
-     * get translation base by id
+     * Save or update record.
      *
-     * @param $baseId
-     * @return Model\TranslationBase|bool - false on failure
-     */
-    public function getTranslationBase($baseId)
-    {
-        $row = $this->select(array('base_id' => (int) $baseId))->current();
-        if (!$row) {
-            return false;
-        }
-
-        $translationBase = new Model\TranslationBase(array(
-            'baseId'            => $row->base_id,
-            'translationFileId' => $row->translation_file_id,
-            'originSource'      => $row->origin_source,
-            'notInUse'          => $row->not_in_use,
-            'screenPath'        => $row->screen_path,
-        ));
-
-        return $translationBase;
-    }
-
-    /**
-     * save or update translation
+     * @param \Application\Model\TranslationBase $translationBase Instance
      *
-     * @param Model\TranslationBase $translationBase
-     * @return bool|int - id of translation base on success, false on failure
+     * @return bool|int ID of record on success, FALSE on failure
+     * @throws \Exception
      */
-    public function saveTranslationBase(Model\TranslationBase $translationBase)
+    public function saveTranslationBase(\Application\Model\TranslationBase $translationBase)
     {
-        $data = array(
-            'base_id'             => $translationBase->getBaseId(),
-            'translation_file_id' => $translationBase->getTranslationFileId(),
-            'origin_source'       => $translationBase->getOriginSource(),
-            'not_in_use'          => $translationBase->getNotInUse(),
-            'screen_path'         => $translationBase->getScreenPath(),
-        );
+        $data = $translationBase->toArray();
+        $id   = (int) $translationBase->getBaseId();
 
-        $baseId = (int) $translationBase->getBaseId();
-
-        if ($baseId == 0) {
-            // insert translation base
-            if (!$this->insert($data))
-                return false;
-            return $this->getLastInsertValue();
-
-        } elseif ($this->getTranslationBase($baseId)) {
-            // update translation base
-            if (!$this->update($data, array('base_id' => $baseId))) {
+        if ($id === 0) {
+            // Insert record
+            if (!$this->tableGateway->insert($data)) {
                 return false;
             }
-            return $baseId;
 
+            return $this->getLastInsertValue();
         } else {
-            // unknown translation base
-            return false;
+            if ($this->getTranslationBase($id)) {
+                // Update record
+                if (!$this->tableGateway->update($data, array('base_id' => $id))) {
+                    return false;
+                }
+
+                return $id;
+            } else {
+                throw new \Exception('Record id does not exist');
+            }
         }
     }
 
     /**
-     * delete translation_base by ID
+     * Delete record by ID.
      *
-     * @param int $baseId
-     * @return int - number of deleted translation base (should be one, because of PK)
+     * @param int $id Record id
+     *
+     * @return int Number of deleted records (should be one, because of PK)
      */
-    public function deleteTranslationBase($baseId)
+    public function deleteTranslationBase($id)
     {
-        return $this->delete(array('base_id' => (int) $baseId));
+        return $this->tableGateway->delete(array('base_id' => (int) $id));
     }
 }
