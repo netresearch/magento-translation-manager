@@ -10,7 +10,7 @@ class IndexController extends Base
     /**
      * @var string - current locale selected by user
      */
-    protected $_currentLocale = self::DEFAULT_LOCALE;
+    private $_currentLocale = self::DEFAULT_LOCALE;
 
     /**
      * define locale out of query params
@@ -202,7 +202,7 @@ class IndexController extends Base
      *
      * @return int|null - if we do a single insert we can jump to this id of row
      */
-    protected function saveIndexForm()
+    private function saveIndexForm()
     {
         $jumpToRow = null;
 
@@ -272,7 +272,7 @@ class IndexController extends Base
      *
      * @return int|false ID of saved element
      */
-    protected function saveTranslationElement($element)
+    private function saveTranslationElement($element)
     {
         if (!array_key_exists('unclearTranslation', $element)) {
             $element['unclearTranslation'] = 0;
@@ -309,7 +309,7 @@ class IndexController extends Base
      *
      * @return bool
      */
-    protected function addSuggestion($translationId, $content)
+    private function addSuggestion($translationId, $content)
     {
         $suggestion = new Suggestion([
             'suggestionId'         => null,
@@ -319,5 +319,4 @@ class IndexController extends Base
 
         return (bool) $this->_suggestionTable->saveSuggestion($suggestion);
     }
-
 }

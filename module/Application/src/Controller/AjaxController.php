@@ -3,15 +3,15 @@ namespace Application\Controller;
 
 use \Zend\Http\PhpEnvironment\Response as HttpResponse;
 
-class AjaxController extends Base {
-
+class AjaxController extends Base
+{
     /**
      * prepare output for output as JSON
      *
      * @param mixed $content
      * @return HttpResponse
      */
-    protected function prepareOutputAsJson($content)
+    private function prepareOutputAsJson($content)
     {
         /** @var $response HttpResponse */
         $response = $this->getResponse();

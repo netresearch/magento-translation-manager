@@ -77,10 +77,8 @@ class AdminController extends Base
             }
         }
 
-
         return new ViewModel([
             'downloadFiles' => $downloadFiles, /* [path|locale|filename] => string */
         ]);
     }
-
 }

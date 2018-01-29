@@ -123,7 +123,7 @@ class Module
      *
      * @param MvcEvent $e
      */
-    protected function setLocaleByAcceptedLang($e)
+    private function setLocaleByAcceptedLang($e)
     {
         /** @var \Zend\Http\Request $request */
         $request = $e->getRequest();
