@@ -31,7 +31,7 @@ class TranslationBase extends Base
     public function getTranslationBase($id)
     {
         $record = $this->tableGateway
-            ->select(array('base_id' => (int) $id))
+            ->select([ 'base_id' => (int) $id ])
             ->current();
 
         if (!$record) {
@@ -64,7 +64,7 @@ class TranslationBase extends Base
         } else {
             if ($this->getTranslationBase($id)) {
                 // Update record
-                if (!$this->tableGateway->update($data, array('base_id' => $id))) {
+                if (!$this->tableGateway->update($data, [ 'base_id' => $id ])) {
                     return false;
                 }
 
@@ -84,6 +84,6 @@ class TranslationBase extends Base
      */
     public function deleteTranslationBase($id)
     {
-        return $this->tableGateway->delete(array('base_id' => (int) $id));
+        return $this->tableGateway->delete([ 'base_id' => (int) $id ]);
     }
 }

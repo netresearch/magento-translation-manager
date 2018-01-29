@@ -31,7 +31,7 @@ class Suggestion extends Base
     {
         return $this->tableGateway
             ->select(function (Select $select) use ($translationId) {
-                $select->where(array('translation_id' => $translationId));
+                $select->where([ 'translation_id' => $translationId ]);
                 $select->order('suggestion_id ASC');
             });
     }
@@ -47,7 +47,7 @@ class Suggestion extends Base
     public function getSuggestion($id)
     {
         $record = $this->tableGateway
-            ->select(array('suggestion_id' => (int) $id))
+            ->select([ 'suggestion_id' => (int) $id ])
             ->current();
 
         if (!$record) {
@@ -80,7 +80,7 @@ class Suggestion extends Base
         } else {
             if ($this->getSuggestion($id)) {
                 // Update record
-                if (!$this->tableGateway->update($data, array('suggestion_id' => $id))) {
+                if (!$this->tableGateway->update($data, [ 'suggestion_id' => $id ])) {
                     return false;
                 }
 
@@ -100,6 +100,6 @@ class Suggestion extends Base
      */
     public function deleteSuggestion($id)
     {
-        return $this->tableGateway->delete(array('suggestion_id' => (int) $id));
+        return $this->tableGateway->delete([ 'suggestion_id' => (int) $id ]);
     }
 }

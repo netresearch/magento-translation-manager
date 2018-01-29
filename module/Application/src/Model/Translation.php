@@ -52,13 +52,13 @@ class Translation
      */
     public function toArray()
     {
-        return array(
+        return [
             'translation_id'      => $this->translationId,
             'base_id'             => $this->baseId,
             'locale'              => $this->locale,
             'current_translation' => $this->currentTranslation,
             'unclear_translation' => (int) $this->unclearTranslation,
-        );
+        ];
     }
 
     public function getTranslationId()

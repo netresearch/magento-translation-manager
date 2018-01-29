@@ -31,7 +31,7 @@ class TranslationFile extends Base
     public function getTranslationFile($id)
     {
         $record = $this->tableGateway
-            ->select(array('translation_file_id' => (int) $id))
+            ->select([ 'translation_file_id' => (int) $id ])
             ->current();
 
         if (!$record) {

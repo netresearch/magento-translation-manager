@@ -1,5 +1,5 @@
 <?php
-return array(
+return [
     'Filter' => 'Filter',
     'Translation file' => 'Übersetzungsdatei',
     'all files' => 'alle Dateien',
@@ -23,4 +23,4 @@ return array(
     'Add suggestion' => 'Vorschlag hinzufügen',
     'See Details' => 'Details ansehen',
     'Submit all' => 'alle abschicken',
-);
+];

@@ -14,7 +14,7 @@ class Translation extends ZendResultSet
      */
     public function groupByLocales(ResultSet\SupportedLocale $supportedLocales)
     {
-        $languages = array();
+        $languages = [];
 
         /** @var Model\Translation $record */
         foreach ($this as $record) {

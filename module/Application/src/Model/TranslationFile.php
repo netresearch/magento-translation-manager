@@ -46,12 +46,12 @@ class TranslationFile
      */
     public function toArray()
     {
-        return array(
+        return [
             'translation_file_id' => $this->translationFileId,
             'filename'            => $this->filename,
             'source_path'         => $this->sourcePath,
             'destination_path'    => $this->destinationPath,
-        );
+        ];
     }
 
     /**

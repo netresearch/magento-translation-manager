@@ -31,9 +31,10 @@ class Module
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function getServiceConfig() {
-        return array(
-            'factories' => array(
+    public function getServiceConfig()
+    {
+        return [
+            'factories' => [
                 // supported_locale table
                 'Application\Resource\SupportedLocale' => function (ServiceManager $sm) {
                     $tableGateway = $sm->get('SupportedLocaleGateway');
@@ -113,8 +114,8 @@ class Module
 
                     return new TableGateway('suggestion', $dbAdapter, null, $resultSetPrototype);
                 },
-             ),
-        );
+             ],
+        ];
     }
 
     /**

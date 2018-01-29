@@ -13,7 +13,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">Export CSV</div>
     <div class="panel-body">
-        <form action="<?php echo $this->url('admin', array('action' => 'export')) ?>" method="post" role="form">
+        <form action="<?php echo $this->url('admin', [ 'action' => 'export' ]) ?>" method="post" role="form">
             <div class="form-group">
                 <label for="translationFile">Translation file</label>
                 <select class="form-control" id="translationFile" name="translation_file[]" multiple="multiple">

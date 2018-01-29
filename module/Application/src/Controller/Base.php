@@ -20,7 +20,7 @@ class Base extends AbstractActionController
     /**
      * @var array - system messages
      */
-    protected $_messages = array();
+    protected $_messages = [];
 
     /**
      * @var \Application\Resource\TranslationBase

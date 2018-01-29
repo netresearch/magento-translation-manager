@@ -43,7 +43,7 @@ class Translation extends Base
 
         // Add count
         $select->reset(Select::COLUMNS)
-            ->columns(array('count' => new Expression('COUNT(*)')));
+            ->columns([ 'count' => new Expression('COUNT(*)') ]);
 
         $statement = $sql->prepareStatementForSqlObject($select);
         $resultSet = $statement->execute();
@@ -100,20 +100,20 @@ class Translation extends Base
         $joinCondition .= ' AND translation.locale = ' . $this->tableGateway->getAdapter()->getPlatform()->quoteValue($locale); // . ' OR locale IS NULL ';
 
         // quoteInto doesn't exist anymore and $this->adapter->getPlatform()->quoteValue() not working
-        $select->join('translation_base', new Expression($joinCondition), array(), Select::JOIN_LEFT);
+        $select->join('translation_base', new Expression($joinCondition), [], Select::JOIN_LEFT);
 
         if (null !== $file) {
             $select->join(
                 'translation_file',
                 'translation_base.translation_file_id = translation_file.translation_file_id',
-                array()
+                []
             );
 
-            $select->where(array('translation_file.filename' => $file));
+            $select->where([ 'translation_file.filename' => $file ]);
         }
 
         if ($filterUnclear) {
-//             $select->where(array('translation.unclear_translation' => 1));
+//             $select->where([ 'translation.unclear_translation' => 1 ]);
         }
 
         return $select;
@@ -130,7 +130,7 @@ class Translation extends Base
     {
         return $this->tableGateway
             ->select(function (Select $select) use ($baseId) {
-                $select->where(array('base_id' => $baseId));
+                $select->where([ 'base_id' => $baseId ]);
                 $select->order('locale ASC');
             });
     }
@@ -146,7 +146,7 @@ class Translation extends Base
     public function getTranslation($id)
     {
         $record = $this->tableGateway
-            ->select(array('translation_id' => (int) $id))
+            ->select([ 'translation_id' => (int) $id ])
             ->current();
 
         if (!$record) {
@@ -179,7 +179,7 @@ class Translation extends Base
         } else {
             if ($this->getTranslation($id)) {
                 // Update record
-                if (!$this->tableGateway->update($data, array('translation_id' => $id))) {
+                if (!$this->tableGateway->update($data, [ 'translation_id' => $id ])) {
                     return false;
                 }
 
@@ -199,6 +199,6 @@ class Translation extends Base
      */
     public function deleteTranslation($id)
     {
-        return $this->tableGateway->delete(array('translation_id' => (int) $id));
+        return $this->tableGateway->delete([ 'translation_id' => (int) $id ]);
     }
 }

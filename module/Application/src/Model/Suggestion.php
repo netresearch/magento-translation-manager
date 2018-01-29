@@ -40,11 +40,11 @@ class Suggestion
      */
     public function toArray()
     {
-        return array(
+        return [
             'suggestion_id'         => $this->suggestionId,
             'translation_id'        => $this->translationId,
             'suggested_translation' => $this->suggestedTranslation,
-        );
+        ];
     }
 
     /**

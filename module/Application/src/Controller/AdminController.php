@@ -14,10 +14,10 @@ class AdminController extends Base
     public function indexAction()
     {
         // prepare view
-        $view =  new ViewModel(array(
+        $view =  new ViewModel([
             'translationFiles' => $this->_translationFileTable->fetchAll(),
             'supportedLocales' => $this->_supportedLocale->fetchAll(),
-        ));
+        ]);
 
         return $view;
     }
@@ -31,15 +31,15 @@ class AdminController extends Base
      */
     public function exportAction()
     {
-        $downloadFiles = array();
+        $downloadFiles = [];
 
         $exportFile = $this->params()->fromPost('translation_file');
         if (!$exportFile) {
-            $exportFile = array();
+            $exportFile = [];
         }
         $exportLocale = $this->params()->fromPost('locale');
         if (!$exportLocale) {
-            $exportLocale = array();
+            $exportLocale = [];
         }
 
         $translationBase = $this->_translationBaseTable->fetchAll();
@@ -60,25 +60,27 @@ class AdminController extends Base
                         $base = $translationBase[$translation['base_id']];
                         fputcsv(
                             $outputFile,
-                            array($base->getOriginSource(), $translation['current_translation']),
+                            [
+                                $base->getOriginSource(), $translation['current_translation']
+                            ],
                             ',', '"'
                         );
                     }
                 fclose($outputFile);
 
                 // store download filenames for template
-                $downloadFiles[] = array(
+                $downloadFiles[] = [
                     'path'     => '/' . self::EXPORT_PATH . "$locale/" . $fileName,
                     'locale'   => $locale,
                     'filename' => $fileName,
-                );
+                ];
             }
         }
 
 
-        return new ViewModel(array(
+        return new ViewModel([
             'downloadFiles' => $downloadFiles, /* [path|locale|filename] => string */
-        ));
+        ]);
     }
 
 }

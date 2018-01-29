@@ -33,7 +33,7 @@ class TranslationBase extends ZendResultSet
      */
     public function getIds()
     {
-        $ids = array();
+        $ids = [];
 
         while ($this->valid()) {
             $ids[] = $this->current()->getBaseId();

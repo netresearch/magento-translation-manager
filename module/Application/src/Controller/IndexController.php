@@ -76,7 +76,7 @@ class IndexController extends Base
         }
 
         // prepare view
-        $view =  new ViewModel(array(
+        $view =  new ViewModel([
             'supportedLocales'     => $this->_supportedLocale->fetchAll(),
             'translations'         => $this->_translationTable->fetchByLanguageAndFile($this->_currentLocale, $currentFile, $currentFilterUnclear, $elementsPerPage, $page),
             'translationBase'      => $this->_translationBaseTable->fetchAll(),
@@ -90,7 +90,7 @@ class IndexController extends Base
             'maxPages'             => $maxPage,
             'messages'             => $this->_messages,
             'jumpToRow'            => $jumpToRow,
-        ));
+        ]);
 
         return $view;
     }
@@ -111,7 +111,7 @@ class IndexController extends Base
         // save data
         if ($this->params()->fromPost('rowid')) {
             // split POST params into rows
-            $formRows = array( /* rowid => array(field => value) */ );
+            $formRows = [ /* rowid => [ field => value ] */ ];
             $postParams = $this->params()->fromPost();
             foreach ($postParams as $postKey => $postValue) {
                 if (preg_match('@(row.{5})_(.+)@', $postKey, $matches)) {
@@ -184,7 +184,7 @@ class IndexController extends Base
         $supportedLocales = $this->_supportedLocale->fetchAll();
         $translations     = $this->_translationTable->fetchByBaseId($baseId)->groupByLocales($supportedLocales);
 
-        return new ViewModel(array(
+        return new ViewModel([
             'supportedLocales'       => $supportedLocales,
             'currentLocale'          => $this->_currentLocale,
             'currentTranslationFile' => $this->_translationFileTable->getTranslationFile($baseTranslation->getTranslationFileId())->getFilename(),
@@ -194,7 +194,7 @@ class IndexController extends Base
             'suggestions'            => $this->_suggestionTable->fetchByTranslationId($translations[$this->_currentLocale]->getTranslationId()),
             'previousItemId'         => $allBaseIds[$previousKey],
             'nextItemId'             => $allBaseIds[$nextKey],
-        ));
+        ]);
     }
 
     /**
@@ -207,7 +207,7 @@ class IndexController extends Base
         $jumpToRow = null;
 
         // split POST params into rows
-        $formRows = array( /* rowid => array(field => value) */ );
+        $formRows = [ /* rowid => [field => value] */ ];
         $postParams = $this->params()->fromPost();
         foreach ($postParams as $postKey => $postValue) {
             if (preg_match('@(row\d+)_(.+)@', $postKey, $matches)) {
@@ -280,13 +280,13 @@ class IndexController extends Base
 
         $translation = null;
 
-        $data  = array(
+        $data = [
             'translation_id'      => $element['id'],
             'base_id'             => $element['baseId'],
             'locale'              => $element['locale'],
             'current_translation' => $element['suggestedTranslation'],
             'unclear_translation' => $element['unclearTranslation'],
-        );
+        ];
 
         if (isset($element['id'])) {
             $translation = $this->_translationTable->getTranslation($element['id']); // $element['translation_id']
@@ -311,11 +311,11 @@ class IndexController extends Base
      */
     protected function addSuggestion($translationId, $content)
     {
-        $suggestion = new Suggestion(array(
+        $suggestion = new Suggestion([
             'suggestionId'         => null,
             'translationId'        => (int) $translationId,
             'suggestedTranslation' => $content,
-        ));
+        ]);
 
         return (bool) $this->_suggestionTable->saveSuggestion($suggestion);
     }

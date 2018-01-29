@@ -58,14 +58,14 @@ class TranslationBase
      */
     public function toArray()
     {
-        return array(
+        return [
             'base_id'             => $this->baseId,
             'translation_file_id' => $this->translationFileId,
             'translation_file'    => $this->translationFile,
             'origin_source'       => $this->originSource,
             'not_in_use'          => (int) $this->notInUse,
             'screen_path'         => $this->screenPath,
-        );
+        ];
     }
 
     public function getBaseId()

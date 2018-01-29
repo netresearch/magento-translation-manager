@@ -28,9 +28,9 @@ class SupportedLocale
      */
     public function toArray()
     {
-        return array(
+        return [
             'locale' => $this->locale,
-        );
+        ];
     }
 
     public function getLocale()

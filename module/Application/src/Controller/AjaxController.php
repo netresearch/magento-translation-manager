@@ -28,11 +28,11 @@ class AjaxController extends Base {
      */
     public function toggleUnclearAction()
     {
-        $json = array(
+        $json = [
             'error'     => null,
             'success'   => false,
             'new_state' => null,
-        );
+        ];
         $translationId = (int)$this->params()->fromPost('translation_id');
         $translation = $this->_translationTable->getTranslation($translationId);
         if (false === $translation) {

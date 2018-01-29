@@ -35,7 +35,7 @@
             </button>
             <ul class="dropdown-menu" role="menu">
                 <?php foreach ($supportedLocales as $locale): ?>
-                    <li><a href="<?php echo $this->url('index', array('action' => 'edit', 'base_id' => $baseTranslation->getBaseId()), array('query' => array('locale' => $locale->getLocale()))); ?>">
+                    <li><a href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale->getLocale() ] ]); ?>">
                             <?php echo $locale->getLocale() ?></a>
                     </li>
                 <?php endforeach; ?>
@@ -50,8 +50,8 @@
     <div class="row">
         <div class="col-md-12">
             <div style="margin-bottom: 25px; overflow: hidden;">
-                <a class="btn btn-default pull-left" href="<?php echo $this->url('index', array('action' => 'edit', 'base_id' => $previousItemId), array('query' => array('locale' => $currentLocale))) ?>">Previous translation</a>
-                <a class="btn btn-default pull-right" href="<?php echo $this->url('index', array('action' => 'edit', 'base_id' => $nextItemId), array('query' => array('locale' => $currentLocale))) ?>">Next translation</a>
+                <a class="btn btn-default pull-left" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $previousItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Previous translation</a>
+                <a class="btn btn-default pull-right" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $nextItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Next translation</a>
             </div>
         </div>
     </div>
@@ -144,8 +144,8 @@
     <div class="row">
         <div class="col-md-12">
             <div style="margin-bottom: 25px; overflow: hidden;">
-                <a class="btn btn-default pull-left" href="<?php echo $this->url('index', array('action' => 'edit', 'base_id' => $previousItemId), array('query' => array('locale' => $currentLocale))) ?>">Previous translation</a>
-                <a class="btn btn-default pull-right" href="<?php echo $this->url('index', array('action' => 'edit', 'base_id' => $nextItemId), array('query' => array('locale' => $currentLocale))) ?>">Next translation</a>
+                <a class="btn btn-default pull-left" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $previousItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Previous translation</a>
+                <a class="btn btn-default pull-right" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $nextItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Next translation</a>
             </div>
         </div>
     </div>
@@ -192,7 +192,7 @@
                                         <input type="hidden" name="<?php echo $rowName?>_id" value="<?php echo $this->escapeHtmlAttr($translation->getTranslationId())?>" />
                                         <button type="submit" value="<?php echo $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="glyphicon glyphicon-plus"></span></button>
                                         &nbsp;
-                                        <a class="btn btn-default btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?php echo $this->url('index', array('action' => 'edit', 'base_id' => $baseTranslation->getBaseId()), array('query' => array('locale' => $locale))) ?>"><span class="glyphicon glyphicon-search"></span></a>
+                                        <a class="btn btn-default btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="glyphicon glyphicon-search"></span></a>
                                     </div>
                                 <td>
                             </tr>
@@ -244,7 +244,7 @@
                                         <input type="hidden" name="<?php echo $rowName?>_id" value="<?php echo $this->escapeHtmlAttr($translation->getTranslationId())?>" />
                                         <button type="submit" value="<?php echo $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="glyphicon glyphicon-plus"></span></button>
                                         &nbsp;
-                                        <a class="btn btn-default btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?php echo $this->url('index', array('action' => 'edit', 'base_id' => $baseTranslation->getBaseId()), array('query' => array('locale' => $locale))) ?>"><span class="glyphicon glyphicon-search"></span></a>
+                                        <a class="btn btn-default btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="glyphicon glyphicon-search"></span></a>
                                     </div>
                                 <td>
                             </tr>
@@ -259,8 +259,8 @@
     <div class="row">
         <div class="col-md-12">
             <div style="margin-bottom: 25px; overflow: hidden;">
-                <button class="btn btn-default pull-left" href="<?php echo $this->url('index', array('action' => 'edit', 'base_id' => $previousItemId), array('query' => array('locale' => $currentLocale))) ?>">Previous translation</button>
-                <button class="btn btn-default pull-right" href="<?php echo $this->url('index', array('action' => 'edit', 'base_id' => $nextItemId), array('query' => array('locale' => $currentLocale))) ?>">Next translation</button>
+                <button class="btn btn-default pull-left" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $previousItemId ], [ 'query' => [ 'locale' => $currentLocale  ] ]) ?>">Previous translation</button>
+                <button class="btn btn-default pull-right" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $nextItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Next translation</button>
             </div>
         </div>
     </div>
