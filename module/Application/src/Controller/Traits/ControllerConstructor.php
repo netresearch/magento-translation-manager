@@ -1,52 +1,48 @@
 <?php
-namespace Application\Controller;
+namespace Application\Controller\Traits;
 
-use \Zend\Mvc\Controller\AbstractActionController;
 use \Application\Resource\SupportedLocale;
 use \Application\Resource\Translation;
 use \Application\Resource\TranslationBase;
 use \Application\Resource\TranslationFile;
 use \Application\Resource\Suggestion;
 
-class Base extends AbstractActionController
+trait ControllerConstructor
 {
-    const DEFAULT_LOCALE = 'de_DE';
-
-    const MESSAGE_INFO = 'info';
-    const MESSAGE_WARN = 'warning';
-    const MESSAGE_ERROR = 'danger';
-    const MESSAGE_SUCCESS = 'success';
-
-    /**
-     * @var array - system messages
-     */
-    protected $_messages = [];
-
     /**
      * @var \Application\Resource\TranslationBase
      */
-    protected $_translationBaseTable;
+    private $_translationBaseTable;
 
     /**
      * @var \Application\Resource\Translation
      */
-    protected $_translationTable;
+    private $_translationTable;
 
     /**
      * @var \Application\Resource\TranslationFile
      */
-    protected $_translationFileTable;
+    private $_translationFileTable;
 
     /**
      * @var \Application\Resource\Suggestion
      */
-    protected $_suggestionTable;
+    private $_suggestionTable;
 
     /**
      * @var array - supported Locales
      */
-    protected $_supportedLocale;
+    private $_supportedLocale;
 
+    /**
+     * Constructor.
+     *
+     * @param SupportedLocale $supportedLocale
+     * @param Translation     $translation
+     * @param TranslationBase $translationBaseTable
+     * @param TranslationFile $translationFileTable
+     * @param Suggestion      $suggestionTable
+     */
     public function __construct(
         SupportedLocale $supportedLocale,
         Translation     $translation,
@@ -59,16 +55,5 @@ class Base extends AbstractActionController
         $this->_translationBaseTable = $translationBaseTable;
         $this->_translationFileTable = $translationFileTable;
         $this->_suggestionTable      = $suggestionTable;
-    }
-
-    /**
-     * Add message to system message queue.
-     *
-     * @param string $message Message to note
-     * @param string $level   Message level eg.g error or info
-     */
-    protected function addMessage($message, $level = self::MESSAGE_INFO)
-    {
-        $this->_messages[$level][] = $message;
     }
 }

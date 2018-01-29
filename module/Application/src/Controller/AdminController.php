@@ -1,10 +1,13 @@
 <?php
 namespace Application\Controller;
 
+use \Zend\Mvc\Controller\AbstractActionController;
 use \Zend\View\Model\ViewModel;
 
-class AdminController extends Base
+class AdminController extends AbstractActionController
 {
+    use Traits\ControllerConstructor;
+
     const EXPORT_PATH = 'export/';
 
     /**

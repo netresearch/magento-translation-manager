@@ -1,10 +1,13 @@
 <?php
 namespace Application\Controller;
 
+use \Zend\Mvc\Controller\AbstractActionController;
 use \Zend\Http\PhpEnvironment\Response as HttpResponse;
 
-class AjaxController extends Base
+class AjaxController extends AbstractActionController
 {
+    use Traits\ControllerConstructor;
+
     /**
      * prepare output for output as JSON
      *

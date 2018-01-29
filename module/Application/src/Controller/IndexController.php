@@ -1,12 +1,23 @@
 <?php
 namespace Application\Controller;
 
+use \Zend\Mvc\Controller\AbstractActionController;
 use \Zend\View\Model\ViewModel;
 use \Application\Model\Suggestion;
 use \Application\Model\Translation;
 
-class IndexController extends Base
+class IndexController extends AbstractActionController
 {
+    use Traits\ControllerConstructor;
+    use Traits\ControllerMessage;
+
+    const DEFAULT_LOCALE  = 'de_DE';
+
+    const MESSAGE_INFO    = 'info';
+    const MESSAGE_WARN    = 'warning';
+    const MESSAGE_ERROR   = 'danger';
+    const MESSAGE_SUCCESS = 'success';
+
     /**
      * @var string - current locale selected by user
      */
