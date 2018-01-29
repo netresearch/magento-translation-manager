@@ -1,8 +1,12 @@
 <?php
-
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use \Zend\Mvc\Controller\AbstractActionController;
+use \Application\Resource\SupportedLocale;
+use \Application\Resource\Translation;
+use \Application\Resource\TranslationBase;
+use \Application\Resource\TranslationFile;
+use \Application\Resource\Suggestion;
 
 class Base extends AbstractActionController
 {
@@ -44,11 +48,11 @@ class Base extends AbstractActionController
     protected $_supportedLocale;
 
     public function __construct(
-        \Application\Resource\SupportedLocale $supportedLocale,
-        \Application\Resource\Translation     $translation,
-        \Application\Resource\TranslationBase $translationBaseTable,
-        \Application\Resource\TranslationFile $translationFileTable,
-        \Application\Resource\Suggestion      $suggestionTable
+        SupportedLocale $supportedLocale,
+        Translation     $translation,
+        TranslationBase $translationBaseTable,
+        TranslationFile $translationFileTable,
+        Suggestion      $suggestionTable
     ) {
         $this->_supportedLocale      = $supportedLocale;
         $this->_translationTable     = $translation;

@@ -2,7 +2,7 @@
 
 namespace Application\Model;
 
-class TranslationBase extends Base
+class TranslationBase
 {
     /**
      * @var int

@@ -1,8 +1,7 @@
 <?php
-
 namespace Application\Controller;
 
-use Zend\View\Model\ViewModel;
+use \Zend\View\Model\ViewModel;
 
 class AdminController extends Base
 {

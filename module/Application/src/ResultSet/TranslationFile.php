@@ -1,8 +1,8 @@
 <?php
 namespace Application\ResultSet;
 
-use Zend\Db\ResultSet\ResultSet;
+use \Zend\Db\ResultSet\ResultSet as ZendResultSet;
 
-class TranslationFile extends ResultSet
+class TranslationFile extends ZendResultSet
 {
 }

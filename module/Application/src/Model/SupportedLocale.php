@@ -2,7 +2,7 @@
 
 namespace Application\Model;
 
-class SupportedLocale extends Base
+class SupportedLocale
 {
     /**
      * @var string

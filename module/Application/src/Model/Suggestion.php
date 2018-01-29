@@ -2,7 +2,7 @@
 
 namespace Application\Model;
 
-class Suggestion extends Base
+class Suggestion
 {
     /**
      * @var int

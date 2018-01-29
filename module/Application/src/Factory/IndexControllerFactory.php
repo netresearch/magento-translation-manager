@@ -3,12 +3,13 @@
 namespace Application\Factory;
 
 use \Interop\Container\ContainerInterface;
+use \Application\Controller\IndexController;
 
 class IndexControllerFactory
 {
     public function __invoke(ContainerInterface $container)
     {
-        return new \Application\Controller\IndexController(
+        return new IndexController(
             $container->get('Application\Resource\SupportedLocale'),
             $container->get('Application\Resource\Translation'),
             $container->get('Application\Resource\TranslationBase'),

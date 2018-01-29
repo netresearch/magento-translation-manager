@@ -1,18 +1,15 @@
 <?php
 namespace Application\Resource;
 
-use Application\Model;
-
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\Sql\Select;
-use Zend\Db\Sql\Sql;
+use \Zend\Db\Sql\Select;
+use \Application\ResultSet\SupportedLocale as ResultSet_SupportedLocale;
 
 class SupportedLocale extends Base
 {
     /**
      * Get all records from "supported_locale" table.
      *
-     * @return \Application\ResultSet\SupportedLocale
+     * @return ResultSet_SupportedLocale
      */
     public function fetchAll()
     {

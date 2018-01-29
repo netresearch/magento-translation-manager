@@ -1,14 +1,10 @@
 <?php
 namespace Application\Resource;
 
-use Zend\Db\Sql\Expression;
-use Zend\Db\ResultSet\ResultSet;
-use Application\Model;
-
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\Sql\Select;
-use Zend\Db\Sql\Sql;
-
+use \Zend\Db\Sql\Expression;
+use \Zend\Db\Sql\Select;
+use \Application\ResultSet\Translation as ResultSet_Translation;
+use \Application\Model\Translation as Model_Translation;
 
 class Translation extends Base
 {
@@ -17,7 +13,7 @@ class Translation extends Base
     /**
      * Get all records from "translation" table.
      *
-     * @return \Application\ResultSet\Translation
+     * @return ResultSet_Translation
      */
     public function fetchAll()
     {
@@ -65,7 +61,7 @@ class Translation extends Base
      * @param int|null    $elementsPerPage Entries to show per page (null = all entries)
      * @param int         $page            Page to show
      *
-     * @return Model\Translation[]
+     * @return Model_Translation[]
      */
     public function fetchByLanguageAndFile(
         $locale,
@@ -128,7 +124,7 @@ class Translation extends Base
      *
      * @param int $baseId
      *
-     * @return \Application\ResultSet\Translation
+     * @return ResultSet_Translation
      */
     public function fetchByBaseId($baseId)
     {
@@ -144,7 +140,7 @@ class Translation extends Base
      *
      * @param int $id ID of record
      *
-     * @return \Application\Model\Translation
+     * @return Model_Translation
      * @throws \Exception
      */
     public function getTranslation($id)
@@ -163,12 +159,12 @@ class Translation extends Base
     /**
      * Save or update record.
      *
-     * @param \Application\Model\TranslationBase $translationBase Instance
+     * @param Model_Translation $translation Instance
      *
      * @return bool|int ID of record on success, FALSE on failure
      * @throws \Exception
      */
-    public function saveTranslation(\Application\Model\Translation $translation)
+    public function saveTranslation(Model_Translation $translation)
     {
         $data = $translation->toArray();
         $id   = (int) $translation->getTranslationId();

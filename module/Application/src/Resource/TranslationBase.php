@@ -1,18 +1,16 @@
 <?php
 namespace Application\Resource;
 
-use Application\Model;
-
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\Sql\Select;
-use Zend\Db\Sql\Sql;
+use \Zend\Db\Sql\Select;
+use \Application\ResultSet\TranslationBase as ResultSet_TranslationBase;
+use \Application\Model\TranslationBase as Model_TranslationBase;
 
 class TranslationBase extends Base
 {
     /**
      * Get all records from "translation_base" table.
      *
-     * @return \Application\ResultSet\TranslationBase
+     * @return ResultSet_TranslationBase
      */
     public function fetchAll()
     {
@@ -27,7 +25,7 @@ class TranslationBase extends Base
      *
      * @param int $id ID of record
      *
-     * @return \Application\Model\TranslationBase
+     * @return Model_TranslationBase
      * @throws \Exception
      */
     public function getTranslationBase($id)
@@ -46,12 +44,12 @@ class TranslationBase extends Base
     /**
      * Save or update record.
      *
-     * @param \Application\Model\TranslationBase $translationBase Instance
+     * @param Model_TranslationBase $translationBase Instance
      *
      * @return bool|int ID of record on success, FALSE on failure
      * @throws \Exception
      */
-    public function saveTranslationBase(\Application\Model\TranslationBase $translationBase)
+    public function saveTranslationBase(Model_TranslationBase $translationBase)
     {
         $data = $translationBase->toArray();
         $id   = (int) $translationBase->getBaseId();

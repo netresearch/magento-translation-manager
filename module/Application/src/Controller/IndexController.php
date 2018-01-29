@@ -1,10 +1,9 @@
 <?php
-
 namespace Application\Controller;
 
-use Application\Model\Suggestion;
-use Application\Model\Translation;
-use Zend\View\Model\ViewModel;
+use \Zend\View\Model\ViewModel;
+use \Application\Model\Suggestion;
+use \Application\Model\Translation;
 
 class IndexController extends Base
 {
@@ -267,10 +266,11 @@ class IndexController extends Base
 
 
     /**
-     * save Translation element with given data
+     * Save translation element with given data.
      *
-     * @param array $element - Translation element data
-     * @return int|false - id of saved element
+     * @param array $element Translation element data
+     *
+     * @return int|false ID of saved element
      */
     protected function saveTranslationElement($element)
     {
@@ -279,39 +279,45 @@ class IndexController extends Base
         }
 
         $translation = null;
+
+        $data  = array(
+            'translation_id'      => $element['id'],
+            'base_id'             => $element['baseId'],
+            'locale'              => $element['locale'],
+            'current_translation' => $element['suggestedTranslation'],
+            'unclear_translation' => $element['unclearTranslation'],
+        );
+
         if (isset($element['id'])) {
-            $translation = $this->_translationTable->getTranslation($element['translation_id']);
-            if (false == $translation) {
-                $translation = new Translation();
-            }
-            $translation->setOptions($element);
-        } else {
-            $translation = new Translation($element);
+            $translation = $this->_translationTable->getTranslation($element['id']); // $element['translation_id']
         }
 
-        $success = $this->_translationTable->saveTranslation($translation);
+        if (!($translation instanceof Translation)) {
+            $translation = new Translation();
+        }
 
-        return $success;
+        $translation->exchangeArray($data);
+
+        return $this->_translationTable->saveTranslation($translation);
     }
 
     /**
-     * add a new suggestion
+     * Add a new suggestion
      *
-     * @param int $translationId - ID of translation
-     * @param string $content - content of the suggestion
-     * @return boolean - was successfully saved
+     * @param int    $translationId ID of translation
+     * @param string $content       Content of the suggestion
+     *
+     * @return bool
      */
     protected function addSuggestion($translationId, $content)
     {
         $suggestion = new Suggestion(array(
             'suggestionId'         => null,
-            'translationId'        => (int)$translationId,
+            'translationId'        => (int) $translationId,
             'suggestedTranslation' => $content,
         ));
 
-        $result = $this->_suggestionTable->saveSuggestion($suggestion);
-
-        return boolval($result);
+        return (bool) $this->_suggestionTable->saveSuggestion($suggestion);
     }
 
 }

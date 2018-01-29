@@ -1,7 +1,4 @@
 <?php
-use Application\Model\TranslationBase;
-use Application\Model\Translation;
-
 /**
  * @var $this Zend\View\Renderer\PhpRenderer
  *
@@ -215,7 +212,7 @@ use Application\Model\Translation;
             data: {"translation_id": translationId},
             success: function(data) {
                 if (false == data.success) {
-                    alert("An error occurred toggling the unclear status of element " + translationId + ":\n" + data.error)
+                    alert("An error occurred toggling the unclear status of element " + translationId + ":\n" + data.error);
                     return;
                 }
 

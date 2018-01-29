@@ -1,26 +1,13 @@
 <?php
-/**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
-
 namespace Application;
 
 use \Zend\Mvc\ModuleRouteListener;
 use \Zend\Mvc\MvcEvent;
 use \Zend\ServiceManager\ServiceManager;
-use \Zend\Db\ResultSet\ResultSet;
 use \Zend\Db\TableGateway\TableGateway;
-
-use \Application\Model\Translation;
-use \Application\Model\TranslationBase;
-use \Application\Model\TranslationFile;
-use \Application\Model\SupportedLocale;
-use \Application\Model\Suggestion;
-
+use \Application\ResultSet;
+use \Application\Resource;
+use \Application\Model;
 
 class Module
 {
@@ -50,14 +37,14 @@ class Module
                 // supported_locale table
                 'Application\Resource\SupportedLocale' => function (ServiceManager $sm) {
                     $tableGateway = $sm->get('SupportedLocaleGateway');
-                    return new \Application\Resource\SupportedLocale($tableGateway);
+                    return new Resource\SupportedLocale($tableGateway);
                 },
 
                 'SupportedLocaleGateway' => function (ServiceManager $sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
 
-                    $resultSetPrototype = new \Application\ResultSet\SupportedLocale();
-                    $resultSetPrototype->setArrayObjectPrototype(new SupportedLocale());
+                    $resultSetPrototype = new ResultSet\SupportedLocale();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\SupportedLocale());
                     $resultSetPrototype->buffer();
 
                     return new TableGateway('supported_locale', $dbAdapter, null, $resultSetPrototype);
@@ -66,14 +53,14 @@ class Module
                 // translation table
                 'Application\Resource\Translation' => function (ServiceManager $sm) {
                     $tableGateway = $sm->get('TranslationTableGateway');
-                    return new \Application\Resource\Translation($tableGateway);
+                    return new Resource\Translation($tableGateway);
                 },
 
                 'TranslationTableGateway' => function (ServiceManager $sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
 
-                    $resultSetPrototype = new \Application\ResultSet\Translation();
-                    $resultSetPrototype->setArrayObjectPrototype(new Translation());
+                    $resultSetPrototype = new ResultSet\Translation();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Translation());
                     $resultSetPrototype->buffer();
 
                     return new TableGateway('translation', $dbAdapter, null, $resultSetPrototype);
@@ -82,14 +69,14 @@ class Module
                 // translation_base table
                 'Application\Resource\TranslationBase' => function (ServiceManager $sm) {
                     $tableGateway  = $sm->get('TranslationBaseTableGateway');
-                    return new \Application\Resource\TranslationBase($tableGateway);
+                    return new Resource\TranslationBase($tableGateway);
                 },
 
                 'TranslationBaseTableGateway' => function (ServiceManager $sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
 
-                    $resultSetPrototype = new \Application\ResultSet\TranslationBase();
-                    $resultSetPrototype->setArrayObjectPrototype(new TranslationBase());
+                    $resultSetPrototype = new ResultSet\TranslationBase();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\TranslationBase());
                     $resultSetPrototype->buffer();
 
                     return new TableGateway('translation_base', $dbAdapter, null, $resultSetPrototype);
@@ -98,14 +85,14 @@ class Module
                 // translation_file table
                 'Application\Resource\TranslationFile' => function (ServiceManager $sm) {
                     $tableGateway = $sm->get('TranslationFileTableGateway');
-                    return new \Application\Resource\TranslationFile($tableGateway);
+                    return new Resource\TranslationFile($tableGateway);
                 },
 
                 'TranslationFileTableGateway' => function (ServiceManager $sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
 
-                    $resultSetPrototype = new \Application\ResultSet\TranslationFile();
-                    $resultSetPrototype->setArrayObjectPrototype(new TranslationFile());
+                    $resultSetPrototype = new ResultSet\TranslationFile();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\TranslationFile());
                     $resultSetPrototype->buffer();
 
                     return new TableGateway('translation_file', $dbAdapter, null, $resultSetPrototype);
@@ -114,14 +101,14 @@ class Module
                 // suggestion table
                 'Application\Resource\Suggestion' => function (ServiceManager $sm) {
                     $tableGateway = $sm->get('SuggestionGateway');
-                    return new \Application\Resource\Suggestion($tableGateway);
+                    return new Resource\Suggestion($tableGateway);
                 },
 
                 'SuggestionGateway' => function (ServiceManager $sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
 
-                    $resultSetPrototype = new \Application\ResultSet\Suggestion();
-                    $resultSetPrototype->setArrayObjectPrototype(new Suggestion());
+                    $resultSetPrototype = new ResultSet\Suggestion();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Suggestion());
                     $resultSetPrototype->buffer();
 
                     return new TableGateway('suggestion', $dbAdapter, null, $resultSetPrototype);

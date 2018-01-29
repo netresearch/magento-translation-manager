@@ -1,16 +1,17 @@
 <?php
 namespace Application\ResultSet;
 
-use Zend\Db\ResultSet\ResultSet;
+use \Zend\Db\ResultSet\ResultSet as ZendResultSet;
+use \Application\Model;
 
-class TranslationBase extends ResultSet
+class TranslationBase extends ZendResultSet
 {
     /**
      * Get record by id.
      *
      * @param int $id Record id
      *
-     * @return \Application\Model\TranslationBase
+     * @return Model\TranslationBase
      */
     public function getById($id)
     {
@@ -21,6 +22,8 @@ class TranslationBase extends ResultSet
 
             $this->next();
         }
+
+        return new Model\TranslationBase();
     }
 
     /**

@@ -1,18 +1,16 @@
 <?php
 namespace Application\Resource;
 
-use Application\Model;
-
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\Sql\Select;
-use Zend\Db\Sql\Sql;
+use \Zend\Db\Sql\Select;
+use \Application\ResultSet\Suggestion as ResultSet_Suggestion;
+use \Application\Model\Suggestion as Model_Suggestion;
 
 class Suggestion extends Base
 {
     /**
      * Get all records from "suggestion" table.
      *
-     * @return \Application\ResultSet\Suggestion
+     * @return ResultSet_Suggestion
      */
     public function fetchAll()
     {
@@ -27,7 +25,7 @@ class Suggestion extends Base
      *
      * @param int $translationId
      *
-     * @return \Application\ResultSet\Suggestion
+     * @return ResultSet_Suggestion
      */
     public function fetchByTranslationId($translationId)
     {
@@ -43,7 +41,7 @@ class Suggestion extends Base
      *
      * @param int $id ID of record
      *
-     * @return \Application\Model\Suggestion
+     * @return Model_Suggestion
      * @throws \Exception
      */
     public function getSuggestion($id)
@@ -62,12 +60,12 @@ class Suggestion extends Base
     /**
      * Save or update record.
      *
-     * @param \Application\Model\Suggestion $suggestion Instance
+     * @param Model_Suggestion $suggestion Instance
      *
      * @return bool|int ID of record on success, FALSE on failure
      * @throws \Exception
      */
-    public function saveSuggestion(\Application\Model\Suggestion $suggestion)
+    public function saveSuggestion(Model_Suggestion $suggestion)
     {
         $data = $suggestion->toArray();
         $id   = (int) $suggestion->getSuggestionId();

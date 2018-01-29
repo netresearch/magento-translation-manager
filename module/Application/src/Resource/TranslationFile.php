@@ -1,18 +1,16 @@
 <?php
 namespace Application\Resource;
 
-use Application\Model;
-
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\Sql\Select;
-use Zend\Db\Sql\Sql;
+use \Zend\Db\Sql\Select;
+use \Application\ResultSet\TranslationFile as ResultSet_TranslationFile;
+use \Application\Model\TranslationFile as Model_TranslationFile;
 
 class TranslationFile extends Base
 {
     /**
      * Get all records from "translation_file" table.
      *
-     * @return \Application\ResultSet\TranslationFile
+     * @return ResultSet_TranslationFile
      */
     public function fetchAll()
     {
@@ -27,7 +25,7 @@ class TranslationFile extends Base
      *
      * @param int $id ID of record
      *
-     * @return \Application\Model\TranslationFile
+     * @return Model_TranslationFile
      * @throws \Exception
      */
     public function getTranslationFile($id)

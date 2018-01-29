@@ -1,8 +1,7 @@
 <?php
-
 namespace Application\Controller;
 
-use Zend\Http\PhpEnvironment\Response as HttpResponse;
+use \Zend\Http\PhpEnvironment\Response as HttpResponse;
 
 class AjaxController extends Base {
 

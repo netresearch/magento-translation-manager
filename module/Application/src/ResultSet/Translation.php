@@ -1,28 +1,30 @@
 <?php
 namespace Application\ResultSet;
 
-use Zend\Db\ResultSet\ResultSet;
+use \Zend\Db\ResultSet\ResultSet as ZendResultSet;
+use \Application\ResultSet;
+use \Application\Model;
 
-class Translation extends ResultSet
+class Translation extends ZendResultSet
 {
     /**
-     * @param \Application\ResultSet\SupportedLocale $supportedLocales
+     * @param ResultSet\SupportedLocale $supportedLocales
      *
-     * @return \Application\Model\Translation[]
+     * @return Translation[]
      */
-    public function groupByLocales(\Application\ResultSet\SupportedLocale $supportedLocales)
+    public function groupByLocales(ResultSet\SupportedLocale $supportedLocales)
     {
         $languages = array();
 
-        /** @var \Application\Model\Translation $record */
+        /** @var Model\Translation $record */
         foreach ($this as $record) {
             $languages[$record->getLocale()] = $record;
         }
 
-        /** @var \Application\Model\SupportedLocale $record */
+        /** @var Model\SupportedLocale $record */
         foreach ($supportedLocales as $record) {
             if (!array_key_exists($record->getLocale(), $languages)) {
-                $languages[$record->getLocale()] = new \Application\Model\Translation();
+                $languages[$record->getLocale()] = new Model\Translation();
             }
         }
 
