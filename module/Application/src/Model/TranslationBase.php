@@ -1,6 +1,7 @@
 <?php
-
 namespace Application\Model;
+
+use Application\Helper\ArrayAccess;
 
 class TranslationBase
 {
@@ -43,12 +44,12 @@ class TranslationBase
      */
     public function exchangeArray(array $data)
     {
-        $this->baseId            = (int) (!empty($data['base_id'])) ? $data['base_id'] : 0;
-        $this->translationFileId = (int) (!empty($data['translation_file_id'])) ? $data['translation_file_id'] : 0;
-        $this->translationFile   = (string) (!empty($data['translation_file'])) ? $data['translation_file'] : null;
-        $this->originSource      = (string) (!empty($data['origin_source'])) ? $data['origin_source'] : null;
-        $this->notInUse          = (bool) (!empty($data['not_in_use'])) ? $data['not_in_use'] : true;
-        $this->screenPath        = (string) (!empty($data['screen_path'])) ? $data['screen_path'] : null;
+        $this->baseId            = ArrayAccess::getInt($data, 'base_id');
+        $this->translationFileId = ArrayAccess::getInt($data, 'translation_file_id');
+        $this->translationFile   = ArrayAccess::getString($data, 'translation_file');
+        $this->originSource      = ArrayAccess::getString($data, 'origin_source');
+        $this->notInUse          = ArrayAccess::getBool($data, 'not_in_use', true);
+        $this->screenPath        = ArrayAccess::getString($data, 'screen_path');
     }
 
     /**

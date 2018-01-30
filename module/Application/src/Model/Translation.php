@@ -1,6 +1,7 @@
 <?php
-
 namespace Application\Model;
+
+use Application\Helper\ArrayAccess;
 
 class Translation
 {
@@ -38,11 +39,11 @@ class Translation
      */
     public function exchangeArray(array $data)
     {
-        $this->translationId      = (int) (!empty($data['translation_id'])) ? $data['translation_id'] : 0;
-        $this->baseId             = (int) (!empty($data['base_id'])) ? $data['base_id'] : 0;
-        $this->locale             = (!empty($data['locale'])) ? $data['locale'] : null;
-        $this->currentTranslation = (!empty($data['current_translation'])) ? $data['current_translation'] : null;
-        $this->unclearTranslation = (bool)  (!empty($data['unclear_translation'])) ? $data['unclear_translation'] : true;
+        $this->translationId      = ArrayAccess::getInt($data, 'translation_id');
+        $this->baseId             = ArrayAccess::getInt($data, 'base_id');
+        $this->locale             = ArrayAccess::getString($data, 'locale');
+        $this->currentTranslation = ArrayAccess::getString($data, 'current_translation');
+        $this->unclearTranslation = ArrayAccess::getBool($data, 'unclear_translation', true);
     }
 
     /**

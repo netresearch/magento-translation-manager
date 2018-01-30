@@ -1,6 +1,7 @@
 <?php
-
 namespace Application\Model;
+
+use Application\Helper\ArrayAccess;
 
 class Suggestion
 {
@@ -28,9 +29,9 @@ class Suggestion
      */
     public function exchangeArray(array $data)
     {
-        $this->suggestionId         = (int) (!empty($data['suggestion_id'])) ? $data['suggestion_id'] : 0;
-        $this->translationId        = (int) (!empty($data['translation_id'])) ? $data['translation_id'] : 0;
-        $this->suggestedTranslation = (!empty($data['suggested_translation'])) ? $data['suggested_translation'] : null;
+        $this->suggestionId         = ArrayAccess::getInt($data, 'suggestion_id');
+        $this->translationId        = ArrayAccess::getInt($data, 'translation_id');
+        $this->suggestedTranslation = ArrayAccess::getString($data, 'suggested_translation');
     }
 
     /**

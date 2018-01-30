@@ -1,6 +1,7 @@
 <?php
-
 namespace Application\Model;
+
+use Application\Helper\ArrayAccess;
 
 class TranslationFile
 {
@@ -33,10 +34,10 @@ class TranslationFile
      */
     public function exchangeArray(array $data)
     {
-        $this->translationFileId = (int) (!empty($data['translation_file_id'])) ? $data['translation_file_id'] : 0;
-        $this->filename          = (!empty($data['filename'])) ? $data['filename'] : null;
-        $this->sourcePath        = (!empty($data['source_path'])) ? $data['source_path'] : null;
-        $this->destinationPath   = (!empty($data['destination_path'])) ? $data['destination_path'] : null;
+        $this->translationFileId = ArrayAccess::getInt($data, 'translation_file_id');
+        $this->filename          = ArrayAccess::getString($data, 'filename');
+        $this->sourcePath        = ArrayAccess::getString($data, 'source_path');
+        $this->destinationPath   = ArrayAccess::getString($data, 'destination_path');
     }
 
     /**

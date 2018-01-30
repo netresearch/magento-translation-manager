@@ -1,6 +1,7 @@
 <?php
-
 namespace Application\Model;
+
+use Application\Helper\ArrayAccess;
 
 class SupportedLocale
 {
@@ -18,7 +19,7 @@ class SupportedLocale
      */
     public function exchangeArray(array $data)
     {
-        $this->locale = (!empty($data['locale'])) ? $data['locale'] : null;
+        $this->locale = ArrayAccess::getString($data, 'locale');
     }
 
     /**
