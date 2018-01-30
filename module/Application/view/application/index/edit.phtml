@@ -30,16 +30,15 @@
     <div class="card-body">
 
         <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                 Language <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu" role="menu">
+            <div class="dropdown-menu">
                 <?php foreach ($supportedLocales as $locale): ?>
-                    <li><a href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale->getLocale() ] ]); ?>">
+                    <a class="dropdown-item" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale->getLocale() ] ]); ?>">
                             <?php echo $locale->getLocale() ?></a>
-                    </li>
                 <?php endforeach; ?>
-            </ul>
+            </div>
         </div>
         <b>selected file:</b> <span class="label label-primary"><?php echo $this->escapeHtml($currentTranslationFile) ?></span>
         <b>selected language:</b> <span class="label label-default"><?php echo $this->escapeHtml($currentLocale) ?></span>

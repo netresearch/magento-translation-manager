@@ -36,30 +36,28 @@
         <div class="card-body">
 
             <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                     <?php echo $this->translate('Translation file') ?> <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => null, 'filter_unclear_translation' => $currentFilterUnclear ] ]); ?>"><?php echo $this->translate('all files') ?></a></li>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => null, 'filter_unclear_translation' => $currentFilterUnclear ] ]); ?>"><?php echo $this->translate('all files') ?></a>
                     <?php foreach ($translationFiles as $translationFile): ?>
-                        <li><a href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $translationFile->getFilename(), 'filter_unclear_translation' => $currentFilterUnclear ] ]); ?>">
+                        <a class="dropdown-item" href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $translationFile->getFilename(), 'filter_unclear_translation' => $currentFilterUnclear ] ]); ?>">
                             <?php echo $translationFile->getFilename() ?></a>
-                        </li>
                     <?php endforeach; ?>
-                </ul>
+                </div>
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                     <?php echo $this->translate('Language') ?> <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" role="menu">
+                <div class="dropdown-menu">
                     <?php foreach ($supportedLocales as $locale): ?>
-                        <li><a href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $locale->getLocale(), 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear ] ]); ?>">
+                        <a class="dropdown-item" href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $locale->getLocale(), 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear ] ]); ?>">
                             <?php echo $locale->getLocale() ?></a>
-                        </li>
                     <?php endforeach; ?>
-                </ul>
+                </div>
             </div>
             <strong><?php echo $this->translate('selected file:') ?></strong>
             <?php if (empty($currentFile)): ?>
@@ -105,26 +103,26 @@
 
             <span id="entries-per-page-button" style="margin-left: 10px"><!-- TODO: where comes the top margin from (see CSS)? -->
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                         <?php echo $this->translate('Entries per page') ?> <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear, 'page' => $currentPage, 'epp' => 25 ] ]); ?>">
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear, 'page' => $currentPage, 'epp' => 25 ] ]); ?>">
                             25
-                        </a></li>
-                        <li><a href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear, 'page' => $currentPage, 'epp' => 50 ] ]); ?>">
+                        </a>
+                        <a class="dropdown-item" href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear, 'page' => $currentPage, 'epp' => 50 ] ]); ?>">
                             50
-                        </a></li>
-                        <li><a href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear, 'page' => $currentPage, 'epp' => 100 ] ]); ?>">
+                        </a>
+                        <a class="dropdown-item" href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear, 'page' => $currentPage, 'epp' => 100 ] ]); ?>">
                             100
-                        </a></li>
-                        <li><a href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear, 'page' => $currentPage, 'epp' => 250 ] ]); ?>">
+                        </a>
+                        <a class="dropdown-item" href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear, 'page' => $currentPage, 'epp' => 250 ] ]); ?>">
                             250
-                        </a></li>
-                        <li><a href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear, 'page' => $currentPage, 'epp' => 'all' ] ]); ?>">
+                        </a>
+                        <a class="dropdown-item" href="<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear, 'page' => $currentPage, 'epp' => 'all' ] ]); ?>">
                             <?php echo $this->translate('all' ) ?>
-                        </a></li>
-                    </ul>
+                        </a>
+                    </div>
                 </div>
                 <strong><?php echo $this->translate('per page:') ?> </strong><span class="label label-default"><?php echo (null !== $currentEPP) ? (int)$currentEPP : $this->translate('all') ?></span>
             </span>
