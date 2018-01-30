@@ -8,10 +8,10 @@
  */
 ?>
 <h2><?= $this->translate('Import') ?></h2>
+<div class="card mt-4">
+    <div class="card-header">Import default CSV (Dummy, not yet implemented!)</div>
+    <div class="card-body">
 
-<div class="panel panel-default">
-    <div class="panel-heading">Import default CSV (Dummy, not yet implemented!)</div>
-    <div class="panel-body">
         <form action="<?php echo $this->url('admin', [ 'action' => 'import' ]) ?>" method="post" multipart="" enctype="multipart/form-data" role="form">
             <div class="form-group">
                 <label class="control-label" for="filebutton">Select File(s)</label>
