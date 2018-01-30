@@ -7,12 +7,12 @@ class Translation
     /**
      * @var int
      */
-    private $translationId;
+    private $translationId = 0;
 
     /**
      * @var int
      */
-    private $baseId;
+    private $baseId = 0;
 
     /**
      * @var string
@@ -27,7 +27,7 @@ class Translation
     /**
      * @var bool
      */
-    private $unclearTranslation;
+    private $unclearTranslation = true;
 
     /**
      * This method simply copies the data from the passed in array to our entities properties.
@@ -38,11 +38,11 @@ class Translation
      */
     public function exchangeArray(array $data)
     {
-        $this->translationId      = (!empty($data['translation_id'])) ? ((int) $data['translation_id']) : null;
-        $this->baseId             = (!empty($data['base_id'])) ? ((int) $data['base_id']) : null;
+        $this->translationId      = (int) (!empty($data['translation_id'])) ? $data['translation_id'] : 0;
+        $this->baseId             = (int) (!empty($data['base_id'])) ? $data['base_id'] : 0;
         $this->locale             = (!empty($data['locale'])) ? $data['locale'] : null;
         $this->currentTranslation = (!empty($data['current_translation'])) ? $data['current_translation'] : null;
-        $this->unclearTranslation = (!empty($data['unclear_translation'])) ? ((bool) $data['unclear_translation']) : null;
+        $this->unclearTranslation = (bool)  (!empty($data['unclear_translation'])) ? $data['unclear_translation'] : true;
     }
 
     /**
@@ -50,7 +50,7 @@ class Translation
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'translation_id'      => $this->translationId,
@@ -61,27 +61,27 @@ class Translation
         ];
     }
 
-    public function getTranslationId()
+    public function getTranslationId(): int
     {
         return $this->translationId;
     }
 
-    public function getBaseId()
+    public function getBaseId(): int
     {
         return $this->baseId;
     }
 
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
 
-    public function getCurrentTranslation()
+    public function getCurrentTranslation(): string
     {
-        return $this->currentTranslation;
+        return (string) $this->currentTranslation;
     }
 
-    public function getUnclearTranslation()
+    public function getUnclearTranslation(): bool
     {
         return $this->unclearTranslation;
     }

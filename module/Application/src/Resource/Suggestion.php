@@ -1,18 +1,24 @@
 <?php
 namespace Application\Resource;
 
+use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Select;
 use \Application\ResultSet\Suggestion as ResultSet_Suggestion;
 use \Application\Model\Suggestion as Model_Suggestion;
 
-class Suggestion extends Base
+/**
+ * Class handles access to the "suggestion" table.
+ */
+class Suggestion extends AbstractTableGateway
 {
+    use Traits\ResourceConstructor;
+
     /**
      * Get all records from "suggestion" table.
      *
      * @return ResultSet_Suggestion
      */
-    public function fetchAll()
+    public function fetchAll(): ResultSet_Suggestion
     {
         return $this->tableGateway
             ->select(function (Select $select) {
@@ -27,7 +33,7 @@ class Suggestion extends Base
      *
      * @return ResultSet_Suggestion
      */
-    public function fetchByTranslationId($translationId)
+    public function fetchByTranslationId($translationId): ResultSet_Suggestion
     {
         return $this->tableGateway
             ->select(function (Select $select) use ($translationId) {
@@ -44,7 +50,7 @@ class Suggestion extends Base
      * @return Model_Suggestion
      * @throws \Exception
      */
-    public function getSuggestion($id)
+    public function getSuggestion($id): Model_Suggestion
     {
         $record = $this->tableGateway
             ->select([ 'suggestion_id' => (int) $id ])
@@ -68,7 +74,7 @@ class Suggestion extends Base
     public function saveSuggestion(Model_Suggestion $suggestion)
     {
         $data = $suggestion->toArray();
-        $id   = (int) $suggestion->getSuggestionId();
+        $id   = $suggestion->getSuggestionId();
 
         if ($id === 0) {
             // Insert record
@@ -98,7 +104,7 @@ class Suggestion extends Base
      *
      * @return int Number of deleted records (should be one, because of PK)
      */
-    public function deleteSuggestion($id)
+    public function deleteSuggestion($id): int
     {
         return $this->tableGateway->delete([ 'suggestion_id' => (int) $id ]);
     }

@@ -7,7 +7,7 @@ use \Application\Controller\AjaxController;
 
 class AjaxControllerFactory
 {
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): AjaxController
     {
         return new AjaxController(
             $container->get('Application\Resource\SupportedLocale'),

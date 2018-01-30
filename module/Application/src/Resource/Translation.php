@@ -1,13 +1,19 @@
 <?php
 namespace Application\Resource;
 
+use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Expression;
 use \Zend\Db\Sql\Select;
 use \Application\ResultSet\Translation as ResultSet_Translation;
 use \Application\Model\Translation as Model_Translation;
 
-class Translation extends Base
+/**
+ * Class handles access to the "translation" table.
+ */
+class Translation extends AbstractTableGateway
 {
+    use Traits\ResourceConstructor;
+
     const DEFAULT_ENTRIES_PER_PAGE = 100;
 
     /**
@@ -15,7 +21,7 @@ class Translation extends Base
      *
      * @return ResultSet_Translation
      */
-    public function fetchAll()
+    public function fetchAll(): ResultSet_Translation
     {
         return $this->tableGateway
             ->select(function (Select $select) {
@@ -28,7 +34,7 @@ class Translation extends Base
      *
      * @param string      $locale        Locale to select
      * @param string|null $file          File to select (null = all files)
-     * @param boolean     $filterUnclear Filter only unclear translations
+     * @param bool        $filterUnclear Filter only unclear translations
      *
      * @return int Number of translations with this filter
      */
@@ -36,7 +42,7 @@ class Translation extends Base
         $locale,
         $file          = null,
         $filterUnclear = false
-    ) {
+    ): int {
         $sql    = $this->tableGateway->getSql();
         $select = $sql->select();
         $select = $this->prepareSqlByLanguageAndFile($select, $locale, $file, $filterUnclear);
@@ -49,7 +55,7 @@ class Translation extends Base
         $resultSet = $statement->execute();
         $result    = $resultSet->current();
 
-        return (int) $result['count'];
+        return $result['count'];
     }
 
     /**
@@ -57,11 +63,11 @@ class Translation extends Base
      *
      * @param string      $locale          Locale to select
      * @param string|null $file            File to select (null = all files)
-     * @param boolean     $filterUnclear   Filter only unclear translations
+     * @param bool        $filterUnclear   Filter only unclear translations
      * @param int|null    $elementsPerPage Entries to show per page (null = all entries)
      * @param int         $page            Page to show
      *
-     * @return Model_Translation[]
+     * @return ResultSet_Translation
      */
     public function fetchByLanguageAndFile(
         $locale,
@@ -69,7 +75,7 @@ class Translation extends Base
         $filterUnclear   = false,
         $elementsPerPage = self::DEFAULT_ENTRIES_PER_PAGE,
         $page            = 1
-    ) {
+    ): ResultSet_Translation {
         return $this->tableGateway
             ->select(function (Select $select) use ($locale, $file, $filterUnclear, $elementsPerPage, $page) {
                 $this->prepareSqlByLanguageAndFile($select, $locale, $file, $filterUnclear);
@@ -92,7 +98,7 @@ class Translation extends Base
      *
      * @return Select Prepared query
      */
-    private function prepareSqlByLanguageAndFile(Select $select, $locale, $file = null, $filterUnclear = false)
+    private function prepareSqlByLanguageAndFile(Select $select, $locale, $file = null, $filterUnclear = false): Select
     {
         $select->order('translation.translation_id ASC');
 
@@ -126,7 +132,7 @@ class Translation extends Base
      *
      * @return ResultSet_Translation
      */
-    public function fetchByBaseId($baseId)
+    public function fetchByBaseId($baseId): ResultSet_Translation
     {
         return $this->tableGateway
             ->select(function (Select $select) use ($baseId) {
@@ -143,7 +149,7 @@ class Translation extends Base
      * @return Model_Translation
      * @throws \Exception
      */
-    public function getTranslation($id)
+    public function getTranslation($id): Model_Translation
     {
         $record = $this->tableGateway
             ->select([ 'translation_id' => (int) $id ])
@@ -197,7 +203,7 @@ class Translation extends Base
      *
      * @return int Number of deleted records (should be one, because of PK)
      */
-    public function deleteTranslation($id)
+    public function deleteTranslation($id): int
     {
         return $this->tableGateway->delete([ 'translation_id' => (int) $id ]);
     }

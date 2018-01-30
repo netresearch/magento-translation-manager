@@ -7,7 +7,7 @@ use \Application\Controller\IndexController;
 
 class IndexControllerFactory
 {
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): IndexController
     {
         return new IndexController(
             $container->get('Application\Resource\SupportedLocale'),

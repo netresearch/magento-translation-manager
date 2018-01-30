@@ -7,7 +7,7 @@ class TranslationFile
     /**
      * @var int
      */
-    private $translationFileId;
+    private $translationFileId = 0;
 
     /**
      * @var string
@@ -33,7 +33,7 @@ class TranslationFile
      */
     public function exchangeArray(array $data)
     {
-        $this->translationFileId = (!empty($data['translation_file_id'])) ? ((int) $data['translation_file_id']) : null;
+        $this->translationFileId = (int) (!empty($data['translation_file_id'])) ? $data['translation_file_id'] : 0;
         $this->filename          = (!empty($data['filename'])) ? $data['filename'] : null;
         $this->sourcePath        = (!empty($data['source_path'])) ? $data['source_path'] : null;
         $this->destinationPath   = (!empty($data['destination_path'])) ? $data['destination_path'] : null;
@@ -44,7 +44,7 @@ class TranslationFile
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'translation_file_id' => $this->translationFileId,
@@ -57,14 +57,15 @@ class TranslationFile
     /**
      * @return int
      */
-    public function getTranslationFileId() {
+    public function getTranslationFileId(): int
+    {
         return $this->translationFileId;
     }
 
     /**
      * @return string
      */
-    public function getFilename()
+    public function getFilename(): string
     {
         return $this->filename;
     }
@@ -72,7 +73,7 @@ class TranslationFile
     /**
      * @return string
      */
-    public function getSourcePath()
+    public function getSourcePath(): string
     {
         return $this->sourcePath;
     }
@@ -80,7 +81,7 @@ class TranslationFile
     /**
      * @return string
      */
-    public function getDestinationPath()
+    public function getDestinationPath(): string
     {
         return $this->destinationPath;
     }

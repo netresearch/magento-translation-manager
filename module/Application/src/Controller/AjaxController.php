@@ -14,7 +14,7 @@ class AjaxController extends AbstractActionController
      * @param mixed $content
      * @return HttpResponse
      */
-    private function prepareOutputAsJson($content)
+    private function prepareOutputAsJson($content): HttpResponse
     {
         /** @var $response HttpResponse */
         $response = $this->getResponse();
@@ -29,19 +29,19 @@ class AjaxController extends AbstractActionController
      *
      * @return HttpResponse
      */
-    public function toggleUnclearAction()
+    public function toggleUnclearAction(): HttpResponse
     {
         $json = [
             'error'     => null,
             'success'   => false,
             'new_state' => null,
         ];
-        $translationId = (int)$this->params()->fromPost('translation_id');
-        $translation = $this->_translationTable->getTranslation($translationId);
-        if (false === $translation) {
-            // translation does not exist
 
-            $json['error'] = 'Unknown translation';
+        try {
+            $translationId = (int) $this->params()->fromPost('translation_id');
+            $translation   = $this->_translationTable->getTranslation($translationId);
+        } catch (\Exception $ex) {
+            $json['error'] = $ex->getMessage();
             return $this->prepareOutputAsJson($json);
         }
 
@@ -50,7 +50,6 @@ class AjaxController extends AbstractActionController
 
         if (false === $success) {
             // error saving translation
-
             $json['error'] = 'Can not save translation';
             return $this->prepareOutputAsJson($json);
         }

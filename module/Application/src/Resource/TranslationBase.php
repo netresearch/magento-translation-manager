@@ -1,18 +1,24 @@
 <?php
 namespace Application\Resource;
 
+use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Select;
 use \Application\ResultSet\TranslationBase as ResultSet_TranslationBase;
 use \Application\Model\TranslationBase as Model_TranslationBase;
 
-class TranslationBase extends Base
+/**
+ * Class handles access to the "translation_base" table.
+ */
+class TranslationBase extends AbstractTableGateway
 {
+    use Traits\ResourceConstructor;
+
     /**
      * Get all records from "translation_base" table.
      *
      * @return ResultSet_TranslationBase
      */
-    public function fetchAll()
+    public function fetchAll(): ResultSet_TranslationBase
     {
         return $this->tableGateway
             ->select(function (Select $select) {
@@ -28,7 +34,7 @@ class TranslationBase extends Base
      * @return Model_TranslationBase
      * @throws \Exception
      */
-    public function getTranslationBase($id)
+    public function getTranslationBase($id): Model_TranslationBase
     {
         $record = $this->tableGateway
             ->select([ 'base_id' => (int) $id ])
@@ -82,7 +88,7 @@ class TranslationBase extends Base
      *
      * @return int Number of deleted records (should be one, because of PK)
      */
-    public function deleteTranslationBase($id)
+    public function deleteTranslationBase($id): int
     {
         return $this->tableGateway->delete([ 'base_id' => (int) $id ]);
     }

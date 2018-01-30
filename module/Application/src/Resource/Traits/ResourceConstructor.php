@@ -1,16 +1,18 @@
 <?php
-namespace Application\Resource;
+namespace Application\Resource\Traits;
 
 use \Zend\Db\TableGateway\TableGateway;
-use \Zend\Db\TableGateway\AbstractTableGateway;
 
-class Base extends AbstractTableGateway
+trait ResourceConstructor
 {
     /**
      * @var TableGateway
      */
-    protected $tableGateway;
+    private $tableGateway;
 
+    /**
+     * Constructor.
+     */
     public function __construct(TableGateway $tableGateway)
     {
         $this->tableGateway = $tableGateway;

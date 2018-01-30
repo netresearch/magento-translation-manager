@@ -26,7 +26,6 @@ class IndexController extends AbstractActionController
     /**
      * define locale out of query params
      * HTTP-Param: locale
-     *
      */
     public function init()
     {
@@ -43,7 +42,7 @@ class IndexController extends AbstractActionController
      *
      * @return ViewModel
      */
-    public function indexAction()
+    public function indexAction(): ViewModel
     {
         $this->init();
 
@@ -86,7 +85,7 @@ class IndexController extends AbstractActionController
             $page = $maxPage;
         }
 
-        // prepare view
+        // Prepare view
         $view =  new ViewModel([
             'supportedLocales'     => $this->_supportedLocale->fetchAll(),
             'translations'         => $this->_translationTable->fetchByLanguageAndFile($this->_currentLocale, $currentFile, $currentFilterUnclear, $elementsPerPage, $page),
@@ -113,7 +112,7 @@ class IndexController extends AbstractActionController
      *
      * @return ViewModel
      */
-    public function editAction()
+    public function editAction(): ViewModel
     {
         $this->init();
         $baseId = $this->params('base_id');
@@ -275,7 +274,6 @@ class IndexController extends AbstractActionController
         return $jumpToRow;
     }
 
-
     /**
      * Save translation element with given data.
      *
@@ -320,7 +318,7 @@ class IndexController extends AbstractActionController
      *
      * @return bool
      */
-    private function addSuggestion($translationId, $content)
+    private function addSuggestion($translationId, $content): bool
     {
         $suggestion = new Suggestion([
             'suggestionId'         => null,

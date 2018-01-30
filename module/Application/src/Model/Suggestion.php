@@ -7,12 +7,12 @@ class Suggestion
     /**
      * @var int
      */
-    private $suggestionId;
+    private $suggestionId = 0;
 
     /**
      * @var int
      */
-    private $translationId;
+    private $translationId = 0;
 
     /**
      * @var string
@@ -28,8 +28,8 @@ class Suggestion
      */
     public function exchangeArray(array $data)
     {
-        $this->suggestionId         = (!empty($data['suggestion_id'])) ? ((int) $data['suggestion_id']) : null;
-        $this->translationId        = (!empty($data['translation_id'])) ? ((int) $data['translation_id']) : null;
+        $this->suggestionId         = (int) (!empty($data['suggestion_id'])) ? $data['suggestion_id'] : 0;
+        $this->translationId        = (int) (!empty($data['translation_id'])) ? $data['translation_id'] : 0;
         $this->suggestedTranslation = (!empty($data['suggested_translation'])) ? $data['suggested_translation'] : null;
     }
 
@@ -38,7 +38,7 @@ class Suggestion
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'suggestion_id'         => $this->suggestionId,
@@ -50,7 +50,7 @@ class Suggestion
     /**
      * @return int
      */
-    public function getSuggestionId()
+    public function getSuggestionId(): int
     {
         return $this->suggestionId;
     }
@@ -58,7 +58,7 @@ class Suggestion
     /**
      * @return int
      */
-    public function getTranslationId()
+    public function getTranslationId(): int
     {
         return $this->translationId;
     }
@@ -66,7 +66,7 @@ class Suggestion
     /**
      * @return string
      */
-    public function getSuggestedTranslation()
+    public function getSuggestedTranslation(): string
     {
         return $this->suggestedTranslation;
     }

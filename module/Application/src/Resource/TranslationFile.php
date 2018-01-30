@@ -1,18 +1,24 @@
 <?php
 namespace Application\Resource;
 
+use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Select;
 use \Application\ResultSet\TranslationFile as ResultSet_TranslationFile;
 use \Application\Model\TranslationFile as Model_TranslationFile;
 
-class TranslationFile extends Base
+/**
+ * Class handles access to the "translation_file" table.
+ */
+class TranslationFile extends AbstractTableGateway
 {
+    use Traits\ResourceConstructor;
+
     /**
      * Get all records from "translation_file" table.
      *
      * @return ResultSet_TranslationFile
      */
-    public function fetchAll()
+    public function fetchAll(): ResultSet_TranslationFile
     {
         return $this->tableGateway
             ->select(function (Select $select) {
@@ -28,7 +34,7 @@ class TranslationFile extends Base
      * @return Model_TranslationFile
      * @throws \Exception
      */
-    public function getTranslationFile($id)
+    public function getTranslationFile($id): Model_TranslationFile
     {
         $record = $this->tableGateway
             ->select([ 'translation_file_id' => (int) $id ])

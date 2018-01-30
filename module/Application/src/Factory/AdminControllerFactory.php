@@ -7,7 +7,7 @@ use \Application\Controller\AdminController;
 
 class AdminControllerFactory
 {
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): AdminController
     {
         return new AdminController(
             $container->get('Application\Resource\SupportedLocale'),

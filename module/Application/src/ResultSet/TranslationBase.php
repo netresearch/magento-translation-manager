@@ -13,7 +13,7 @@ class TranslationBase extends ZendResultSet
      *
      * @return Model\TranslationBase
      */
-    public function getById($id)
+    public function getById($id): Model\TranslationBase
     {
         while ($this->valid()) {
             if ($this->current()->getBaseId() === $id) {
@@ -31,7 +31,7 @@ class TranslationBase extends ZendResultSet
      *
      * @return int[]
      */
-    public function getIds()
+    public function getIds(): array
     {
         $ids = [];
 

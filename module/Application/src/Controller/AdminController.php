@@ -14,7 +14,7 @@ class AdminController extends AbstractActionController
      * admin dashboard
      * @return ViewModel
      */
-    public function indexAction()
+    public function indexAction(): ViewModel
     {
         // prepare view
         $view =  new ViewModel([
@@ -32,7 +32,7 @@ class AdminController extends AbstractActionController
      *
      * @return ViewModel
      */
-    public function exportAction()
+    public function exportAction(): ViewModel
     {
         $downloadFiles = [];
 

@@ -10,29 +10,29 @@ use \Application\Resource\Suggestion;
 trait ControllerConstructor
 {
     /**
-     * @var \Application\Resource\TranslationBase
+     * @var SupportedLocale
      */
-    private $_translationBaseTable;
+    private $_supportedLocale;
 
     /**
-     * @var \Application\Resource\Translation
+     * @var Translation
      */
     private $_translationTable;
 
     /**
-     * @var \Application\Resource\TranslationFile
+     * @var TranslationBase
+     */
+    private $_translationBaseTable;
+
+    /**
+     * @var TranslationFile
      */
     private $_translationFileTable;
 
     /**
-     * @var \Application\Resource\Suggestion
+     * @var Suggestion
      */
     private $_suggestionTable;
-
-    /**
-     * @var array - supported Locales
-     */
-    private $_supportedLocale;
 
     /**
      * Constructor.

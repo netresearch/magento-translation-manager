@@ -10,7 +10,7 @@
     "homepage": "https://github.com/netresearch/magento-translation-manager",
     "config": {
         "platform": {
-            "php" : "7.0"
+            "php" : "7.1"
         },
         "sort-packages": true
     },

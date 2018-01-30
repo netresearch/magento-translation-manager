@@ -12,7 +12,7 @@ class Translation extends ZendResultSet
      *
      * @return Translation[]
      */
-    public function groupByLocales(ResultSet\SupportedLocale $supportedLocales)
+    public function groupByLocales(ResultSet\SupportedLocale $supportedLocales): array
     {
         $languages = [];
 

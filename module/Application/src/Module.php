@@ -26,12 +26,12 @@ class Module
         $this->setLocaleByAcceptedLang($e);
     }
 
-    public function getConfig()
+    public function getConfig(): array
     {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function getServiceConfig()
+    public function getServiceConfig(): array
     {
         return [
             'factories' => [

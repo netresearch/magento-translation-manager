@@ -7,12 +7,12 @@ class TranslationBase
     /**
      * @var int
      */
-    private $baseId;
+    private $baseId = 0;
 
     /**
      * @var int
      */
-    private $translationFileId;
+    private $translationFileId = 0;
 
     /**
      * @var string
@@ -25,9 +25,9 @@ class TranslationBase
     private $originSource;
 
     /**
-     * @var boolean
+     * @var bool
      */
-    private $notInUse;
+    private $notInUse = true;
 
     /**
      * @var string
@@ -43,12 +43,12 @@ class TranslationBase
      */
     public function exchangeArray(array $data)
     {
-        $this->baseId            = (!empty($data['base_id'])) ? ((int) $data['base_id']) : null;
-        $this->translationFileId = (!empty($data['translation_file_id'])) ? ((int) $data['translation_file_id']) : null;
-        $this->translationFile   = (!empty($data['translation_file'])) ? $data['translation_file'] : null;
-        $this->originSource      = (!empty($data['origin_source'])) ? $data['origin_source'] : null;
-        $this->notInUse          = (!empty($data['not_in_use'])) ? ((bool) $data['not_in_use']) : null;
-        $this->screenPath        = (!empty($data['screen_path'])) ? $data['screen_path'] : null;
+        $this->baseId            = (int) (!empty($data['base_id'])) ? $data['base_id'] : 0;
+        $this->translationFileId = (int) (!empty($data['translation_file_id'])) ? $data['translation_file_id'] : 0;
+        $this->translationFile   = (string) (!empty($data['translation_file'])) ? $data['translation_file'] : null;
+        $this->originSource      = (string) (!empty($data['origin_source'])) ? $data['origin_source'] : null;
+        $this->notInUse          = (bool) (!empty($data['not_in_use'])) ? $data['not_in_use'] : true;
+        $this->screenPath        = (string) (!empty($data['screen_path'])) ? $data['screen_path'] : null;
     }
 
     /**
@@ -56,7 +56,7 @@ class TranslationBase
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'base_id'             => $this->baseId,
@@ -68,33 +68,33 @@ class TranslationBase
         ];
     }
 
-    public function getBaseId()
+    public function getBaseId(): int
     {
         return $this->baseId;
     }
 
-    public function getTranslationFileId()
+    public function getTranslationFileId(): int
     {
         return $this->translationFileId;
     }
 
-    public function getTranslationFile()
+    public function getTranslationFile(): string
     {
         return $this->translationFile;
     }
 
-    public function getOriginSource()
+    public function getOriginSource(): string
     {
         return $this->originSource;
     }
 
-    public function getNotInUse()
+    public function getNotInUse(): bool
     {
         return $this->notInUse;
     }
 
-    public function getScreenPath()
+    public function getScreenPath(): string
     {
-        return $this->screenPath;
+        return (string) $this->screenPath;
     }
 }
