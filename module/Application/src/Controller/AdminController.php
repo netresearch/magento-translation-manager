@@ -11,7 +11,8 @@ class AdminController extends AbstractActionController
     const EXPORT_PATH = 'export/';
 
     /**
-     * admin dashboard
+     * Admin dashboard
+     *
      * @return ViewModel
      */
     public function indexAction(): ViewModel
@@ -20,6 +21,20 @@ class AdminController extends AbstractActionController
         $view =  new ViewModel([
             'translationFiles' => $this->_translationFileTable->fetchAll(),
             'supportedLocales' => $this->_supportedLocale->fetchAll(),
+        ]);
+
+        return $view;
+    }
+
+    /**
+     * Admin dashboard
+     *
+     * @return ViewModel
+     */
+    public function importAction(): ViewModel
+    {
+        // prepare view
+        $view =  new ViewModel([
         ]);
 
         return $view;
