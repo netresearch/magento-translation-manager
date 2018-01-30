@@ -28,20 +28,25 @@
 <div class="card">
     <div class="card-header"><b>Basic data</b></div>
     <div class="card-body">
-
-        <div class="btn-group">
-            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-                Language <span class="caret"></span>
-            </button>
-            <div class="dropdown-menu">
-                <?php foreach ($supportedLocales as $locale): ?>
-                    <a class="dropdown-item" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale->getLocale() ] ]); ?>">
-                            <?php echo $locale->getLocale() ?></a>
-                <?php endforeach; ?>
+        <div class="row">
+            <div class="col-12">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                        Language <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <?php foreach ($supportedLocales as $locale): ?>
+                            <a class="dropdown-item" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale->getLocale() ] ]); ?>">
+                                <?php echo $locale->getLocale() ?></a>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <b>selected file:</b> <span class="label label-primary"><?php echo $this->escapeHtml($currentTranslationFile) ?></span>
+                <b>selected language:</b> <span class="badge badge-info"><?php echo $this->escapeHtml($currentLocale) ?></span>
             </div>
         </div>
-        <b>selected file:</b> <span class="label label-primary"><?php echo $this->escapeHtml($currentTranslationFile) ?></span>
-        <b>selected language:</b> <span class="label label-default"><?php echo $this->escapeHtml($currentLocale) ?></span>
     </div>
 </div>
 
@@ -87,7 +92,7 @@
                 <?php $unclearSelected = $translations[$currentLocale]->getUnclearTranslation() ?>
                 <div class="card-header">
                     <strong>Current translation</strong>
-                    <span class="label label-default pull-right"><?php echo $currentLocale ?></span>
+                    <span class="badge badge-info pull-right"><?php echo $currentLocale ?></span>
                     <span class="pull-right">&nbsp;<img src="<?php echo $this->basePath('img/flags/' . strtolower(substr($currentLocale, 0, 2))) ?>.png" alt="<?php echo $currentLocale ?>" />&nbsp;</span>
                     <?php if ($unclearSelected): ?>
                         <i class="glyphicon glyphicon-exclamation-sign unclear " title="unclear translation"></i>
@@ -108,12 +113,12 @@
             <div class="card">
                 <div class="card-header">
                     <strong>Existing suggestions</strong>
-                    <span class="label label-default pull-right"><?php echo $currentLocale ?></span>
+                    <span class="badge badge-info pull-right"><?php echo $currentLocale ?></span>
                     <span class="pull-right">&nbsp;<img src="<?php echo $this->basePath('img/flags/' . strtolower(substr($currentLocale, 0, 2))) ?>.png" alt="<?php echo $currentLocale ?>" />&nbsp;</span>
                 </div>
                 <div class="card-body suggestionlist">
                     <?php foreach ($suggestions as $suggestion): ?>
-                        <span class="label label-default" id="suggestion_<?php echo $suggestion->getSuggestionId() ?>">
+                        <span class="badge badge-info" id="suggestion_<?php echo $suggestion->getSuggestionId() ?>">
                             <?php echo $suggestion->getSuggestedTranslation() ?>
                         </span>
                     <?php endforeach; ?>
@@ -128,7 +133,7 @@
             <div class="card">
                 <div class="card-header">
                     <strong>Submit a new suggestion</strong>
-                    <span class="label label-default pull-right"><?php echo $currentLocale ?></span>
+                    <span class="badge badge-info pull-right"><?php echo $currentLocale ?></span>
                     <span class="pull-right">&nbsp;<img src="<?php echo $this->basePath('img/flags/' . strtolower(substr($currentLocale, 0, 2))) ?>.png" alt="<?php echo $currentLocale ?>" />&nbsp;</span>
                 </div>
                 <div class="card-body">
