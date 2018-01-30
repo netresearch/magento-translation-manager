@@ -1,0 +1,31 @@
+<?php
+/**
+ * @var \Zend\View\Renderer\PhpRenderer        $this
+ * @var \Application\ResultSet\SupportedLocale $locales
+ * @var \Application\Model\SupportedLocale     $locale
+ */
+
+$title = $this->translate('Supported locales');
+$this->headTitle($title);
+?>
+
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<p>
+    <a href="<?= $this->url('locale', [ 'action'=>'add' ]);?>"><?= $this->translate('Add new locale') ?></a>
+</p>
+
+<table class="table">
+    <tr>
+        <th>Locale</th>
+        <th>&nbsp;</th>
+    </tr>
+    <?php foreach ($locales as $locale): ?>
+        <tr>
+            <td><?= $this->escapeHtml($locale->getLocale());?></td>
+            <td>
+                <a href="<?= $this->url('locale', [ 'action'=>'edit', 'id' => $locale->getId() ]);?>"><?= $this->translate('Edit') ?></a>
+                <a href="<?= $this->url('locale', [ 'action'=>'delete', 'id' => $locale->getId() ]);?>"><?= $this->translate('Delete') ?></a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</table>

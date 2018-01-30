@@ -50,6 +50,18 @@ return [
                     ],
                 ],
             ],
+
+            'locale' => [
+                'type' => 'Zend\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/locale/[:action][/:id]',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\Locale',
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
@@ -104,9 +116,10 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            'Application\Controller\Index' => '\Application\Factory\IndexControllerFactory',
-            'Application\Controller\Admin' => '\Application\Factory\AdminControllerFactory',
-            'Application\Controller\Ajax'  => '\Application\Factory\AjaxControllerFactory',
+            'Application\Controller\Index'  => '\Application\Factory\IndexControllerFactory',
+            'Application\Controller\Admin'  => '\Application\Factory\AdminControllerFactory',
+            'Application\Controller\Ajax'   => '\Application\Factory\AjaxControllerFactory',
+            'Application\Controller\Locale' => '\Application\Factory\LocaleControllerFactory',
         ],
     ],
     'view_manager' => [

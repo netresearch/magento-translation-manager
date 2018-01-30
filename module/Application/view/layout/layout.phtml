@@ -49,8 +49,9 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="adminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><?= $this->translate('Admin') ?></a>
                             <div class="dropdown-menu" aria-labelledby="adminDropdown">
-                                <a class="dropdown-item" href="<?= $this->url('admin', ['action' => 'import']) ?>">Import</a>
-                                <a class="dropdown-item" href="<?= $this->url('admin', ['action' => 'export']) ?>">Export</a>
+                                <a class="dropdown-item" href="<?= $this->url('locale') ?>"><?= $this->translate('Locale configuration') ?></a>
+                                <a class="dropdown-item" href="<?= $this->url('admin', ['action' => 'import']) ?>"><?= $this->translate('Import') ?></a>
+                                <a class="dropdown-item" href="<?= $this->url('admin', ['action' => 'export']) ?>"><?= $this->translate('Export') ?></a>
                             </div>
                         </li>
                     </ul>

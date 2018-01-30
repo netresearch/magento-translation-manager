@@ -21,9 +21,11 @@ CREATE TABLE IF NOT EXISTS `suggestion` (
 -- Tabellenstruktur für Tabelle `supported_locale`
 --
 CREATE TABLE IF NOT EXISTS `supported_locale` (
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
     `locale` varchar(5) NOT NULL,
+    PRIMARY KEY (`id`),
     UNIQUE KEY `locale` (`locale`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
 --

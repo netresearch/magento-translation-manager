@@ -3,6 +3,8 @@ namespace Application\Controller;
 
 use \Zend\Mvc\Controller\AbstractActionController;
 use \Zend\View\Model\ViewModel;
+use \Application\Form\SupportedLocaleForm;
+use \Application\Model\SupportedLocale;
 
 class AdminController extends AbstractActionController
 {
@@ -27,7 +29,7 @@ class AdminController extends AbstractActionController
     }
 
     /**
-     * Admin dashboard
+     * Action "import".
      *
      * @return ViewModel
      */
@@ -41,6 +43,8 @@ class AdminController extends AbstractActionController
     }
 
     /**
+     * Action "export".
+     *
      * export language files as CSV data
      * HTTP-Param: translation_file
      * HTTP-Param: locale

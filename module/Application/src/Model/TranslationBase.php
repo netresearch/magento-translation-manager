@@ -1,7 +1,7 @@
 <?php
 namespace Application\Model;
 
-use Application\Helper\ArrayAccess;
+use \Application\Helper\ArrayAccess;
 
 class TranslationBase
 {
