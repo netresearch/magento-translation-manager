@@ -18,6 +18,7 @@
         "zendframework/zend-cache": "^2.7",
         "zendframework/zend-component-installer": "^1.1",
         "zendframework/zend-db": "^2.9",
+        "zendframework/zend-form": "^2.11",
         "zendframework/zend-log": "^2.9",
         "zendframework/zend-mvc": "^3.1",
         "zendframework/zend-mvc-i18n": "^1.0"
