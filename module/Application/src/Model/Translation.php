@@ -37,7 +37,7 @@ class Translation
      *
      * @return void
      */
-    public function exchangeArray(array $data)
+    public function exchangeArray(array $data): void
     {
         $this->translationId      = ArrayAccess::getInt($data, 'translation_id');
         $this->baseId             = ArrayAccess::getInt($data, 'base_id');

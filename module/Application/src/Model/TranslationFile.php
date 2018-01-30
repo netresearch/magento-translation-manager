@@ -32,7 +32,7 @@ class TranslationFile
      *
      * @return void
      */
-    public function exchangeArray(array $data)
+    public function exchangeArray(array $data): void
     {
         $this->translationFileId = ArrayAccess::getInt($data, 'translation_file_id');
         $this->filename          = ArrayAccess::getString($data, 'filename');

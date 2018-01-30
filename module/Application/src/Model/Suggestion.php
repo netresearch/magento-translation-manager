@@ -27,7 +27,7 @@ class Suggestion
      *
      * @return void
      */
-    public function exchangeArray(array $data)
+    public function exchangeArray(array $data): void
     {
         $this->suggestionId         = ArrayAccess::getInt($data, 'suggestion_id');
         $this->translationId        = ArrayAccess::getInt($data, 'translation_id');

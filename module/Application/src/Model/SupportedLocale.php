@@ -17,7 +17,7 @@ class SupportedLocale
      *
      * @return void
      */
-    public function exchangeArray(array $data)
+    public function exchangeArray(array $data): void
     {
         $this->locale = ArrayAccess::getString($data, 'locale');
     }
