@@ -39,9 +39,9 @@ class Translation extends AbstractTableGateway
      * @return int Number of translations with this filter
      */
     public function countByLanguageAndFile(
-        $locale,
-        $file          = null,
-        $filterUnclear = false
+        string  $locale,
+        ?string $file          = null,
+        bool    $filterUnclear = false
     ): int {
         $sql    = $this->tableGateway->getSql();
         $select = $sql->select();
@@ -70,11 +70,11 @@ class Translation extends AbstractTableGateway
      * @return ResultSet_Translation
      */
     public function fetchByLanguageAndFile(
-        $locale,
-        $file            = null,
-        $filterUnclear   = false,
-        $elementsPerPage = self::DEFAULT_ENTRIES_PER_PAGE,
-        $page            = 1
+        string  $locale,
+        ?string $file            = null,
+        bool    $filterUnclear   = false,
+        ?int    $elementsPerPage = self::DEFAULT_ENTRIES_PER_PAGE,
+        int     $page            = 1
     ): ResultSet_Translation {
         return $this->tableGateway
             ->select(function (Select $select) use ($locale, $file, $filterUnclear, $elementsPerPage, $page) {
@@ -98,8 +98,12 @@ class Translation extends AbstractTableGateway
      *
      * @return Select Prepared query
      */
-    private function prepareSqlByLanguageAndFile(Select $select, $locale, $file = null, $filterUnclear = false): Select
-    {
+    private function prepareSqlByLanguageAndFile(
+        Select  $select,
+        string  $locale,
+        ?string $file = null,
+        bool    $filterUnclear = false
+    ): Select {
         $select->order('translation.translation_id ASC');
 
         $joinCondition  = $this->tableGateway->getTable() . '.base_id = translation_base.base_id';
@@ -132,7 +136,7 @@ class Translation extends AbstractTableGateway
      *
      * @return ResultSet_Translation
      */
-    public function fetchByBaseId($baseId): ResultSet_Translation
+    public function fetchByBaseId(int $baseId): ResultSet_Translation
     {
         return $this->tableGateway
             ->select(function (Select $select) use ($baseId) {
@@ -149,7 +153,7 @@ class Translation extends AbstractTableGateway
      * @return Model_Translation
      * @throws \Exception
      */
-    public function getTranslation($id): Model_Translation
+    public function getTranslation(int $id): Model_Translation
     {
         $record = $this->tableGateway
             ->select([ 'translation_id' => (int) $id ])
@@ -203,7 +207,7 @@ class Translation extends AbstractTableGateway
      *
      * @return int Number of deleted records (should be one, because of PK)
      */
-    public function deleteTranslation($id): int
+    public function deleteTranslation(int $id): int
     {
         return $this->tableGateway->delete([ 'translation_id' => (int) $id ]);
     }

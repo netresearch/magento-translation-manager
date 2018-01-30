@@ -14,7 +14,7 @@ trait ControllerMessage
      * @param string $message Message to note
      * @param string $level   Message level eg.g error or info
      */
-    private function addMessage($message, $level = self::MESSAGE_INFO)
+    private function addMessage(string $message, string $level = self::MESSAGE_INFO): void
     {
         $this->_messages[$level][] = $message;
     }

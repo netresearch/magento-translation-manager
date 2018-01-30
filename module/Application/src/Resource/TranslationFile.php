@@ -34,7 +34,7 @@ class TranslationFile extends AbstractTableGateway
      * @return Model_TranslationFile
      * @throws \Exception
      */
-    public function getTranslationFile($id): Model_TranslationFile
+    public function getTranslationFile(int $id): Model_TranslationFile
     {
         $record = $this->tableGateway
             ->select([ 'translation_file_id' => (int) $id ])

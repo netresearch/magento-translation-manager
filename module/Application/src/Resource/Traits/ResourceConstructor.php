@@ -12,6 +12,8 @@ trait ResourceConstructor
 
     /**
      * Constructor.
+     *
+     * @param TableGateway $tableGateway Table gateway instance
      */
     public function __construct(TableGateway $tableGateway)
     {

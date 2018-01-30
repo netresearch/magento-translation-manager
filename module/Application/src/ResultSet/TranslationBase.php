@@ -13,7 +13,7 @@ class TranslationBase extends ZendResultSet
      *
      * @return Model\TranslationBase
      */
-    public function getById($id): Model\TranslationBase
+    public function getById(int $id): Model\TranslationBase
     {
         while ($this->valid()) {
             if ($this->current()->getBaseId() === $id) {

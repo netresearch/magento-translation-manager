@@ -14,7 +14,7 @@ class AjaxController extends AbstractActionController
      * @param mixed $content
      * @return HttpResponse
      */
-    private function prepareOutputAsJson($content): HttpResponse
+    private function prepareOutputAsJson(string $content): HttpResponse
     {
         /** @var $response HttpResponse */
         $response = $this->getResponse();

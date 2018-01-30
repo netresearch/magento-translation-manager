@@ -34,7 +34,7 @@ class TranslationBase extends AbstractTableGateway
      * @return Model_TranslationBase
      * @throws \Exception
      */
-    public function getTranslationBase($id): Model_TranslationBase
+    public function getTranslationBase(int $id): Model_TranslationBase
     {
         $record = $this->tableGateway
             ->select([ 'base_id' => (int) $id ])
@@ -88,7 +88,7 @@ class TranslationBase extends AbstractTableGateway
      *
      * @return int Number of deleted records (should be one, because of PK)
      */
-    public function deleteTranslationBase($id): int
+    public function deleteTranslationBase(int $id): int
     {
         return $this->tableGateway->delete([ 'base_id' => (int) $id ]);
     }

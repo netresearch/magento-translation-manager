@@ -33,7 +33,7 @@ class Suggestion extends AbstractTableGateway
      *
      * @return ResultSet_Suggestion
      */
-    public function fetchByTranslationId($translationId): ResultSet_Suggestion
+    public function fetchByTranslationId(int $translationId): ResultSet_Suggestion
     {
         return $this->tableGateway
             ->select(function (Select $select) use ($translationId) {
@@ -50,7 +50,7 @@ class Suggestion extends AbstractTableGateway
      * @return Model_Suggestion
      * @throws \Exception
      */
-    public function getSuggestion($id): Model_Suggestion
+    public function getSuggestion(int $id): Model_Suggestion
     {
         $record = $this->tableGateway
             ->select([ 'suggestion_id' => (int) $id ])
@@ -104,7 +104,7 @@ class Suggestion extends AbstractTableGateway
      *
      * @return int Number of deleted records (should be one, because of PK)
      */
-    public function deleteSuggestion($id): int
+    public function deleteSuggestion(int $id): int
     {
         return $this->tableGateway->delete([ 'suggestion_id' => (int) $id ]);
     }

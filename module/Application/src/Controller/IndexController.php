@@ -63,8 +63,8 @@ class IndexController extends AbstractActionController
         }
 
         // prepare pagination
-        $page = $this->params()->fromQuery('page') ?: 1;
-        $maxPage = 1;
+        $page            = (int) $this->params()->fromQuery('page') ?: 1;
+        $maxPage         = 1;
         $elementsPerPage = $this->params()->fromQuery('epp') ?: \Application\Resource\Translation::DEFAULT_ENTRIES_PER_PAGE;
 
         $translationsCount = $this->_translationTable
@@ -74,11 +74,12 @@ class IndexController extends AbstractActionController
             // show all entries on one page
             $elementsPerPage = null;
         } else {
-            $maxPage = ceil($translationsCount / $elementsPerPage);
+            $maxPage = (int) ceil($translationsCount / $elementsPerPage);
+            $maxPage = $maxPage < 1 ? 1 : $maxPage;
         }
 
-        if ($page < 0) {
-            $page = 0;
+        if ($page <= 0) {
+            $page = 1;
         }
 
         if ($page > $maxPage) {
@@ -281,7 +282,7 @@ class IndexController extends AbstractActionController
      *
      * @return int|false ID of saved element
      */
-    private function saveTranslationElement($element)
+    private function saveTranslationElement(array $element)
     {
         if (!array_key_exists('unclearTranslation', $element)) {
             $element['unclearTranslation'] = 0;
@@ -318,7 +319,7 @@ class IndexController extends AbstractActionController
      *
      * @return bool
      */
-    private function addSuggestion($translationId, $content): bool
+    private function addSuggestion(int $translationId, string $content): bool
     {
         $suggestion = new Suggestion([
             'suggestionId'         => null,
