@@ -1,17 +1,16 @@
 <?php
-namespace Application\Resource;
+namespace Application\Model;
 
 use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Select;
 use \Application\ResultSet\Suggestion as ResultSet_Suggestion;
-use \Application\Model\Suggestion as Model_Suggestion;
 
 /**
  * Class handles access to the "suggestion" table.
  */
-class Suggestion extends AbstractTableGateway
+class SuggestionTable extends AbstractTableGateway
 {
-    use Traits\ResourceConstructor;
+    use Traits\TableConstructor;
 
     /**
      * Get all records from "suggestion" table.
@@ -47,10 +46,10 @@ class Suggestion extends AbstractTableGateway
      *
      * @param int $id ID of record
      *
-     * @return Model_Suggestion
+     * @return Suggestion
      * @throws \Exception
      */
-    public function getSuggestion(int $id): Model_Suggestion
+    public function getSuggestion(int $id): Suggestion
     {
         $record = $this->tableGateway
             ->select([ 'suggestion_id' => (int) $id ])
@@ -66,12 +65,12 @@ class Suggestion extends AbstractTableGateway
     /**
      * Save or update record.
      *
-     * @param Model_Suggestion $suggestion Instance
+     * @param Suggestion $suggestion Instance
      *
      * @return bool|int ID of record on success, FALSE on failure
      * @throws \Exception
      */
-    public function saveSuggestion(Model_Suggestion $suggestion)
+    public function saveSuggestion(Suggestion $suggestion)
     {
         $data = $suggestion->toArray();
         $id   = $suggestion->getSuggestionId();

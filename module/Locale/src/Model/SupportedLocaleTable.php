@@ -1,17 +1,17 @@
 <?php
-namespace Application\Resource;
+namespace Locale\Model;
 
 use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Select;
-use \Application\ResultSet\SupportedLocale as ResultSet_SupportedLocale;
-use \Application\Model\SupportedLocale as Model_SupportedLocale;
+use \Application\Model\Traits;
+use \Locale\ResultSet\SupportedLocale as ResultSet_SupportedLocale;
 
 /**
  * Class handles access to the "supported_locale" table.
  */
-class SupportedLocale extends AbstractTableGateway
+class SupportedLocaleTable extends AbstractTableGateway
 {
-    use Traits\ResourceConstructor;
+    use Traits\TableConstructor;
 
     /**
      * Get all records from "supported_locale" table.
@@ -31,10 +31,10 @@ class SupportedLocale extends AbstractTableGateway
      *
      * @param int $id ID of record
      *
-     * @return Model_SupportedLocale
+     * @return SupportedLocale
      * @throws \Exception
      */
-    public function getSupportedLocale(int $id): Model_SupportedLocale
+    public function getSupportedLocale(int $id): SupportedLocale
     {
         $record = $this->tableGateway
             ->select([ 'id' => (int) $id ])
@@ -50,12 +50,12 @@ class SupportedLocale extends AbstractTableGateway
     /**
      * Save or update record.
      *
-     * @param Model_SupportedLocale $supportedLocale Instance
+     * @param SupportedLocale $supportedLocale Instance
      *
      * @return bool|int ID of record on success, FALSE on failure
      * @throws \Exception
      */
-    public function saveSupportedLocale(Model_SupportedLocale $supportedLocale)
+    public function saveSupportedLocale(SupportedLocale $supportedLocale)
     {
         $data = $supportedLocale->toArray();
         $id   = $supportedLocale->getId();

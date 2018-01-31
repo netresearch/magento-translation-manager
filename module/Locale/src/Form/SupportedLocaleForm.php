@@ -1,5 +1,5 @@
 <?php
-namespace Application\Form;
+namespace Locale\Form;
 
 use \Zend\Form\Form;
 

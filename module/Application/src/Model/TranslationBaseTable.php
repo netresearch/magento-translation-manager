@@ -1,17 +1,16 @@
 <?php
-namespace Application\Resource;
+namespace Application\Model;
 
 use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Select;
 use \Application\ResultSet\TranslationBase as ResultSet_TranslationBase;
-use \Application\Model\TranslationBase as Model_TranslationBase;
 
 /**
  * Class handles access to the "translation_base" table.
  */
-class TranslationBase extends AbstractTableGateway
+class TranslationBaseTable extends AbstractTableGateway
 {
-    use Traits\ResourceConstructor;
+    use Traits\TableConstructor;
 
     /**
      * Get all records from "translation_base" table.
@@ -31,10 +30,10 @@ class TranslationBase extends AbstractTableGateway
      *
      * @param int $id ID of record
      *
-     * @return Model_TranslationBase
+     * @return TranslationBase
      * @throws \Exception
      */
-    public function getTranslationBase(int $id): Model_TranslationBase
+    public function getTranslationBase(int $id): TranslationBase
     {
         $record = $this->tableGateway
             ->select([ 'base_id' => (int) $id ])
@@ -50,12 +49,12 @@ class TranslationBase extends AbstractTableGateway
     /**
      * Save or update record.
      *
-     * @param Model_TranslationBase $translationBase Instance
+     * @param TranslationBase $translationBase Instance
      *
      * @return bool|int ID of record on success, FALSE on failure
      * @throws \Exception
      */
-    public function saveTranslationBase(Model_TranslationBase $translationBase)
+    public function saveTranslationBase(TranslationBase $translationBase)
     {
         $data = $translationBase->toArray();
         $id   = (int) $translationBase->getBaseId();

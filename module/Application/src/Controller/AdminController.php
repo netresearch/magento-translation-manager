@@ -3,8 +3,6 @@ namespace Application\Controller;
 
 use \Zend\Mvc\Controller\AbstractActionController;
 use \Zend\View\Model\ViewModel;
-use \Application\Form\SupportedLocaleForm;
-use \Application\Model\SupportedLocale;
 
 class AdminController extends AbstractActionController
 {
@@ -15,31 +13,26 @@ class AdminController extends AbstractActionController
     /**
      * Admin dashboard
      *
-     * @return ViewModel
+     * @return mixed
      */
-    public function indexAction(): ViewModel
+    public function indexAction()
     {
-        // prepare view
-        $view =  new ViewModel([
-            'translationFiles' => $this->_translationFileTable->fetchAll(),
-            'supportedLocales' => $this->_supportedLocale->fetchAll(),
-        ]);
-
-        return $view;
+//         return [
+//             'translationFiles' => $this->_translationFileTable->fetchAll(),
+//             'supportedLocales' => $this->_supportedLocale->fetchAll(),
+//         ];
     }
 
     /**
      * Action "import".
      *
-     * @return ViewModel
+     * @return mixed
      */
-    public function importAction(): ViewModel
+    public function importAction()
     {
-        // prepare view
-        $view =  new ViewModel([
-        ]);
-
-        return $view;
+        return [
+            'supportedLocales' => $this->_supportedLocale->fetchAll(),
+        ];
     }
 
     /**

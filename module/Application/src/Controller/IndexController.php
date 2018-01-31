@@ -13,6 +13,8 @@ class IndexController extends AbstractActionController
 
     const DEFAULT_LOCALE  = 'de_DE';
 
+    const DEFAULT_ENTRIES_PER_PAGE = 100;
+
     const MESSAGE_INFO    = 'info';
     const MESSAGE_WARN    = 'warning';
     const MESSAGE_ERROR   = 'danger';
@@ -65,7 +67,7 @@ class IndexController extends AbstractActionController
         // prepare pagination
         $page            = (int) $this->params()->fromQuery('page') ?: 1;
         $maxPage         = 1;
-        $elementsPerPage = $this->params()->fromQuery('epp') ?: \Application\Resource\Translation::DEFAULT_ENTRIES_PER_PAGE;
+        $elementsPerPage = $this->params()->fromQuery('epp') ?: self::DEFAULT_ENTRIES_PER_PAGE;
 
         $translationsCount = $this->_translationTable
             ->countByLanguageAndFile($this->_currentLocale, $currentFile, $currentFilterUnclear);

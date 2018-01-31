@@ -1,23 +1,31 @@
 <?php
 namespace Application;
 
-use \Zend\Mvc\ModuleRouteListener;
-use \Zend\Mvc\MvcEvent;
-use \Zend\ServiceManager\ServiceManager;
+use \Zend\ModuleManager\Feature\BootstrapListenerInterface;
+use \Zend\ModuleManager\Feature\ConfigProviderInterface;
+use \Zend\ModuleManager\Feature\ControllerProviderInterface;
+use \Zend\ModuleManager\Feature\ServiceProviderInterface;
+use \Zend\Db\Adapter\AdapterInterface;
 use \Zend\Db\TableGateway\TableGateway;
-use \Application\ResultSet;
-use \Application\Resource;
-use \Application\Model;
+use \Zend\ServiceManager\ServiceManager;
+use \Zend\Mvc\ModuleRouteListener;
+use \Zend\EventManager\EventInterface;
 
-class Module
+class Module implements BootstrapListenerInterface, ConfigProviderInterface, ControllerProviderInterface, ServiceProviderInterface
 {
     /**
-     * available locales in the application
+     * Available locales in the application
      */
     const LOCALE_AVAILABLE = 'de_DE,en_US';
 
-
-    public function onBootstrap(MvcEvent $e)
+    /**
+     * Listen to the bootstrap event
+     *
+     * @param EventInterface $e
+     *
+     * @return array
+     */
+    public function onBootstrap(EventInterface $e)
     {
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
@@ -26,39 +34,34 @@ class Module
         $this->setLocaleByAcceptedLang($e);
     }
 
+    /**
+     * Returns configuration to merge with application configuration
+     *
+     * @return array|\Traversable
+     */
     public function getConfig(): array
     {
         return include __DIR__ . '/../config/module.config.php';
     }
 
+    /**
+     * Expected to return \Zend\ServiceManager\Config object or array to
+     * seed such an object.
+     *
+     * @return array|\Zend\ServiceManager\Config
+     */
     public function getServiceConfig(): array
     {
         return [
             'factories' => [
-                // supported_locale table
-                'Application\Resource\SupportedLocale' => function (ServiceManager $sm) {
-                    $tableGateway = $sm->get('SupportedLocaleGateway');
-                    return new Resource\SupportedLocale($tableGateway);
-                },
-
-                'SupportedLocaleGateway' => function (ServiceManager $sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-
-                    $resultSetPrototype = new ResultSet\SupportedLocale();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\SupportedLocale());
-                    $resultSetPrototype->buffer();
-
-                    return new TableGateway('supported_locale', $dbAdapter, null, $resultSetPrototype);
-                },
-
                 // translation table
-                'Application\Resource\Translation' => function (ServiceManager $sm) {
-                    $tableGateway = $sm->get('TranslationTableGateway');
-                    return new Resource\Translation($tableGateway);
+                Model\TranslationTable::class => function (ServiceManager $sm) {
+                    $tableGateway = $sm->get('Model\TranslationGateway');
+                    return new Model\TranslationTable($tableGateway);
                 },
 
-                'TranslationTableGateway' => function (ServiceManager $sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                'Model\TranslationGateway' => function (ServiceManager $sm) {
+                    $dbAdapter = $sm->get(AdapterInterface::class);
 
                     $resultSetPrototype = new ResultSet\Translation();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Translation());
@@ -68,13 +71,13 @@ class Module
                 },
 
                 // translation_base table
-                'Application\Resource\TranslationBase' => function (ServiceManager $sm) {
-                    $tableGateway  = $sm->get('TranslationBaseTableGateway');
-                    return new Resource\TranslationBase($tableGateway);
+                Model\TranslationBaseTable::class => function (ServiceManager $sm) {
+                    $tableGateway  = $sm->get('Model\TranslationBaseGateway');
+                    return new Model\TranslationBaseTable($tableGateway);
                 },
 
-                'TranslationBaseTableGateway' => function (ServiceManager $sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                'Model\TranslationBaseGateway' => function (ServiceManager $sm) {
+                    $dbAdapter = $sm->get(AdapterInterface::class);
 
                     $resultSetPrototype = new ResultSet\TranslationBase();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\TranslationBase());
@@ -84,13 +87,13 @@ class Module
                 },
 
                 // translation_file table
-                'Application\Resource\TranslationFile' => function (ServiceManager $sm) {
-                    $tableGateway = $sm->get('TranslationFileTableGateway');
-                    return new Resource\TranslationFile($tableGateway);
+                Model\TranslationFileTable::class => function (ServiceManager $sm) {
+                    $tableGateway = $sm->get('Model\TranslationFileGateway');
+                    return new Model\TranslationFileTable($tableGateway);
                 },
 
-                'TranslationFileTableGateway' => function (ServiceManager $sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                'Model\TranslationFileGateway' => function (ServiceManager $sm) {
+                    $dbAdapter = $sm->get(AdapterInterface::class);
 
                     $resultSetPrototype = new ResultSet\TranslationFile();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\TranslationFile());
@@ -100,13 +103,13 @@ class Module
                 },
 
                 // suggestion table
-                'Application\Resource\Suggestion' => function (ServiceManager $sm) {
-                    $tableGateway = $sm->get('SuggestionGateway');
-                    return new Resource\Suggestion($tableGateway);
+                Model\SuggestionTable::class => function (ServiceManager $sm) {
+                    $tableGateway = $sm->get('Model\SuggestionGateway');
+                    return new Model\SuggestionTable($tableGateway);
                 },
 
-                'SuggestionGateway' => function (ServiceManager $sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                'Model\SuggestionGateway' => function (ServiceManager $sm) {
+                    $dbAdapter = $sm->get(AdapterInterface::class);
 
                     $resultSetPrototype = new ResultSet\Suggestion();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Suggestion());
@@ -114,16 +117,61 @@ class Module
 
                     return new TableGateway('suggestion', $dbAdapter, null, $resultSetPrototype);
                 },
-             ],
+            ],
         ];
     }
 
     /**
-     * define locale by HTTP Header Accept-Language
+     * Expected to return \Zend\ServiceManager\Config object or array to seed
+     * such an object.
      *
-     * @param MvcEvent $e
+     * @return array|\Zend\ServiceManager\Config
      */
-    private function setLocaleByAcceptedLang(MvcEvent $e): void
+    public function getControllerConfig(): array
+    {
+        return [
+            'factories' => [
+                Controller\IndexController::class => function (ServiceManager $sm) {
+                    return new Controller\IndexController(
+                        $sm->get(\Locale\Model\SupportedLocaleTable::class),
+                        $sm->get(\Application\Model\TranslationTable::class),
+                        $sm->get(\Application\Model\TranslationBaseTable::class),
+                        $sm->get(\Application\Model\TranslationFileTable::class),
+                        $sm->get(\Application\Model\SuggestionTable::class)
+                    );
+                },
+
+                Controller\AdminController::class => function (ServiceManager $sm) {
+                    return new Controller\AdminController(
+                        $sm->get(\Locale\Model\SupportedLocaleTable::class),
+                        $sm->get(\Application\Model\TranslationTable::class),
+                        $sm->get(\Application\Model\TranslationBaseTable::class),
+                        $sm->get(\Application\Model\TranslationFileTable::class),
+                        $sm->get(\Application\Model\SuggestionTable::class)
+                    );
+                },
+
+                Controller\AjaxController::class => function (ServiceManager $sm) {
+                    return new Controller\AjaxController(
+                        $sm->get(\Locale\Model\SupportedLocaleTable::class),
+                        $sm->get(\Application\Model\TranslationTable::class),
+                        $sm->get(\Application\Model\TranslationBaseTable::class),
+                        $sm->get(\Application\Model\TranslationFileTable::class),
+                        $sm->get(\Application\Model\SuggestionTable::class)
+                    );
+                },
+            ],
+        ];
+    }
+
+    /**
+     * Define locale by HTTP Header Accept-Language
+     *
+     * @param EventInterface $e
+     *
+     * @return void
+     */
+    private function setLocaleByAcceptedLang(EventInterface $e): void
     {
         /** @var \Zend\Http\Request $request */
         $request = $e->getRequest();

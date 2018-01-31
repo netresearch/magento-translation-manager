@@ -1,5 +1,5 @@
 <?php
-namespace Application\Model;
+namespace Locale\Model;
 
 use \Zend\InputFilter\InputFilter;
 use \Zend\InputFilter\InputFilterAwareInterface;

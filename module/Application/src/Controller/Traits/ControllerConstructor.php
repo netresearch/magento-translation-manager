@@ -1,16 +1,16 @@
 <?php
 namespace Application\Controller\Traits;
 
-use \Application\Resource\SupportedLocale;
-use \Application\Resource\Translation;
-use \Application\Resource\TranslationBase;
-use \Application\Resource\TranslationFile;
-use \Application\Resource\Suggestion;
+use \Locale\Model\SupportedLocaleTable;
+use \Application\Model\TranslationTable;
+use \Application\Model\TranslationBaseTable;
+use \Application\Model\TranslationFileTable;
+use \Application\Model\SuggestionTable;
 
 trait ControllerConstructor
 {
     /**
-     * @var SupportedLocale
+     * @var SupportedLocaleTable
      */
     private $_supportedLocale;
 
@@ -37,18 +37,18 @@ trait ControllerConstructor
     /**
      * Constructor.
      *
-     * @param SupportedLocale $supportedLocale
-     * @param Translation     $translation
-     * @param TranslationBase $translationBaseTable
-     * @param TranslationFile $translationFileTable
-     * @param Suggestion      $suggestionTable
+     * @param SupportedLocaleTable $supportedLocale
+     * @param TranslationTable     $translation
+     * @param TranslationBaseTable $translationBaseTable
+     * @param TranslationFileTable $translationFileTable
+     * @param SuggestionTable      $suggestionTable
      */
     public function __construct(
-        SupportedLocale $supportedLocale,
-        Translation     $translation,
-        TranslationBase $translationBaseTable,
-        TranslationFile $translationFileTable,
-        Suggestion      $suggestionTable
+        SupportedLocaleTable $supportedLocale,
+        TranslationTable     $translation,
+        TranslationBaseTable $translationBaseTable,
+        TranslationFileTable $translationFileTable,
+        SuggestionTable      $suggestionTable
     ) {
         $this->_supportedLocale      = $supportedLocale;
         $this->_translationTable     = $translation;

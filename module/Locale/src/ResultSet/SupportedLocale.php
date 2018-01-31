@@ -1,5 +1,5 @@
 <?php
-namespace Application\ResultSet;
+namespace Locale\ResultSet;
 
 use \Zend\Db\ResultSet\ResultSet as ZendResultSet;
 

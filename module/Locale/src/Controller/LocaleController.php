@@ -1,14 +1,22 @@
 <?php
-namespace Application\Controller;
+namespace Locale\Controller;
 
 use \Zend\Mvc\Controller\AbstractActionController;
-use \Zend\View\Model\ViewModel;
-use \Application\Form\SupportedLocaleForm;
-use \Application\Model\SupportedLocale;
+use \Locale\Form\SupportedLocaleForm;
+use \Locale\Model\SupportedLocale;
+use \Locale\Model\SupportedLocaleTable;
 
 class LocaleController extends AbstractActionController
 {
-    use Traits\ControllerConstructor;
+    /**
+     * @var SupportedLocaleTable
+     */
+    private $_supportedLocale;
+
+    public function __construct(SupportedLocaleTable $table)
+    {
+        $this->_supportedLocale = $table;
+    }
 
     /**
      * Action "index".

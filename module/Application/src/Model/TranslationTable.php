@@ -1,20 +1,17 @@
 <?php
-namespace Application\Resource;
+namespace Application\Model;
 
 use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Expression;
 use \Zend\Db\Sql\Select;
 use \Application\ResultSet\Translation as ResultSet_Translation;
-use \Application\Model\Translation as Model_Translation;
 
 /**
  * Class handles access to the "translation" table.
  */
-class Translation extends AbstractTableGateway
+class TranslationTable extends AbstractTableGateway
 {
-    use Traits\ResourceConstructor;
-
-    const DEFAULT_ENTRIES_PER_PAGE = 100;
+    use Traits\TableConstructor;
 
     /**
      * Get all records from "translation" table.
@@ -73,7 +70,7 @@ class Translation extends AbstractTableGateway
         string  $locale,
         ?string $file            = null,
         bool    $filterUnclear   = false,
-        ?int    $elementsPerPage = self::DEFAULT_ENTRIES_PER_PAGE,
+        ?int    $elementsPerPage = 25,
         int     $page            = 1
     ): ResultSet_Translation {
         return $this->tableGateway
@@ -150,10 +147,10 @@ class Translation extends AbstractTableGateway
      *
      * @param int $id ID of record
      *
-     * @return Model_Translation
+     * @return Translation
      * @throws \Exception
      */
-    public function getTranslation(int $id): Model_Translation
+    public function getTranslation(int $id): Translation
     {
         $record = $this->tableGateway
             ->select([ 'translation_id' => (int) $id ])
@@ -169,12 +166,12 @@ class Translation extends AbstractTableGateway
     /**
      * Save or update record.
      *
-     * @param Model_Translation $translation Instance
+     * @param Translation $translation Instance
      *
      * @return bool|int ID of record on success, FALSE on failure
      * @throws \Exception
      */
-    public function saveTranslation(Model_Translation $translation)
+    public function saveTranslation(Translation $translation)
     {
         $data = $translation->toArray();
         $id   = (int) $translation->getTranslationId();

@@ -1,17 +1,16 @@
 <?php
-namespace Application\Resource;
+namespace Application\Model;
 
 use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Select;
 use \Application\ResultSet\TranslationFile as ResultSet_TranslationFile;
-use \Application\Model\TranslationFile as Model_TranslationFile;
 
 /**
  * Class handles access to the "translation_file" table.
  */
-class TranslationFile extends AbstractTableGateway
+class TranslationFileTable extends AbstractTableGateway
 {
-    use Traits\ResourceConstructor;
+    use Traits\TableConstructor;
 
     /**
      * Get all records from "translation_file" table.
@@ -31,10 +30,10 @@ class TranslationFile extends AbstractTableGateway
      *
      * @param int $id ID of record
      *
-     * @return Model_TranslationFile
+     * @return TranslationFile
      * @throws \Exception
      */
-    public function getTranslationFile(int $id): Model_TranslationFile
+    public function getTranslationFile(int $id): TranslationFile
     {
         $record = $this->tableGateway
             ->select([ 'translation_file_id' => (int) $id ])

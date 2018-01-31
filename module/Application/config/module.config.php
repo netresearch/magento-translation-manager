@@ -1,108 +1,124 @@
 <?php
-/**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
+namespace Application;
+
+use Zend\Router\Http\Literal;
+use Zend\Router\Http\Segment;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'router' => [
         'routes' => [
-            'admin' => [
-                'type' => 'Zend\Router\Http\Segment',
-                'options' => [
-                    'route'    => '/admin/[:action][/:base_id]',
-                    'defaults' => [
-                        'controller' => 'Application\Controller\Admin',
-                        'action'     => 'index',
-                    ],
-                ],
-            ],
             'home' => [
-                'type' => 'Zend\Router\Http\Segment',
+                'type' => Literal::class,
                 'options' => [
                     'route'    => '/',
                     'defaults' => [
-                        'controller' => 'Application\Controller\Index',
+                        'controller' => Controller\IndexController::class,
                         'action'     => 'index',
                     ],
                 ],
             ],
-            'index' => [
-                'type' => 'Zend\Router\Http\Segment',
+
+            'application' => [
+                'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/index/[:action][/:base_id]',
+                    'route'    => '/application[/:action]',
                     'defaults' => [
-                        'controller' => 'Application\Controller\Index',
+                        'controller' => Controller\IndexController::class,
                         'action'     => 'index',
                     ],
                 ],
             ],
+//             'index' => [
+//                 'type' => Segment::class,
+//                 'options' => [
+//                     'route'    => '/index/[:action][/:base_id]',
+//                     'defaults' => [
+//                         'controller' => Controller\IndexController::class,
+//                         'action'     => 'index',
+//                     ],
+//                 ],
+//             ],
+
+            'admin' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/admin/[:action][/:base_id]',
+                    'defaults' => [
+                        'controller' => Controller\AdminController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+
             'ajax' => [
-                'type' => 'Zend\Router\Http\Segment',
+                'type' => Segment::class,
                 'options' => [
                     'route'    => '/ajax/[:action][/:base_id]',
                     'defaults' => [
-                        'controller' => 'Application\Controller\Ajax',
+                        'controller' => Controller\AjaxController::class,
                         'action'     => 'index',
                     ],
                 ],
             ],
 
-            'locale' => [
-                'type' => 'Zend\Router\Http\Segment',
-                'options' => [
-                    'route'    => '/locale/[:action][/:id]',
-                    'defaults' => [
-                        'controller' => 'Application\Controller\Locale',
-                        'action'     => 'index',
-                    ],
-                ],
-            ],
+//             'locale' => [
+//                 'type' => Segment::class,
+//                 'options' => [
+//                     'route'    => '/locale/[:action][/:id]',
+//                     'defaults' => [
+//                         'controller' => 'Locale\Controller\Locale',
+//                         'action'     => 'index',
+//                     ],
+//                 ],
+//             ],
 
-            // The following is a route to simplify getting started creating
-            // new controllers and actions without needing to create a new
-            // module. Simply drop new controllers in, and you can access them
-            // using the path /application/:controller/:action
-            'application' => [
-                'type'    => 'Segment',
-                'options' => [
-                    'route'    => '/application[/:action][/:id]',
-                    'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Index',
-                        'action'        => 'index',
-                    ],
-                ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'default' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => [
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ],
-                            'defaults' => [
-                            ],
-                        ],
-                    ],
-                ],
-            ],
+//             // The following is a route to simplify getting started creating
+//             // new controllers and actions without needing to create a new
+//             // module. Simply drop new controllers in, and you can access them
+//             // using the path /application/:controller/:action
+//             'application' => [
+//                 'type'    => 'Segment',
+//                 'options' => [
+//                     'route'    => '/application[/:action][/:id]',
+//                     'defaults' => [
+//                         '__NAMESPACE__' => 'Application\Controller',
+//                         'controller'    => 'Index',
+//                         'action'        => 'index',
+//                     ],
+//                 ],
+//                 'may_terminate' => true,
+//                 'child_routes' => [
+//                     'default' => [
+//                         'type'    => 'Segment',
+//                         'options' => [
+//                             'route'    => '/[:controller[/:action]]',
+//                             'constraints' => [
+//                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+//                                 'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+//                             ],
+//                             'defaults' => [
+//                             ],
+//                         ],
+//                     ],
+//                 ],
+//             ],
         ],
     ],
+
     'service_manager' => [
         'abstract_factories' => [
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
         ],
-        'aliases' => [
-            'translator' => 'MvcTranslator',
-        ],
+//         'aliases' => [
+//             'translator' => 'MvcTranslator',
+//         ],
+        'factories' => [
+            'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
+        ]
     ],
+
     'translator' => [
         'locale' => 'en_US',
         'translation_file_patterns' => [
@@ -114,14 +130,7 @@ return [
             ],
         ],
     ],
-    'controllers' => [
-        'factories' => [
-            'Application\Controller\Index'  => '\Application\Factory\IndexControllerFactory',
-            'Application\Controller\Admin'  => '\Application\Factory\AdminControllerFactory',
-            'Application\Controller\Ajax'   => '\Application\Factory\AjaxControllerFactory',
-            'Application\Controller\Locale' => '\Application\Factory\LocaleControllerFactory',
-        ],
-    ],
+
     'view_manager' => [
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
@@ -136,13 +145,6 @@ return [
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',
-        ],
-    ],
-    // Placeholder for console routes
-    'console' => [
-        'router' => [
-            'routes' => [
-            ],
         ],
     ],
 ];

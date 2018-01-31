@@ -1,4 +1,5 @@
 <?php
+
 return array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
@@ -14,6 +15,7 @@ return array(
         'Zend\Router',
         'Zend\Validator',
         'Application',
+        'Locale',
     ),
 
     // These are various options for the listeners attached to the ModuleManager
@@ -31,7 +33,8 @@ return array(
         // modules are loaded. These effectively override configuration
         // provided by modules themselves. Paths may use GLOB_BRACE notation.
         'config_glob_paths' => array(
-            'config/autoload/{,*.}{global,local}.php',
+            realpath(__DIR__) . '/autoload/{{,*.}global,{,*.}local}.php',
+//             'config/autoload/{,*.}{global,local}.php',
         ),
 
         // Whether or not to enable a configuration cache.
