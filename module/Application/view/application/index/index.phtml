@@ -84,29 +84,34 @@
                         </div>
                     </div>
                     <div class="col-lg-4 text-right">
-                        <strong><?php echo $this->translate('selected file:') ?></strong>
-                        <?php if (empty($currentFile)): ?>
-                            <span class="label label-info"><?php echo $this->translate('all files') ?></span>
-                        <?php else: ?>
-                            <?php foreach ($currentFile as $fileName): ?>
-                                <span class="label label-primary"><?php echo $fileName ?></span>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                        <br>
-                        <strong><?php echo $this->translate('selected language:') ?></strong> <span class="badge badge-info"><?php echo $currentLocale ?></span>
-                        <br>
-                        <strong><?php echo $this->translate('per page:') ?> </strong><span class="badge badge-info"><?php echo (null !== $currentEPP) ? (int)$currentEPP : $this->translate('all') ?></span>
-                        <br>
-                        <strong><?php echo $this->translate('unclear translations:') ?> </strong>
-                        <?php if ($currentFilterUnclear): ?>
-                            <button class="btn btn-info" onclick="location.href='<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => 0 ] ]) ?>'">
-                                <?php echo $this->translate('show only unclear') ?>
-                            </button>
-                        <?php else: ?>
-                            <button class="btn btn-outline-info" onclick="location.href='<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => 1 ] ]) ?>'">
-                                <?php echo $this->translate('show only unclear') ?>
-                            </button>
-                        <?php endif; ?>
+                        <p>
+                            <strong><?php echo $this->translate('selected file:') ?></strong>
+                            <?php if (empty($currentFile)): ?>
+                                <span class="label label-info"><?php echo $this->translate('all files') ?></span>
+                            <?php else: ?>
+                                <?php foreach ($currentFile as $fileName): ?>
+                                    <span class="label label-primary"><?php echo $fileName ?></span>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </p>
+                        <p>
+                            <strong><?php echo $this->translate('selected language:') ?></strong> <span class="badge badge-info"><?php echo $currentLocale ?></span>
+                        </p>
+                        <p>
+                            <strong><?php echo $this->translate('per page:') ?> </strong><span class="badge badge-info"><?php echo (null !== $currentEPP) ? (int)$currentEPP : $this->translate('all') ?></span>
+                        </p>
+                        <p>
+                            <strong><?php echo $this->translate('unclear translations:') ?> </strong>
+                            <?php if ($currentFilterUnclear): ?>
+                                <button class="btn btn-info" onclick="location.href='<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => 0 ] ]) ?>'">
+                                    <?php echo $this->translate('show only unclear') ?>
+                                </button>
+                            <?php else: ?>
+                                <button class="btn btn-outline-info" onclick="location.href='<?php echo $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => 1 ] ]) ?>'">
+                                    <?php echo $this->translate('show only unclear') ?>
+                                </button>
+                            <?php endif; ?>
+                        </p>
                     </div>
                     <div class="col-12">
                         <ul class="pagination">
@@ -180,14 +185,14 @@
                                                 <input type="hidden" name="<?php echo $rowName?>_translationId" value="<?php echo $this->escapeHtmlAttr($translation->getTranslationId())?>" />
                                                 <button type="submit" value="<?php echo $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="<?php echo $this->translate('Add suggestion') ?>"><span class="glyphicon glyphicon-plus"></span></button>
                                                 &nbsp;
-                                                <a class="btn btn-default btn-lg" data-toggle="tooltip" data-placement="right" title="<?php echo $this->translate('See Details') ?>" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $translation->getBaseId() ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>"><span class="glyphicon glyphicon-search"></span></a>
+                                                <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="<?php echo $this->translate('See Details') ?>" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $translation->getBaseId() ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>"><span class="glyphicon glyphicon-search"></span></a>
                                             </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
 
                             </table>
-                            <button type="submit" value="all" name="rowid" class="btn btn-success"><?php echo $this->translate('Submit all') ?></button>
+                            <button type="submit" value="all" name="rowid" class="btn btn-info"><?php echo $this->translate('Submit all') ?></button>
                         </form>
                     </div>
                 </div>

@@ -22,5 +22,8 @@ return [
     'clear translation at the moment' => 'momentan klare Übersetzung',
     'Add suggestion' => 'Vorschlag hinzufügen',
     'See Details' => 'Details ansehen',
-    'Submit all' => 'alle abschicken',
+    'Submit all' => 'Alle abschicken',
+    'Import MAGENTO Language CSV file(s) (Dummy, not yet implemented!)' => 'Import von MAGENTO CSV Übersetzungsdateien (Dummy, noch nicht implementiert)',
+    'Select File(s)' => 'Datei(en) auswählen',
+    'Import as language' => 'Importieren als Sprache',
 ];
