@@ -11,28 +11,28 @@
 
 <h2><?= $this->translate('Import') ?></h2>
 <div class="card mt-4">
-    <div class="card-header"><?php echo $this->translate('Import MAGENTO Language CSV file(s) (Dummy, not yet implemented!)') ?></div>
+    <div class="card-header"><?= $this->translate('Import MAGENTO Language CSV file(s) (Dummy, not yet implemented!)') ?></div>
     <div class="card-body">
 
-        <form action="<?php echo $this->url('admin', [ 'action' => 'import' ]) ?>" method="post" multipart="" enctype="multipart/form-data" role="form">
+        <form action="<?= $this->url('admin', [ 'action' => 'import' ]) ?>" method="post" multipart="" enctype="multipart/form-data" role="form">
             <div class="form-group">
-                <label class="control-label" for="filebutton"><?php echo $this->translate('Select File(s)') ?></label><br>
+                <label class="control-label" for="filebutton"><?= $this->translate('Select File(s)') ?></label><br>
                 <input type="file" name="files[]" id="filebutton" class="input-large" multiple>
             </div>
             <div class="form-group row">
                 <div class="col-sm-12">
-                    <label for="locale"><?php echo $this->translate('Import as locale') ?></label>
+                    <label for="locale"><?= $this->translate('Import as locale') ?></label>
                 </div>
                 <div class="col-sm-2">
                     <select class="form-control" id="locale">
                         <?php foreach ($supportedLocales as $locale): ?>
-                            <option value="<?php echo $locale->getLocale() ?>"><?php echo $locale->getLocale() ?></option>
+                            <option value="<?= $locale->getLocale() ?>"><?= $locale->getLocale() ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
             </div>
             <div class="form-group">
-                <button type="submit" id="submit" name="Import" class="btn btn-info button-loading" data-loading-text="Loading..."><?php echo $this->translate('Start Import') ?></button>
+                <button type="submit" id="submit" name="Import" class="btn btn-info button-loading" data-loading-text="Loading..."><?= $this->translate('Start Import') ?></button>
             </div>
         </form>
     </div>

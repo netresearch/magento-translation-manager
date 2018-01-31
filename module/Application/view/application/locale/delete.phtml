@@ -3,9 +3,9 @@ $title = 'Delete locale';
 $this->headTitle($title);
 ?>
 
-<h1><?php echo $this->escapeHtml($title); ?></h1>
+<h1><?= $this->escapeHtml($title); ?></h1>
 
-<p>Are you sure that you want to delete '<?php echo $this->escapeHtml($locale->getLocale()); ?>'?</p>
+<p>Are you sure that you want to delete '<?= $this->escapeHtml($locale->getLocale()); ?>'?</p>
 <?php
 
 $url = $this->url('locale', array(
@@ -14,9 +14,9 @@ $url = $this->url('locale', array(
 ));
 ?>
 
-<form action="<?php echo $url; ?>" method="post">
+<form action="<?= $url; ?>" method="post">
     <div>
-        <input type="hidden" name="id" value="<?php echo $locale->getId(); ?>" />
+        <input type="hidden" name="id" value="<?= $locale->getId(); ?>" />
         <input type="submit" name="del" value="Yes" />
         <input type="submit" name="del" value="No" />
     </div>

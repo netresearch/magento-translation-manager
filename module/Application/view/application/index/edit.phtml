@@ -17,8 +17,8 @@
     <?php if (isset($messages)): ?>
         <?php foreach ($messages as $messageLevel => $messageLevelContainer): ?>
             <?php foreach ($messageLevelContainer as $message): ?>
-                <li class="alert alert-<?php echo $this->escapeHtmlAttr($messageLevel); ?>" role="alert">
-                    <?php echo $this->escapeHtml($message); ?>
+                <li class="alert alert-<?= $this->escapeHtmlAttr($messageLevel); ?>" role="alert">
+                    <?= $this->escapeHtml($message); ?>
                 </li>
             <?php endforeach; ?>
         <?php endforeach; ?>
@@ -36,15 +36,15 @@
                     </button>
                     <div class="dropdown-menu">
                         <?php foreach ($supportedLocales as $locale): ?>
-                            <a class="dropdown-item" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale->getLocale() ] ]); ?>">
-                                <?php echo $locale->getLocale() ?></a>
+                            <a class="dropdown-item" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale->getLocale() ] ]); ?>">
+                                <?= $locale->getLocale() ?></a>
                         <?php endforeach; ?>
                     </div>
                 </div>
             </div>
             <div class="col-12">
-                <b>selected file:</b> <span class="label label-primary"><?php echo $this->escapeHtml($currentTranslationFile) ?></span>
-                <b>selected language:</b> <span class="badge badge-info"><?php echo $this->escapeHtml($currentLocale) ?></span>
+                <b>selected file:</b> <span class="label label-primary"><?= $this->escapeHtml($currentTranslationFile) ?></span>
+                <b>selected language:</b> <span class="badge badge-info"><?= $this->escapeHtml($currentLocale) ?></span>
             </div>
         </div>
     </div>
@@ -54,17 +54,17 @@
     <div class="row">
         <div class="col-md-12">
             <div style="margin-bottom: 25px; overflow: hidden;">
-                <a class="btn btn-info pull-left" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $previousItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Previous translation</a>
-                <a class="btn btn-info pull-right" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $nextItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Next translation</a>
+                <a class="btn btn-info pull-left" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $previousItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Previous translation</a>
+                <a class="btn btn-info pull-right" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $nextItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Next translation</a>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
             <?php $rowName = 'row' .$currentLocale; ?>
-            <input type="hidden" name="base_id" value="<?php echo $baseTranslation->getBaseId() ?>" />
-            <input type="hidden" name="<?php echo $rowName ?>_locale" value="<?php echo $this->escapeHtmlAttr($currentLocale) ?>" />
-            <input type="hidden" name="<?php echo $rowName ?>_id" value="<?php echo $translations[$currentLocale]->getTranslationId() ?>" />
+            <input type="hidden" name="base_id" value="<?= $baseTranslation->getBaseId() ?>" />
+            <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $this->escapeHtmlAttr($currentLocale) ?>" />
+            <input type="hidden" name="<?= $rowName ?>_id" value="<?= $translations[$currentLocale]->getTranslationId() ?>" />
             <div class="card">
                 <div class="card-header">
                     <strong>Origin source</strong>
@@ -72,15 +72,15 @@
                     <?php endif; ?>
                 </div>
                 <div class="card-body">
-                    <?php echo $this->escapeHtml($baseTranslation->getOriginSource()); ?>
+                    <?= $this->escapeHtml($baseTranslation->getOriginSource()); ?>
                 </div>
                 <div class="panel-footer">
                     <?php if ('' !== $baseTranslation->getScreenPath()): ?>
-                        <a href="<?php echo $this->basePath('usages/' . $baseTranslation->getScreenPath()) ?>" class="btn btn-info" role="button" data-target="#lightbox" data-toggle="lightbox">
+                        <a href="<?= $this->basePath('usages/' . $baseTranslation->getScreenPath()) ?>" class="btn btn-info" role="button" data-target="#lightbox" data-toggle="lightbox">
                             <span class="glyphicon glyphicon-camera"></span> Show Context
                         </a>
                     <?php else: ?>
-                    <a href="<?php echo $this->basePath('img/fallback-no-screenshot.png') ?>" class="btn btn-info" role="button" data-target="#lightbox" data-toggle="lightbox" data-width="400">
+                    <a href="<?= $this->basePath('img/fallback-no-screenshot.png') ?>" class="btn btn-info" role="button" data-target="#lightbox" data-toggle="lightbox" data-width="400">
                         <span class="glyphicon glyphicon-camera"></span> Show Context
                     </a>
                     <?php endif; ?>
@@ -92,18 +92,18 @@
                 <?php $unclearSelected = $translations[$currentLocale]->getUnclearTranslation() ?>
                 <div class="card-header">
                     <strong>Current translation</strong>
-                    <span class="badge badge-info pull-right"><?php echo $currentLocale ?></span>
-                    <span class="pull-right">&nbsp;<img src="<?php echo $this->basePath('img/flags/' . strtolower(substr($currentLocale, 0, 2))) ?>.png" alt="<?php echo $currentLocale ?>" />&nbsp;</span>
+                    <span class="badge badge-info pull-right"><?= $currentLocale ?></span>
+                    <span class="pull-right">&nbsp;<img src="<?= $this->basePath('img/flags/' . strtolower(substr($currentLocale, 0, 2))) ?>.png" alt="<?= $currentLocale ?>" />&nbsp;</span>
                     <?php if ($unclearSelected): ?>
                         <i class="glyphicon glyphicon-exclamation-sign unclear " title="unclear translation"></i>
                     <?php endif; ?>
                 </div>
                 <div class="card-body">
-                    <?php echo $this->escapeHtml($translations[$currentLocale]->getCurrentTranslation()); ?>
+                    <?= $this->escapeHtml($translations[$currentLocale]->getCurrentTranslation()); ?>
                 </div>
                 <div class="panel-footer">
-                    <input type="checkbox" name="<?php echo $rowName ?>_unclearTranslation" id="<?php echo $rowName ?>_unclearTranslation" value="1" <?php if ($unclearSelected) echo 'checked="checked"' ?>/>
-                    <label style="font-weight: normal" for="<?php echo $rowName ?>_unclearTranslation">translation is unclear</label>
+                    <input type="checkbox" name="<?= $rowName ?>_unclearTranslation" id="<?= $rowName ?>_unclearTranslation" value="1" <?php if ($unclearSelected) echo 'checked="checked"' ?>/>
+                    <label style="font-weight: normal" for="<?= $rowName ?>_unclearTranslation">translation is unclear</label>
                 </div>
             </div>
         </div>
@@ -113,13 +113,13 @@
             <div class="card">
                 <div class="card-header">
                     <strong>Existing suggestions</strong>
-                    <span class="badge badge-info pull-right"><?php echo $currentLocale ?></span>
-                    <span class="pull-right">&nbsp;<img src="<?php echo $this->basePath('img/flags/' . strtolower(substr($currentLocale, 0, 2))) ?>.png" alt="<?php echo $currentLocale ?>" />&nbsp;</span>
+                    <span class="badge badge-info pull-right"><?= $currentLocale ?></span>
+                    <span class="pull-right">&nbsp;<img src="<?= $this->basePath('img/flags/' . strtolower(substr($currentLocale, 0, 2))) ?>.png" alt="<?= $currentLocale ?>" />&nbsp;</span>
                 </div>
                 <div class="card-body suggestionlist">
                     <?php foreach ($suggestions as $suggestion): ?>
-                        <span class="badge badge-info" id="suggestion_<?php echo $suggestion->getSuggestionId() ?>">
-                            <?php echo $suggestion->getSuggestedTranslation() ?>
+                        <span class="badge badge-info" id="suggestion_<?= $suggestion->getSuggestionId() ?>">
+                            <?= $suggestion->getSuggestedTranslation() ?>
                         </span>
                     <?php endforeach; ?>
 
@@ -133,13 +133,13 @@
             <div class="card">
                 <div class="card-header">
                     <strong>Submit a new suggestion</strong>
-                    <span class="badge badge-info pull-right"><?php echo $currentLocale ?></span>
-                    <span class="pull-right">&nbsp;<img src="<?php echo $this->basePath('img/flags/' . strtolower(substr($currentLocale, 0, 2))) ?>.png" alt="<?php echo $currentLocale ?>" />&nbsp;</span>
+                    <span class="badge badge-info pull-right"><?= $currentLocale ?></span>
+                    <span class="pull-right">&nbsp;<img src="<?= $this->basePath('img/flags/' . strtolower(substr($currentLocale, 0, 2))) ?>.png" alt="<?= $currentLocale ?>" />&nbsp;</span>
                 </div>
                 <div class="card-body">
                     <div class="input-group col-md-12">
-                        <textarea class="form-control" rows="3" name="<?php echo $rowName ?>_suggestedTranslation"></textarea>
-                        <button type="submit" value="<?php echo $rowName ?>" name="rowid" class="btn btn-primary btn-lg pull-right" style="margin-top: 15px;">Submit suggestion</button>
+                        <textarea class="form-control" rows="3" name="<?= $rowName ?>_suggestedTranslation"></textarea>
+                        <button type="submit" value="<?= $rowName ?>" name="rowid" class="btn btn-primary btn-lg pull-right" style="margin-top: 15px;">Submit suggestion</button>
                     </div>
                 </div>
             </div>
@@ -148,8 +148,8 @@
     <div class="row">
         <div class="col-md-12">
             <div style="margin-bottom: 25px; overflow: hidden;">
-                <a class="btn btn-info pull-left" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $previousItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Previous translation</a>
-                <a class="btn btn-info pull-right" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $nextItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Next translation</a>
+                <a class="btn btn-info pull-left" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $previousItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Previous translation</a>
+                <a class="btn btn-info pull-right" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $nextItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Next translation</a>
             </div>
         </div>
     </div>
@@ -175,28 +175,28 @@
                             <?php if ($locale == $currentLocale) continue; ?>
                             <?php /* @var $translation \Application\Model\Translation */ ?>
                             <?php $rowName = 'row' . $locale; ?>
-                            <tr id="<?php echo $rowName ?>">
-                                <td><?php echo $this->escapeHtml($locale) ?><td>
-                                <td><?php echo $this->escapeHtml($translation->getCurrentTranslation()) ?><td>
+                            <tr id="<?= $rowName ?>">
+                                <td><?= $this->escapeHtml($locale) ?><td>
+                                <td><?= $this->escapeHtml($translation->getCurrentTranslation()) ?><td>
                                 <td>
                                     <?php if ($translation->getUnclearTranslation()): ?>
                                         <i class="glyphicon glyphicon-exclamation-sign unclear" title="unclear translation"></i>
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <input type="radio" name="<?php echo $rowName?>_unclearTranslation" value="1" <?php echo ($translation->getUnclearTranslation()) ? 'checked="checked"':'' ?>>
-                                    <!-- <input type="checkbox" name="<?php echo $rowName?>_unclearTranslation" value="1" <?php echo ($translation->getUnclearTranslation()) ? 'checked="checked"':'' ?>> -->
+                                    <input type="radio" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclearTranslation()) ? 'checked="checked"':'' ?>>
+                                    <!-- <input type="checkbox" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclearTranslation()) ? 'checked="checked"':'' ?>> -->
                                 </td>
                                 <td class="suggested-translation">
-                                    <input type="text" class="form-control" name="<?php echo $rowName?>_suggestedTranslation" value="" />
+                                    <input type="text" class="form-control" name="<?= $rowName?>_suggestedTranslation" value="" />
                                 <td>
                                 <td>
                                     <div style="min-width: 125px">
-                                        <input type="hidden" name="<?php echo $rowName ?>_locale" value="<?php echo $locale ?>" />
-                                        <input type="hidden" name="<?php echo $rowName?>_id" value="<?php echo $this->escapeHtmlAttr($translation->getTranslationId())?>" />
-                                        <button type="submit" value="<?php echo $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="glyphicon glyphicon-plus"></span></button>
+                                        <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $locale ?>" />
+                                        <input type="hidden" name="<?= $rowName?>_id" value="<?= $this->escapeHtmlAttr($translation->getTranslationId())?>" />
+                                        <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="glyphicon glyphicon-plus"></span></button>
                                         &nbsp;
-                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="glyphicon glyphicon-search"></span></a>
+                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="glyphicon glyphicon-search"></span></a>
                                     </div>
                                 <td>
                             </tr>
@@ -227,28 +227,28 @@
                             <?php if ($locale === $currentLocale) continue; ?>
                             <?php /* @var $translation \Application\Model\Translation */ ?>
                             <?php $rowName = 'row' . $locale; ?>
-                            <tr id="<?php echo $rowName ?>">
-                                <td><?php echo $this->escapeHtml($locale) ?><td>
-                                <td><?php echo $this->escapeHtml($translation->getCurrentTranslation()) ?><td>
+                            <tr id="<?= $rowName ?>">
+                                <td><?= $this->escapeHtml($locale) ?><td>
+                                <td><?= $this->escapeHtml($translation->getCurrentTranslation()) ?><td>
                                 <td>
                                     <?php if ($translation->getUnclearTranslation()): ?>
                                         <i class="glyphicon glyphicon-exclamation-sign unclear" title="unclear translation"></i>
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <input type="radio" name="<?php echo $rowName?>_unclearTranslation" value="1" <?php echo ($translation->getUnclearTranslation()) ? 'checked="checked"':'' ?>>
-                                    <!-- <input type="checkbox" name="<?php echo $rowName?>_unclearTranslation" value="1" <?php echo ($translation->getUnclearTranslation()) ? 'checked="checked"':'' ?>> -->
+                                    <input type="radio" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclearTranslation()) ? 'checked="checked"':'' ?>>
+                                    <!-- <input type="checkbox" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclearTranslation()) ? 'checked="checked"':'' ?>> -->
                                 </td>
                                 <td class="suggested-translation">
-                                    <input type="text" class="form-control" name="<?php echo $rowName?>_suggestedTranslation" value="" />
+                                    <input type="text" class="form-control" name="<?= $rowName?>_suggestedTranslation" value="" />
                                 <td>
                                 <td>
                                     <div style="min-width: 125px">
-                                        <input type="hidden" name="<?php echo $rowName ?>_locale" value="<?php echo $locale ?>" />
-                                        <input type="hidden" name="<?php echo $rowName?>_id" value="<?php echo $this->escapeHtmlAttr($translation->getTranslationId())?>" />
-                                        <button type="submit" value="<?php echo $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="glyphicon glyphicon-plus"></span></button>
+                                        <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $locale ?>" />
+                                        <input type="hidden" name="<?= $rowName?>_id" value="<?= $this->escapeHtmlAttr($translation->getTranslationId())?>" />
+                                        <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="glyphicon glyphicon-plus"></span></button>
                                         &nbsp;
-                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="glyphicon glyphicon-search"></span></a>
+                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="glyphicon glyphicon-search"></span></a>
                                     </div>
                                 <td>
                             </tr>
@@ -263,8 +263,8 @@
     <div class="row">
         <div class="col-md-12">
             <div style="margin-bottom: 25px; overflow: hidden;">
-                <button class="btn btn-info pull-left" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $previousItemId ], [ 'query' => [ 'locale' => $currentLocale  ] ]) ?>">Previous translation</button>
-                <button class="btn btn-info pull-right" href="<?php echo $this->url('index', [ 'action' => 'edit', 'base_id' => $nextItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Next translation</button>
+                <button class="btn btn-info pull-left" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $previousItemId ], [ 'query' => [ 'locale' => $currentLocale  ] ]) ?>">Previous translation</button>
+                <button class="btn btn-info pull-right" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $nextItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Next translation</button>
             </div>
         </div>
     </div>

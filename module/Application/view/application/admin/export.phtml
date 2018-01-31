@@ -9,12 +9,12 @@
 <div class="card mt-4">
     <div class="card-header">Export CSV</div>
     <div class="card-body">
-        <form action="<?php echo $this->url('admin', [ 'action' => 'export' ]) ?>" method="post" role="form">
+        <form action="<?= $this->url('admin', [ 'action' => 'export' ]) ?>" method="post" role="form">
             <div class="form-group">
                 <label for="translationFile">Translation file</label>
                 <select class="form-control" id="translationFile" name="translation_file[]" multiple="multiple">
                     <?php foreach ($translationFiles as $translationFile): ?>
-                        <option value="<?php echo $translationFile->getFilename(); ?>"><?php echo $translationFile->getFilename(); //TODO escape ?></option>
+                        <option value="<?= $translationFile->getFilename(); ?>"><?= $translationFile->getFilename(); //TODO escape ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -22,7 +22,7 @@
                 <label for="language">Language</label>
                 <select class="form-control" id="language" name="locale[]" multiple="multiple">
                     <?php foreach ($supportedLocales as $locale): ?>
-                        <option value="<?php echo $locale->getLocale() ?>"><?php echo $locale->getLocale() ?></option>
+                        <option value="<?= $locale->getLocale() ?>"><?= $locale->getLocale() ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -51,11 +51,11 @@
 
 <ul>
     <?php foreach ($downloadFiles as $file): ?>
-    <li><a href="<?php echo $this->serverUrl($file['path']) ?>"><?php echo $file['locale']?> - <?php echo $file['filename'] ?></a></li>
+    <li><a href="<?= $this->serverUrl($file['path']) ?>"><?= $file['locale']?> - <?= $file['filename'] ?></a></li>
     <?php endforeach; ?>
 </ul>
 
-<p><a href="<?php echo $this->url('admin') ?>">
+<p><a href="<?= $this->url('admin') ?>">
     <span class="glyphicon glyphicon-chevron-left"></span>
     Back to admin
 </a></p>
