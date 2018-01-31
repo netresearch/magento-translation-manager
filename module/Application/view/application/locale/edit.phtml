@@ -11,8 +11,11 @@ $this->headTitle($title);
     $form->prepare();
 
     echo $this->form()->openTag($form);
+    echo '<div class="form-group">';
     echo $this->formHidden($form->get('id'));
     echo $this->formRow($form->get('locale'));
+    echo '</div><div class="form-group">';
     echo $this->formSubmit($form->get('submit'));
+    echo '</div';
     echo $this->form()->closeTag();
 ?>
