@@ -24,18 +24,6 @@ class AdminController extends AbstractActionController
     }
 
     /**
-     * Action "import".
-     *
-     * @return mixed
-     */
-    public function importAction()
-    {
-        return [
-            'supportedLocales' => $this->_supportedLocale->fetchAll(),
-        ];
-    }
-
-    /**
      * Action "export".
      *
      * export language files as CSV data

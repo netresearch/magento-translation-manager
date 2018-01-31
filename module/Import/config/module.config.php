@@ -1,21 +1,21 @@
 <?php
-namespace Locale;
+namespace Import;
 
 use Zend\Router\Http\Segment;
 
 return [
     'router' => [
         'routes' => [
-            'locale' => [
+            'import' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route'    => '/locale/[:action][/:id]',
+                    'route'    => '/import/[:action][/:id]',
                     'constraints' => [
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
                     ],
                     'defaults' => [
-                        'controller' => Controller\LocaleController::class,
+                        'controller' => Controller\ImportController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -25,7 +25,7 @@ return [
 
     'view_manager' => [
         'template_path_stack' => [
-             'locale' => __DIR__ . '/../view',
+             'import' => __DIR__ . '/../view',
          ],
     ],
 ];

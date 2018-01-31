@@ -54,6 +54,22 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
     {
         return [
             'factories' => [
+                // Table "supported_locale"
+                Model\SupportedLocaleTable::class => function (ServiceManager $sm) {
+                    $tableGateway = $sm->get('Model\SupportedLocaleGateway');
+                    return new Model\SupportedLocaleTable($tableGateway);
+                },
+
+                'Model\SupportedLocaleGateway' => function (ServiceManager $sm) {
+                    $dbAdapter = $sm->get(AdapterInterface::class);
+
+                    $resultSetPrototype = new ResultSet\SupportedLocale();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\SupportedLocale());
+                    $resultSetPrototype->buffer();
+
+                    return new TableGateway('supported_locale', $dbAdapter, null, $resultSetPrototype);
+                },
+
                 // translation table
                 Model\TranslationTable::class => function (ServiceManager $sm) {
                     $tableGateway = $sm->get('Model\TranslationGateway');
@@ -133,7 +149,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
             'factories' => [
                 Controller\IndexController::class => function (ServiceManager $sm) {
                     return new Controller\IndexController(
-                        $sm->get(\Locale\Model\SupportedLocaleTable::class),
+                        $sm->get(\Application\Model\SupportedLocaleTable::class),
                         $sm->get(\Application\Model\TranslationTable::class),
                         $sm->get(\Application\Model\TranslationBaseTable::class),
                         $sm->get(\Application\Model\TranslationFileTable::class),
@@ -143,7 +159,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
 
                 Controller\AdminController::class => function (ServiceManager $sm) {
                     return new Controller\AdminController(
-                        $sm->get(\Locale\Model\SupportedLocaleTable::class),
+                        $sm->get(\Application\Model\SupportedLocaleTable::class),
                         $sm->get(\Application\Model\TranslationTable::class),
                         $sm->get(\Application\Model\TranslationBaseTable::class),
                         $sm->get(\Application\Model\TranslationFileTable::class),
@@ -153,11 +169,17 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
 
                 Controller\AjaxController::class => function (ServiceManager $sm) {
                     return new Controller\AjaxController(
-                        $sm->get(\Locale\Model\SupportedLocaleTable::class),
+                        $sm->get(\Application\Model\SupportedLocaleTable::class),
                         $sm->get(\Application\Model\TranslationTable::class),
                         $sm->get(\Application\Model\TranslationBaseTable::class),
                         $sm->get(\Application\Model\TranslationFileTable::class),
                         $sm->get(\Application\Model\SuggestionTable::class)
+                    );
+                },
+
+                Controller\LocaleController::class => function (ServiceManager $sm) {
+                    return new Controller\LocaleController(
+                        $sm->get(Model\SupportedLocaleTable::class)
                     );
                 },
             ],

@@ -1,10 +1,10 @@
 <?php
-namespace Locale\Model;
+namespace Application\Model;
 
 use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Select;
 use \Application\Model\Traits;
-use \Locale\ResultSet\SupportedLocale as ResultSet_SupportedLocale;
+use \Application\ResultSet\SupportedLocale as ResultSet_SupportedLocale;
 
 /**
  * Class handles access to the "supported_locale" table.

@@ -1,10 +1,10 @@
 <?php
-namespace Locale\Controller;
+namespace Application\Controller;
 
 use \Zend\Mvc\Controller\AbstractActionController;
-use \Locale\Form\SupportedLocaleForm;
-use \Locale\Model\SupportedLocale;
-use \Locale\Model\SupportedLocaleTable;
+use \Application\Form\SupportedLocaleForm;
+use \Application\Model\SupportedLocale;
+use \Application\Model\SupportedLocaleTable;
 
 class LocaleController extends AbstractActionController
 {

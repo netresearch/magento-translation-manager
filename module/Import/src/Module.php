@@ -1,5 +1,5 @@
 <?php
-namespace Locale;
+namespace Import;
 
 use \Zend\ModuleManager\Feature\ConfigProviderInterface;
 use \Zend\ModuleManager\Feature\ControllerProviderInterface;
@@ -30,20 +30,20 @@ class Module implements ConfigProviderInterface, ControllerProviderInterface, Se
     {
         return [
             'factories' => [
-                Model\SupportedLocaleTable::class => function (ServiceManager $sm) {
-                    $tableGateway = $sm->get('Model\SupportedLocaleGateway');
-                    return new Model\SupportedLocaleTable($tableGateway);
-                },
+//                 Model\SupportedLocaleTable::class => function (ServiceManager $sm) {
+//                     $tableGateway = $sm->get('Model\SupportedLocaleGateway');
+//                     return new Model\SupportedLocaleTable($tableGateway);
+//                 },
 
-                'Model\SupportedLocaleGateway' => function (ServiceManager $sm) {
-                    $dbAdapter = $sm->get(AdapterInterface::class);
+//                 'Model\SupportedLocaleGateway' => function (ServiceManager $sm) {
+//                     $dbAdapter = $sm->get(AdapterInterface::class);
 
-                    $resultSetPrototype = new ResultSet\SupportedLocale();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\SupportedLocale());
-                    $resultSetPrototype->buffer();
+//                     $resultSetPrototype = new ResultSet\SupportedLocale();
+//                     $resultSetPrototype->setArrayObjectPrototype(new Model\SupportedLocale());
+//                     $resultSetPrototype->buffer();
 
-                    return new TableGateway('supported_locale', $dbAdapter, null, $resultSetPrototype);
-                },
+//                     return new TableGateway('supported_locale', $dbAdapter, null, $resultSetPrototype);
+//                 },
             ],
         ];
     }
@@ -58,9 +58,9 @@ class Module implements ConfigProviderInterface, ControllerProviderInterface, Se
     {
         return [
             'factories' => [
-                Controller\LocaleController::class => function (ServiceManager $sm) {
-                    return new Controller\LocaleController(
-                        $sm->get(Model\SupportedLocaleTable::class)
+                Controller\ImportController::class => function (ServiceManager $sm) {
+                    return new Controller\ImportController(
+                        $sm->get(\Application\Model\SupportedLocaleTable::class)
                     );
                 },
             ],

@@ -62,16 +62,20 @@ return [
                 ],
             ],
 
-//             'locale' => [
-//                 'type' => Segment::class,
-//                 'options' => [
-//                     'route'    => '/locale/[:action][/:id]',
-//                     'defaults' => [
-//                         'controller' => 'Locale\Controller\Locale',
-//                         'action'     => 'index',
-//                     ],
-//                 ],
-//             ],
+            'locale' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/locale/[:action][/:id]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\LocaleController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
 
 //             // The following is a route to simplify getting started creating
 //             // new controllers and actions without needing to create a new

@@ -1,7 +1,7 @@
 <?php
 namespace Application\Controller\Traits;
 
-use \Locale\Model\SupportedLocaleTable;
+use \Application\Model\SupportedLocaleTable;
 use \Application\Model\TranslationTable;
 use \Application\Model\TranslationBaseTable;
 use \Application\Model\TranslationFileTable;

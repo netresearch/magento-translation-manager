@@ -1,17 +1,17 @@
 <?php
-namespace Locale\Form;
+namespace Import\Form;
 
 use \Zend\Form\Form;
 
 /**
  * Class representing the supported locale form.
  */
-class SupportedLocaleForm extends Form
+class ImportForm extends Form
 {
     public function __construct($name = null)
     {
         // We want to ignore the name passed
-        parent::__construct('supportedLocale');
+        parent::__construct('import');
 
         $this->add(array(
             'name' => 'id',

@@ -15,7 +15,7 @@ return array(
         'Zend\Router',
         'Zend\Validator',
         'Application',
-        'Locale',
+        'Import',
     ),
 
     // These are various options for the listeners attached to the ModuleManager
