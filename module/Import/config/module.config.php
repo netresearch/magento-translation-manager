@@ -1,7 +1,7 @@
 <?php
 namespace Import;
 
-use Zend\Router\Http\Segment;
+use \Zend\Router\Http\Segment;
 
 return [
     'router' => [
@@ -27,5 +27,20 @@ return [
         'template_path_stack' => [
              'import' => __DIR__ . '/../view',
          ],
+    ],
+
+    'navigation' => [
+        'default' => [
+            'admin' => [
+                'label' => 'Admin',
+                'route' => 'admin',
+                'pages' => [
+                    'admin/locale' => [
+                        'label' => 'Import',
+                        'route' => 'import',
+                    ],
+                ],
+            ],
+        ],
     ],
 ];

@@ -9,7 +9,10 @@ use \Zend\Db\Adapter\AdapterInterface;
 use \Zend\Db\TableGateway\TableGateway;
 use \Zend\ServiceManager\ServiceManager;
 use \Zend\Mvc\ModuleRouteListener;
+use \Zend\Mvc\MvcEvent;
 use \Zend\EventManager\EventInterface;
+use \Zend\ModuleManager\ModuleManager;
+use \Zend\ModuleManager\ModuleEvent;
 
 class Module implements BootstrapListenerInterface, ConfigProviderInterface, ControllerProviderInterface, ServiceProviderInterface
 {

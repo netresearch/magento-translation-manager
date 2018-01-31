@@ -1,0 +1,29 @@
+<?php
+/**
+ * @var \Zend\Navigation\Page\Mvc $page
+ * @var \Zend\Navigation\Page\Mvc $childPage
+ */
+?>
+
+<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    <?php foreach ($this->container as $page): ?>
+        <li class="nav-item <?php if ($page->isActive(true)): ?> active<?php endif; ?><?php if ($page->hasPages()): ?> dropdown<?php endif; ?>">
+            <a class="nav-link<?php if ($page->hasPages()): ?> dropdown-toggle<?php endif; ?>"
+                href="<?= $page->getHref() ?>"
+                <?php if ($page->hasPages()): ?>
+                    id="<?= $page->getRoute() ?>Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                <?php endif; ?>
+            >
+                <?= $this->translate($page->getLabel()) ?>
+            </a>
+
+            <?php if ($page->hasPages()): ?>
+                <div class="dropdown-menu" aria-labelledby="<?= $page->getRoute() ?>Dropdown">
+                    <?php foreach ($page->getPages() as $childPage): ?>
+                        <a class="dropdown-item" href="<?= $childPage->getHref() ?>"><?= $this->translate($childPage->getLabel()) ?></a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
+</ul>

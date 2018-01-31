@@ -41,19 +41,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="<?= $this->url('home') ?>"><?= $this->translate('Home') ?> <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="adminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><?= $this->translate('Admin') ?></a>
-                            <div class="dropdown-menu" aria-labelledby="adminDropdown">
-                                <a class="dropdown-item" href="<?= $this->url('locale') ?>"><?= $this->translate('Locale configuration') ?></a>
-                                <a class="dropdown-item" href="<?= $this->url('import') ?>"><?= $this->translate('Import') ?></a>
-                                <a class="dropdown-item" href="<?= $this->url('admin', ['action' => 'export']) ?>"><?= $this->translate('Export') ?></a>
-                            </div>
-                        </li>
-                    </ul>
+                    <?= $this->navigation('navigation')->menu()->setPartial('navigation.phtml')->render() ?>
                 </div>
             </div>
         </nav>

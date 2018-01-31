@@ -1,9 +1,12 @@
 <?php
 namespace Application;
 
-use Zend\Router\Http\Literal;
-use Zend\Router\Http\Segment;
-use Zend\ServiceManager\Factory\InvokableFactory;
+use \Zend\Router\Http\Literal;
+use \Zend\Router\Http\Segment;
+use \Zend\I18n\Translator\TranslatorServiceFactory;
+use \Zend\Navigation\Service\DefaultNavigationFactory;
+use \Zend\Cache\Service\StorageCacheAbstractServiceFactory;
+use \Zend\Log\LoggerAbstractServiceFactory;
 
 return [
     'router' => [
@@ -77,49 +80,69 @@ return [
                 ],
             ],
 
-//             // The following is a route to simplify getting started creating
-//             // new controllers and actions without needing to create a new
-//             // module. Simply drop new controllers in, and you can access them
-//             // using the path /application/:controller/:action
-//             'application' => [
-//                 'type'    => 'Segment',
-//                 'options' => [
-//                     'route'    => '/application[/:action][/:id]',
-//                     'defaults' => [
-//                         '__NAMESPACE__' => 'Application\Controller',
-//                         'controller'    => 'Index',
-//                         'action'        => 'index',
-//                     ],
-//                 ],
-//                 'may_terminate' => true,
-//                 'child_routes' => [
-//                     'default' => [
-//                         'type'    => 'Segment',
-//                         'options' => [
-//                             'route'    => '/[:controller[/:action]]',
-//                             'constraints' => [
-//                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-//                                 'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-//                             ],
-//                             'defaults' => [
-//                             ],
-//                         ],
-//                     ],
-//                 ],
-//             ],
+            // The following is a route to simplify getting started creating
+            // new controllers and actions without needing to create a new
+            // module. Simply drop new controllers in, and you can access them
+            // using the path /application/:controller/:action
+            'application' => [
+                'type'    => 'Segment',
+                'options' => [
+                    'route'    => '/application[/:action][/:id]',
+                    'defaults' => [
+                        '__NAMESPACE__' => 'Application\Controller',
+                        'controller'    => 'Index',
+                        'action'        => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'default' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/[:controller[/:action]]',
+                            'constraints' => [
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ],
+                            'defaults' => [
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'label' => 'Home',
+                'route' => 'home',
+            ],
+            'admin' => [
+                'label' => 'Admin',
+                'route' => 'admin',
+                'pages' => [
+                    'locale' => [
+                        'label' => 'Locale',
+                        'route' => 'locale',
+                    ],
+                ],
+            ],
         ],
     ],
 
     'service_manager' => [
         'abstract_factories' => [
-            'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
-            'Zend\Log\LoggerAbstractServiceFactory',
+            StorageCacheAbstractServiceFactory::class,
+            LoggerAbstractServiceFactory::class,
         ],
 //         'aliases' => [
 //             'translator' => 'MvcTranslator',
 //         ],
         'factories' => [
-            'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
+            'translator' => TranslatorServiceFactory::class,
+            'navigation' => DefaultNavigationFactory::class,
         ]
     ],
 
