@@ -1,37 +1,42 @@
 <?php
 /**
- * @var Zend\View\Renderer\PhpRenderer         $this
+ * @var \Zend\View\Renderer\PhpRenderer        $this
  * @var \Application\ResultSet\SupportedLocale $supportedLocales
  * @var \Application\Model\SupportedLocale     $locale
+ * @var \Import\Form\ImportForm                $form
  */
+
+$title = 'Import';
+$this->headTitle($title);
+
+$form = $this->form;
+$form->setAttribute('action', $this->url('import', [ 'action' => 'index' ]));
+$form->prepare();
 ?>
 
-<h2><?= $this->translate('Import') ?></h2>
+<h1><?= $this->escapeHtml($title); ?></h1>
 <div class="card mt-4">
-    <div class="card-header"><?= $this->translate('Import MAGENTO Language CSV file(s) (Dummy, not yet implemented!)') ?></div>
+    <div class="card-header">
+        <?= $this->translate('Import magento language CSV file(s)') ?>
+    </div>
     <div class="card-body">
-
-        <form action="<?= $this->url('admin', [ 'action' => 'import' ]) ?>" method="post" multipart="" enctype="multipart/form-data" role="form">
+        <?= $this->form()->openTag($form); ?>
             <div class="form-group">
-                <label class="control-label" for="filebutton"><?= $this->translate('Select File(s)') ?></label><br>
-                <input type="file" name="files[]" id="filebutton" class="input-large" multiple>
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-12">
-                    <label for="locale"><?= $this->translate('Import as locale') ?></label>
-                </div>
-                <div class="col-sm-2">
-                    <select class="form-control" id="locale">
-                        <?php foreach ($supportedLocales as $locale): ?>
-                            <option value="<?= $locale->getLocale() ?>"><?= $locale->getLocale() ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                <?php $files = $form->get('files'); ?>
+                <?= $this->formLabel($files); ?>
+                <?= $this->formElement($files); ?>
+                <?= $this->formElementErrors($files); ?>
             </div>
             <div class="form-group">
-                <button type="submit" id="submit" name="Import" class="btn btn-info button-loading" data-loading-text="Loading..."><?= $this->translate('Start Import') ?></button>
+                <?php $locale = $form->get('locale'); ?>
+                <?= $this->formLabel($locale); ?>
+                <?= $this->formElement($locale); ?>
+                <?= $this->formElementErrors($locale); ?>
             </div>
-        </form>
+            <div class="form-group">
+                <?= $this->formElement($form->get('submit')); ?>
+            </div>
+        <?= $this->form()->closeTag(); ?>
     </div>
 </div>
 

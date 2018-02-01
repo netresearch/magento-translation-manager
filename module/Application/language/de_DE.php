@@ -23,7 +23,9 @@ return [
     'Add suggestion' => 'Vorschlag hinzufügen',
     'See Details' => 'Details ansehen',
     'Submit all' => 'Alle abschicken',
-    'Import MAGENTO Language CSV file(s) (Dummy, not yet implemented!)' => 'Import von MAGENTO CSV Übersetzungsdateien (Dummy, noch nicht implementiert)',
+    'Import magento language CSV file(s)' => 'Import von Magentor CSV Übersetzungsdateien',
     'Select File(s)' => 'Datei(en) auswählen',
     'Import as language' => 'Importieren als Sprache',
+
+    'Value is required and can\'t be empty' => 'Wert ist erforderlich und kann nicht leer sein',
 ];

@@ -6,6 +6,17 @@ body {
 .filter-area .btn-group {
     margin-bottom: 4px;
 }
+
 .filter-area .pagination {
     margin-bottom: 0;
+}
+
+form ul {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px 0px;
+}
+
+form ul li {
+    color: red;
 }
