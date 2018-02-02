@@ -31,4 +31,21 @@ class Translation extends ZendResultSet
 
         return $languages;
     }
+
+//     /**
+//      * @param @param string $locale Locale string, e.g. de_DE
+//      *
+//      * @return Model_Translation
+//      */
+//     public function getByLocale(string $locale): Model_Translation
+//     {
+//         /** @var Model_Translation $record */
+//         foreach ($this as $record) {
+//             if ($record->getLocale() === $locale) {
+//                 return $record;
+//             }
+//         }
+
+//         return new Model_Translation();
+//     }
 }

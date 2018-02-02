@@ -85,12 +85,12 @@ class TranslationBase
         return $this;
     }
 
-    public function getFile(): string
+    public function getFile(): ?string
     {
         return $this->file;
     }
 
-    public function setFile(string $file): self
+    public function setFile(?string $file): self
     {
         $this->file = $file;
         return $this;
@@ -112,12 +112,12 @@ class TranslationBase
         return $this->notInUse;
     }
 
-    public function getScreenPath(): string
+    public function getScreenPath(): ?string
     {
         return $this->screenPath;
     }
 
-    public function setScreenPath(string $screenPath): self
+    public function setScreenPath(?string $screenPath): self
     {
         $this->screenPath = $screenPath;
         return $this;

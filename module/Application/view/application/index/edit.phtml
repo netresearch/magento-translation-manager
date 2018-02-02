@@ -1,14 +1,14 @@
 <?php
 /**
- * @var Zend\View\Renderer\PhpRenderer $this
- *
- * @var \Application\ResultSet\Locale $supportedLocales
+ * @var \Zend\View\Renderer\PhpRenderer    $this
+ * @var \Application\ResultSet\Translation $translations
+ * @var \Application\ResultSet\Suggestion  $suggestions
+ * @var \Application\ResultSet\Locale      $supportedLocales
+ * @var \Application\Model\TranslationBase $baseTranslation
+ * @var \Application\Model\Locale          $locale
  * @var string $currentLocale
  * @var string $currentTranslationFile
  * @var array $messages of strings
- * @var \Application\Model\TranslationBase $baseTranslation
- * @var \Application\ResultSet\Translation $translations with index locale
- * @var \Application\ResultSet\Suggestion $suggestions with index suggestion_id
  * @var int $previousItemId
  * @var int $nextItemId
  */
@@ -36,7 +36,7 @@
                     </button>
                     <div class="dropdown-menu">
                         <?php foreach ($supportedLocales as $locale): ?>
-                            <a class="dropdown-item" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale->getLocale() ] ]); ?>">
+                            <a class="dropdown-item" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getId() ], [ 'query' => [ 'locale' => $locale->getLocale() ] ]); ?>">
                                 <?= $locale->getLocale() ?></a>
                         <?php endforeach; ?>
                     </div>
@@ -62,9 +62,9 @@
     <div class="row">
         <div class="col-md-6">
             <?php $rowName = 'row' .$currentLocale; ?>
-            <input type="hidden" name="base_id" value="<?= $baseTranslation->getBaseId() ?>" />
+            <input type="hidden" name="base_id" value="<?= $baseTranslation->getId() ?>" />
             <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $this->escapeHtmlAttr($currentLocale) ?>" />
-            <input type="hidden" name="<?= $rowName ?>_id" value="<?= $translations[$currentLocale]->getTranslationId() ?>" />
+            <input type="hidden" name="<?= $rowName ?>_id" value="<?= $translations[$currentLocale]->getId() ?>" />
             <div class="card">
                 <div class="card-header">
                     <strong>Origin source</strong>
@@ -89,7 +89,7 @@
         </div>
         <div class="col-md-6">
             <div class="card">
-                <?php $unclearSelected = $translations[$currentLocale]->getUnclearTranslation() ?>
+                <?php $unclearSelected = $translations[$currentLocale]->getUnclear() ?>
                 <div class="card-header">
                     <strong>Current translation</strong>
                     <span class="badge badge-info pull-right"><?= $currentLocale ?></span>
@@ -99,7 +99,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="card-body">
-                    <?= $this->escapeHtml($translations[$currentLocale]->getCurrentTranslation()); ?>
+                    <?= $this->escapeHtml($translations[$currentLocale]->getTranslation()); ?>
                 </div>
                 <div class="panel-footer">
                     <input type="checkbox" name="<?= $rowName ?>_unclearTranslation" id="<?= $rowName ?>_unclearTranslation" value="1" <?php if ($unclearSelected) echo 'checked="checked"' ?>/>
@@ -123,7 +123,7 @@
                         </span>
                     <?php endforeach; ?>
 
-                    <?php //echo $this->escapeHtml($translations[$currentLocale]->getCurrentTranslation()); ?>
+                    <?php //echo $this->escapeHtml($translations[$currentLocale]->getTranslation()); ?>
                 </div>
             </div>
         </div>
@@ -177,15 +177,15 @@
                             <?php $rowName = 'row' . $locale; ?>
                             <tr id="<?= $rowName ?>">
                                 <td><?= $this->escapeHtml($locale) ?><td>
-                                <td><?= $this->escapeHtml($translation->getCurrentTranslation()) ?><td>
+                                <td><?= $this->escapeHtml($translation->getTranslation()) ?><td>
                                 <td>
-                                    <?php if ($translation->getUnclearTranslation()): ?>
+                                    <?php if ($translation->getUnclear()): ?>
                                         <i class="fa fa-exclamation-triangle unclear" title="unclear translation"></i>
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <input type="radio" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclearTranslation()) ? 'checked="checked"':'' ?>>
-                                    <!-- <input type="checkbox" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclearTranslation()) ? 'checked="checked"':'' ?>> -->
+                                    <input type="radio" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclear()) ? 'checked="checked"':'' ?>>
+                                    <!-- <input type="checkbox" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclear()) ? 'checked="checked"':'' ?>> -->
                                 </td>
                                 <td class="suggested-translation">
                                     <input type="text" class="form-control" name="<?= $rowName?>_suggestedTranslation" value="" />
@@ -193,10 +193,10 @@
                                 <td>
                                     <div style="min-width: 125px">
                                         <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $locale ?>" />
-                                        <input type="hidden" name="<?= $rowName?>_id" value="<?= $this->escapeHtmlAttr($translation->getTranslationId())?>" />
+                                        <input type="hidden" name="<?= $rowName?>_id" value="<?= $this->escapeHtmlAttr($translation->getId())?>" />
                                         <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="fa fa-plus"></span></button>
                                         &nbsp;
-                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="fa fa-search"></span></a>
+                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="fa fa-search"></span></a>
                                     </div>
                                 <td>
                             </tr>
@@ -229,15 +229,15 @@
                             <?php $rowName = 'row' . $locale; ?>
                             <tr id="<?= $rowName ?>">
                                 <td><?= $this->escapeHtml($locale) ?><td>
-                                <td><?= $this->escapeHtml($translation->getCurrentTranslation()) ?><td>
+                                <td><?= $this->escapeHtml($translation->getTranslation()) ?><td>
                                 <td>
-                                    <?php if ($translation->getUnclearTranslation()): ?>
+                                    <?php if ($translation->getUnclear()): ?>
                                         <i class="fa fa-exclamation-triangle unclear" title="unclear translation"></i>
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <input type="radio" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclearTranslation()) ? 'checked="checked"':'' ?>>
-                                    <!-- <input type="checkbox" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclearTranslation()) ? 'checked="checked"':'' ?>> -->
+                                    <input type="radio" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclear()) ? 'checked="checked"':'' ?>>
+                                    <!-- <input type="checkbox" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclear()) ? 'checked="checked"':'' ?>> -->
                                 </td>
                                 <td class="suggested-translation">
                                     <input type="text" class="form-control" name="<?= $rowName?>_suggestedTranslation" value="" />
@@ -245,10 +245,10 @@
                                 <td>
                                     <div style="min-width: 125px">
                                         <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $locale ?>" />
-                                        <input type="hidden" name="<?= $rowName?>_id" value="<?= $this->escapeHtmlAttr($translation->getTranslationId())?>" />
+                                        <input type="hidden" name="<?= $rowName?>_id" value="<?= $this->escapeHtmlAttr($translation->getId())?>" />
                                         <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="fa fa-plus"></span></button>
                                         &nbsp;
-                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="fa fa-search"></span></a>
+                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="fa fa-search"></span></a>
                                     </div>
                                 <td>
                             </tr>

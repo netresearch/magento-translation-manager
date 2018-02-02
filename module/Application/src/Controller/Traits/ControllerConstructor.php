@@ -15,22 +15,22 @@ trait ControllerConstructor
     private $_supportedLocale;
 
     /**
-     * @var Translation
+     * @var TranslationTable
      */
     private $_translationTable;
 
     /**
-     * @var TranslationBase
+     * @var TranslationBaseTable
      */
     private $_translationBaseTable;
 
     /**
-     * @var TranslationFile
+     * @var TranslationFileTable
      */
     private $_translationFileTable;
 
     /**
-     * @var Suggestion
+     * @var SuggestionTable
      */
     private $_suggestionTable;
 

@@ -61,7 +61,7 @@ class IndexController extends AbstractActionController
         $currentFilterUnclear = (bool) $this->params()->fromQuery('filter_unclear_translation');
 
         if ($this->params()->fromQuery('file')) {
-            $currentFile = (array) $this->params()->fromQuery('file');
+            $currentFile = $this->params()->fromQuery('file');
         }
 
         // prepare pagination
@@ -96,7 +96,7 @@ class IndexController extends AbstractActionController
             'translationFiles'     => $this->_translationFileTable->fetchAll(),
             'translationsCount'    => $translationsCount,
             'currentLocale'        => $this->_currentLocale,
-            'currentFile'          => (array) $currentFile,
+            'currentFile'          => $currentFile,
             'currentFilterUnclear' => $currentFilterUnclear,
             'currentPage'          => $page,
             'currentEPP'           => $elementsPerPage,
@@ -142,7 +142,7 @@ class IndexController extends AbstractActionController
                         if (empty($row['suggestedTranslation'])) {
                             continue;
                         }
-                        $row['baseId'] = $baseTranslation->getBaseId();
+                        $row['baseId'] = $baseTranslation->getId();
                         $modified = $this->saveTranslationElement($row);
                         if (false !== $modified) {
                             $elementsModified++;
@@ -163,7 +163,7 @@ class IndexController extends AbstractActionController
                 }
             } else {
                 $rowId = $this->params()->fromPost('rowid');
-                $formRows[$rowId]['baseId'] = $baseTranslation->getBaseId();
+                $formRows[$rowId]['baseId'] = $baseTranslation->getId();
                 try {
                     $success = false;
                     if (!empty($formRows[$rowId]['suggestedTranslation'])) {
@@ -200,11 +200,11 @@ class IndexController extends AbstractActionController
         return new ViewModel([
             'supportedLocales'       => $supportedLocales,
             'currentLocale'          => $this->_currentLocale,
-            'currentTranslationFile' => $this->_translationFileTable->getTranslationFile($baseTranslation->getTranslationFileId())->getFilename(),
+            'currentTranslationFile' => $this->_translationFileTable->getTranslationFile($baseTranslation->getFileId())->getFilename(),
             'messages'               => $this->_messages,
             'baseTranslation'        => $baseTranslation,
             'translations'           => $translations,
-            'suggestions'            => $this->_suggestionTable->fetchByTranslationId($translations[$this->_currentLocale]->getTranslationId()),
+            'suggestions'            => $this->_suggestionTable->fetchByTranslationId($translations[$this->_currentLocale]->getId()),
             'previousItemId'         => $allBaseIds[$previousKey],
             'nextItemId'             => $allBaseIds[$nextKey],
         ]);

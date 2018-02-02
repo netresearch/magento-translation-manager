@@ -89,7 +89,7 @@ class Translation
         return $this;
     }
 
-    public function getTranslation(): string
+    public function getTranslation(): ?string
     {
         return $this->translation;
     }

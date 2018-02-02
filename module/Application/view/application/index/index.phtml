@@ -9,7 +9,7 @@
  * @var \Application\Model\Translation         $translation
  * @var int $translationsCount
  * @var string $currentLocale
- * @var string[] $currentFile
+ * @var string $currentFile
  * @var bool $currentFilterUnclear
  * @var int $currentPage
  * @var int $currentEPP - entries per page
@@ -90,9 +90,7 @@
                             <?php if (empty($currentFile)): ?>
                                 <span class="label label-info"><?= $this->translate('all files') ?></span>
                             <?php else: ?>
-                                <?php foreach ($currentFile as $fileName): ?>
-                                    <span class="label label-primary"><?= $fileName ?></span>
-                                <?php endforeach; ?>
+                                <span class="label label-primary"><?= $currentFile ?></span>
                             <?php endif; ?>
                         </p>
                         <p>
