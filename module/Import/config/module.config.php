@@ -43,4 +43,15 @@ return [
             ],
         ],
     ],
+
+    'translator' => [
+        'locale' => 'en_US',
+        'translation_file_patterns' => [
+            [
+                'type'     => 'phpArray',
+                'base_dir' => __DIR__ . '/../language',
+                'pattern'  => '%s.php',
+            ],
+        ],
+    ],
 ];

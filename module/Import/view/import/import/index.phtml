@@ -6,7 +6,7 @@
  * @var \Import\Form\ImportForm                $form
  */
 
-$title = 'Import';
+$title = $this->translate('Import');
 $this->headTitle($title);
 
 $form = $this->form;
@@ -42,6 +42,7 @@ $form->prepare();
 
 <?php $this->inlineScript()->captureStart(); ?>
 
+/*
 $("document").ready(function () {
     $("#filebutton").change(function () {
         var fullPath   = $("#filebutton").val();
@@ -66,5 +67,6 @@ $("document").ready(function () {
         }
     });
 });
+*/
 
 <?php $this->inlineScript()->captureEnd(); ?>
