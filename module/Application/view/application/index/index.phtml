@@ -2,10 +2,11 @@
 /**
  * @var $this Zend\View\Renderer\PhpRenderer
  *
- * @var \Application\ResultSet\Locale $supportedLocales
+ * @var \Application\ResultSet\Locale          $supportedLocales
  * @var \Application\ResultSet\Translation     $translations
  * @var \Application\ResultSet\TranslationBase $translationBase
  * @var \Application\ResultSet\TranslationFile $translationFiles
+ * @var \Application\Model\Translation         $translation
  * @var int $translationsCount
  * @var string $currentLocale
  * @var string[] $currentFile
@@ -162,17 +163,17 @@
                                                 <?= $this->escapeHtml($base->getOriginSource()) ?>
                                             <?php endif; ?>
                                         </td>
-                                        <td><?= $this->escapeHtml($translation->getCurrentTranslation()) ?></td>
+                                        <td><?= $this->escapeHtml($translation->getTranslation()) ?></td>
                                         <td class="text-center">
-                                            <?php if ($translation->getUnclearTranslation()): ?>
+                                            <?php if ($translation->getUnclear()): ?>
                                                 <button class="unclear-translation" title="<?= $this->translate('unclear translation at the moment') ?>" type="button"
-                                                        onclick="toggleUnclearTranslation($(this))" data-translation-id="<?= $this->escapeHtmlAttr($translation->getTranslationId())?>">
-                                                    <i class="glyphicon glyphicon-exclamation-sign unclear"></i>
+                                                        onclick="toggleUnclearTranslation($(this))" data-translation-id="<?= $this->escapeHtmlAttr($translation->getId())?>">
+                                                    <i class="fa fa-exclamation-triangle unclear"></i>
                                                 </button>
                                             <?php else: ?>
                                                 <button class="unclear-translation" title="<?= $this->translate('clear translation at the moment') ?>" type="button"
-                                                        onclick="toggleUnclearTranslation($(this))" data-translation-id="<?= $this->escapeHtmlAttr($translation->getTranslationId())?>">
-                                                    <i class="glyphicon glyphicon-ok-circle clear"></i>
+                                                        onclick="toggleUnclearTranslation($(this))" data-translation-id="<?= $this->escapeHtmlAttr($translation->getId())?>">
+                                                    <i class="fa fa-check-circle clear"></i>
                                                 </button>
                                             <?php endif; ?>
                                         </td>
@@ -182,10 +183,10 @@
                                         <td>
                                             <div style="min-width: 125px">
                                                 <input type="hidden" name="<?= $rowName?>_baseId" value="<?= $this->escapeHtmlAttr($translation->getBaseId())?>" />
-                                                <input type="hidden" name="<?= $rowName?>_translationId" value="<?= $this->escapeHtmlAttr($translation->getTranslationId())?>" />
-                                                <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="<?= $this->translate('Add suggestion') ?>"><span class="glyphicon glyphicon-plus"></span></button>
+                                                <input type="hidden" name="<?= $rowName?>_translationId" value="<?= $this->escapeHtmlAttr($translation->getId())?>" />
+                                                <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="<?= $this->translate('Add suggestion') ?>"><span class="fa fa-plus"></span></button>
                                                 &nbsp;
-                                                <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="<?= $this->translate('See Details') ?>" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $translation->getBaseId() ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>"><span class="glyphicon glyphicon-search"></span></a>
+                                                <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="<?= $this->translate('See Details') ?>" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $translation->getBaseId() ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>"><span class="fa fa-search"></span></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -227,10 +228,10 @@
                 // change status in frontend
                 if (false == data.new_state) {
                     toggleButton.attr("title", "clear translation at the moment");
-                    toggleButton.html("<i class=\"glyphicon glyphicon-ok-circle clear\"></i>");
+                    toggleButton.html("<i class=\"fa fa-check-circle clear\"></i>");
                 } else {
                     toggleButton.attr("title", "unclear translation at the moment");
-                    toggleButton.html("<i class=\"glyphicon glyphicon-exclamation-sign unclear\"></i>");
+                    toggleButton.html("<i class=\"fa fa-exclamation-triangle unclear\"></i>");
                 }
             },
             error: function() {

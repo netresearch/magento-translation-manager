@@ -4,7 +4,7 @@
  * @var \Import\Form\ImportForm         $form
  */
 
-$title = $this->translate('Import');
+$title = $this->translate('Import magento language CSV file(s)');
 $this->headTitle($title);
 
 $form = $this->form;
@@ -12,10 +12,9 @@ $form->setAttribute('action', $this->url('import', [ 'action' => 'index' ]));
 $form->prepare();
 ?>
 
-<h1><?= $this->escapeHtml($title); ?></h1>
 <div class="card mt-4">
     <div class="card-header">
-        <?= $this->translate('Import magento language CSV file(s)') ?>
+        <?= $this->escapeHtml($title); ?>
     </div>
     <div class="card-body">
         <?= $this->form()->openTag($form); ?>

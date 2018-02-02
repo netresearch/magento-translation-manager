@@ -77,11 +77,11 @@
                 <div class="panel-footer">
                     <?php if ('' !== $baseTranslation->getScreenPath()): ?>
                         <a href="<?= $this->basePath('usages/' . $baseTranslation->getScreenPath()) ?>" class="btn btn-info" role="button" data-target="#lightbox" data-toggle="lightbox">
-                            <span class="glyphicon glyphicon-camera"></span> Show Context
+                            <span class="fa fa-camera"></span> Show Context
                         </a>
                     <?php else: ?>
                     <a href="<?= $this->basePath('img/fallback-no-screenshot.png') ?>" class="btn btn-info" role="button" data-target="#lightbox" data-toggle="lightbox" data-width="400">
-                        <span class="glyphicon glyphicon-camera"></span> Show Context
+                        <span class="fa fa-camera"></span> Show Context
                     </a>
                     <?php endif; ?>
                 </div>
@@ -95,7 +95,7 @@
                     <span class="badge badge-info pull-right"><?= $currentLocale ?></span>
                     <span class="pull-right">&nbsp;<img src="<?= $this->basePath('img/flags/' . strtolower(substr($currentLocale, 0, 2))) ?>.png" alt="<?= $currentLocale ?>" />&nbsp;</span>
                     <?php if ($unclearSelected): ?>
-                        <i class="glyphicon glyphicon-exclamation-sign unclear " title="unclear translation"></i>
+                        <i class="fa fa-exclamation-triangle unclear " title="unclear translation"></i>
                     <?php endif; ?>
                 </div>
                 <div class="card-body">
@@ -180,7 +180,7 @@
                                 <td><?= $this->escapeHtml($translation->getCurrentTranslation()) ?><td>
                                 <td>
                                     <?php if ($translation->getUnclearTranslation()): ?>
-                                        <i class="glyphicon glyphicon-exclamation-sign unclear" title="unclear translation"></i>
+                                        <i class="fa fa-exclamation-triangle unclear" title="unclear translation"></i>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -194,9 +194,9 @@
                                     <div style="min-width: 125px">
                                         <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $locale ?>" />
                                         <input type="hidden" name="<?= $rowName?>_id" value="<?= $this->escapeHtmlAttr($translation->getTranslationId())?>" />
-                                        <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="glyphicon glyphicon-plus"></span></button>
+                                        <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="fa fa-plus"></span></button>
                                         &nbsp;
-                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="glyphicon glyphicon-search"></span></a>
+                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="fa fa-search"></span></a>
                                     </div>
                                 <td>
                             </tr>
@@ -232,7 +232,7 @@
                                 <td><?= $this->escapeHtml($translation->getCurrentTranslation()) ?><td>
                                 <td>
                                     <?php if ($translation->getUnclearTranslation()): ?>
-                                        <i class="glyphicon glyphicon-exclamation-sign unclear" title="unclear translation"></i>
+                                        <i class="fa fa-exclamation-triangle unclear" title="unclear translation"></i>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -246,9 +246,9 @@
                                     <div style="min-width: 125px">
                                         <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $locale ?>" />
                                         <input type="hidden" name="<?= $rowName?>_id" value="<?= $this->escapeHtmlAttr($translation->getTranslationId())?>" />
-                                        <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="glyphicon glyphicon-plus"></span></button>
+                                        <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="fa fa-plus"></span></button>
                                         &nbsp;
-                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="glyphicon glyphicon-search"></span></a>
+                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getBaseId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="fa fa-search"></span></a>
                                     </div>
                                 <td>
                             </tr>
