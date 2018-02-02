@@ -9,23 +9,29 @@ $title = $this->translate('Locale configuration');
 $this->headTitle($title);
 ?>
 
-<h1><?= $this->escapeHtml($title); ?></h1>
-<p class="form-group">
-    <a class="btn btn-info" href="<?= $this->url('locale', [ 'action'=>'add' ]);?>"><?= $this->translate('Add new locale') ?></a>
-</p>
+<div class="card mt-4">
+    <div class="card-header">
+        <?= $this->escapeHtml($title); ?>
+    </div>
+    <div class="card-body">
+        <p class="form-group">
+            <a class="btn btn-info" href="<?= $this->url('locale', [ 'action'=>'add' ]);?>"><?= $this->translate('Add new locale') ?></a>
+        </p>
 
-<table class="table">
-    <tr>
-        <th>Locale</th>
-        <th>&nbsp;</th>
-    </tr>
-    <?php foreach ($locales as $locale): ?>
-        <tr>
-            <td><?= $this->escapeHtml($locale->getLocale());?></td>
-            <td>
-                <a class="badge badge-info" href="<?= $this->url('locale', [ 'action'=>'edit', 'id' => $locale->getId() ]);?>"><?= $this->translate('Edit') ?></a>
-                <a class="badge badge-danger" href="<?= $this->url('locale', [ 'action'=>'delete', 'id' => $locale->getId() ]);?>"><?= $this->translate('Delete') ?></a>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-</table>
+        <table class="table">
+            <tr>
+                <th>Locale</th>
+                <th>&nbsp;</th>
+            </tr>
+            <?php foreach ($locales as $locale): ?>
+                <tr>
+                    <td><?= $this->escapeHtml($locale->getLocale());?></td>
+                    <td>
+                        <a class="badge badge-info" href="<?= $this->url('locale', [ 'action'=>'edit', 'id' => $locale->getId() ]);?>"><?= $this->translate('Edit') ?></a>
+                        <a class="badge badge-danger" href="<?= $this->url('locale', [ 'action'=>'delete', 'id' => $locale->getId() ]);?>"><?= $this->translate('Delete') ?></a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+</div>

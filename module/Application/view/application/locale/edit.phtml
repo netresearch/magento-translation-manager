@@ -1,21 +1,33 @@
 <?php
-$title = 'Edit locale';
+/**
+ * @var \Zend\View\Renderer\PhpRenderer $this
+ * @var \Application\Form\LocaleForm    $form
+ */
+
+$title = $this->translate('Edit locale');
 $this->headTitle($title);
+
+$form = $this->form;
+$form->setAttribute('action', $this->url('locale', [ 'action' => 'edit', 'id' => $this->id ]));
+$form->prepare();
 ?>
 
-<h1><?= $this->escapeHtml($title); ?></h1>
-
-<?php
-    $form = $this->form;
-    $form->setAttribute('action', $this->url('locale', [ 'action' => 'edit', 'id' => $this->id ]));
-    $form->prepare();
-
-    echo $this->form()->openTag($form);
-    echo '<div class="form-group">';
-    echo $this->formHidden($form->get('id'));
-    echo $this->formRow($form->get('locale'));
-    echo '</div><div class="form-group">';
-    echo $this->formSubmit($form->get('submit'));
-    echo '</div';
-    echo $this->form()->closeTag();
-?>
+<div class="card mt-4">
+    <div class="card-header">
+        <?= $this->escapeHtml($title) ?>
+    </div>
+    <div class="card-body">
+        <?= $this->form()->openTag($form); ?>
+            <?= $this->formHidden($form->get('id')); ?>
+            <div class="form-group">
+                <?php $locale = $form->get('locale'); ?>
+                <?= $this->formLabel($locale); ?>
+                <?= $this->formElement($locale); ?>
+                <?= $this->formElementErrors($locale); ?>
+            </div>
+            <div class="form-group">
+                <?= $this->formElement($form->get('submit')); ?>
+            </div>
+        <?= $this->form()->closeTag(); ?>
+    </div>
+</div>

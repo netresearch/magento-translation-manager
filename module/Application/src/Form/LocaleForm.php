@@ -26,6 +26,7 @@ class LocaleForm extends Form
             ),
             'attributes' => array(
                 'maxlength' => 5,
+                'class'     => 'form-control',
             ),
         ));
 
@@ -35,6 +36,7 @@ class LocaleForm extends Form
             'attributes' => array(
                 'value' => 'Submit',
                 'id'    => 'submitbutton',
+                'class' => 'btn btn-info',
             ),
         ));
     }

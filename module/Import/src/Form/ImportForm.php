@@ -87,7 +87,7 @@ class ImportForm extends Form
             'attributes' => [
                 'value' => 'Start import',
                 'id'    => 'submitbutton',
-                'class' =>'btn btn-info',
+                'class' => 'btn btn-info',
             ],
         ]);
     }

@@ -1,23 +1,27 @@
 <?php
-$title = 'Delete locale';
+/**
+ * @var \Zend\View\Renderer\PhpRenderer $this
+ */
+
+$title = $this->translate('Delete locale');
 $this->headTitle($title);
+
+$url = $this->url('locale', [ 'action' => 'delete', 'id' => $this->id ]);
 ?>
 
-<h1><?= $this->escapeHtml($title); ?></h1>
-
-<p>Are you sure that you want to delete '<?= $this->escapeHtml($locale->getLocale()); ?>'?</p>
-<?php
-
-$url = $this->url('locale', array(
-    'action' => 'delete',
-    'id'     => $this->id,
-));
-?>
-
-<form action="<?= $url; ?>" method="post">
-    <div>
-        <input type="hidden" name="id" value="<?= $locale->getId(); ?>" />
-        <input type="submit" name="del" value="Yes" />
-        <input type="submit" name="del" value="No" />
+<div class="card mt-4">
+    <div class="card-header">
+        <p>Are you sure that you want to delete '<?= $this->escapeHtml($locale->getLocale()); ?>'?</p>
     </div>
-</form>
+    <div class="card-body">
+        <form action="<?= $url; ?>" method="post">
+            <div class="form-group">
+                <input type="hidden" name="id" value="<?= $locale->getId(); ?>" />
+            </div>
+            <div class="form-group">
+                <input class="btn btn-danger" type="submit" name="del" value="Yes" />
+                <input class="btn btn-success" type="submit" name="del" value="No" />
+            </div>
+        </form>
+    </div>
+</div>

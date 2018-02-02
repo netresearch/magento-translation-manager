@@ -124,7 +124,7 @@ return [
                 'route' => 'admin',
                 'pages' => [
                     'locale' => [
-                        'label' => 'Locale',
+                        'label' => 'Locale configuration',
                         'route' => 'locale',
                     ],
                 ],
