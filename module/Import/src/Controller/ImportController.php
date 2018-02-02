@@ -83,7 +83,7 @@ class ImportController extends AbstractActionController
                 foreach ($data['files'] as $file) {
                     try {
                         $fileRecord = $this->translationFileTable->fetchByFilename($file['name']);
-                        $fileid     = $fileRecord->getId();
+                        $fileId     = $fileRecord->getId();
                     } catch (\Exception $ex) {
                         // Add new translation file record
                         $translationFile = new TranslationFile();

@@ -9,7 +9,10 @@ return [
     'Start import' => 'Import beginnen',
 
     // Languages
-    'de_DE' => 'Deutsch',
+    'de_DE' => 'Deutsch (Deutschland)',
+    'de_AT' => 'Deutsch (Österreich)',
     'en_GB' => 'Englisch (Vereinigtes Königreich)',
     'en_US' => 'Englisch (Vereinigte Staaten)',
+    'es_ES' => 'Spanisch (Spanien)',
+    'fr_FR' => 'Französisch (Frankreich)',
 ];
