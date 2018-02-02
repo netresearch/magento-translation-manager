@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `translation` (
 CREATE TABLE IF NOT EXISTS `translationBase` (
     `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
     `fileId` int(10) UNSIGNED NOT NULL,
-    `file` varchar(256) NOT NULL,
+    `file` varchar(256) DEFAULT NULL,
     `originSource` text DEFAULT NULL,
     `notInUse` tinyint(4) NOT NULL DEFAULT 0,
     `screenPath` varchar(255) DEFAULT NULL,
@@ -52,9 +52,10 @@ CREATE TABLE IF NOT EXISTS `translationBase` (
 CREATE TABLE IF NOT EXISTS `translationFile` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `filename` varchar(255) NOT NULL,
-    `sourcePath` text NOT NULL,
-    `destinationPath` text NOT NULL,
-    PRIMARY KEY (`id`)
+    `sourcePath` text DEFAULT NULL,
+    `destinationPath` text DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `filename` (`filename`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 

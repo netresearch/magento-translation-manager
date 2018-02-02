@@ -32,16 +32,17 @@ return [
                     ],
                 ],
             ],
-//             'index' => [
-//                 'type' => Segment::class,
-//                 'options' => [
-//                     'route'    => '/index/[:action][/:base_id]',
-//                     'defaults' => [
-//                         'controller' => Controller\IndexController::class,
-//                         'action'     => 'index',
-//                     ],
-//                 ],
-//             ],
+
+            'index' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/index/[:action][/:base_id]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
 
             'admin' => [
                 'type' => Segment::class,

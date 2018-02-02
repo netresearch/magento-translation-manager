@@ -61,7 +61,9 @@ class Module implements ConfigProviderInterface, ControllerProviderInterface, Se
                 Controller\ImportController::class => function (ServiceManager $sm) {
                     return new Controller\ImportController(
                         $sm->get(\Application\Model\LocaleTable::class),
-                        $sm->get(\Application\Model\TranslationTable::class)
+                        $sm->get(\Application\Model\TranslationTable::class),
+                        $sm->get(\Application\Model\TranslationBaseTable::class),
+                        $sm->get(\Application\Model\TranslationFileTable::class)
                     );
                 },
             ],

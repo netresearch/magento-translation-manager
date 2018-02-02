@@ -182,7 +182,7 @@ class TranslationTable extends AbstractTableGateway
                 return false;
             }
 
-            return $this->getLastInsertValue();
+            return (int) $this->tableGateway->getLastInsertValue();
         } else {
             if ($this->getTranslation($id)) {
                 // Update record

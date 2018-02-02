@@ -26,6 +26,26 @@ class TranslationBaseTable extends AbstractTableGateway
     }
 
     /**
+     * Get a record by the given origin source.
+     *
+     * @param string $originSource Origin source
+     *
+     * @return TranslationBase
+     */
+    public function fetchByOriginSource(string $originSource): TranslationBase
+    {
+        $record = $this->tableGateway
+            ->select([ 'originSource' => $originSource ])
+            ->current();
+
+        if (!$record) {
+            throw new \Exception('Could not find row <' . $originSource . '>');
+        }
+
+        return $record;
+    }
+
+    /**
      * Get a single record from "translationBase" table by its record id.
      *
      * @param int $id ID of record
@@ -65,7 +85,7 @@ class TranslationBaseTable extends AbstractTableGateway
                 return false;
             }
 
-            return $this->getLastInsertValue();
+            return (int) $this->tableGateway->getLastInsertValue();
         } else {
             if ($this->getTranslationBase($id)) {
                 // Update record

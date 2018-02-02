@@ -72,6 +72,12 @@ class Translation
         return $this->baseId;
     }
 
+    public function setBaseId(int $baseId): self
+    {
+        $this->baseId = $baseId;
+        return $this;
+    }
+
     public function getLocale(): string
     {
         return $this->locale;

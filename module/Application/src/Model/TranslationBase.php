@@ -79,6 +79,12 @@ class TranslationBase
         return $this->fileId;
     }
 
+    public function setFileId(int $fileId): self
+    {
+        $this->fileId = $fileId;
+        return $this;
+    }
+
     public function getFile(): string
     {
         return $this->file;

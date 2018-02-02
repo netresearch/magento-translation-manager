@@ -1,21 +1,21 @@
 <?php
 namespace Application\Model\Traits;
 
-use \Zend\Db\TableGateway\TableGatewayInterface;
+use \Zend\Db\TableGateway\AbstractTableGateway;
 
 trait TableConstructor
 {
     /**
-     * @var TableGatewayInterface
+     * @var AbstractTableGateway
      */
     private $tableGateway;
 
     /**
      * Constructor.
      *
-     * @param TableGatewayInterface $tableGateway Table gateway interface
+     * @param AbstractTableGateway $tableGateway Table gateway interface
      */
-    public function __construct(TableGatewayInterface $tableGateway)
+    public function __construct(AbstractTableGateway $tableGateway)
     {
         $this->tableGateway = $tableGateway;
     }

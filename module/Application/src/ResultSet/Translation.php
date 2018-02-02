@@ -9,23 +9,23 @@ use \Application\Model\Locale;
 class Translation extends ZendResultSet
 {
     /**
-     * @param ResultSet_Locale $supportedLocales
+     * @param ResultSet_Locale $locales
      *
      * @return Model_Translation[]
      */
-    public function groupByLocales(ResultSet_Locale $supportedLocales): array
+    public function groupByLocales(ResultSet_Locale $locales): array
     {
         $languages = [];
 
-        /** @var Translation $record */
+        /** @var Model_Translation $record */
         foreach ($this as $record) {
             $languages[$record->getLocale()] = $record;
         }
 
         /** @var Locale $record */
-        foreach ($supportedLocales as $record) {
+        foreach ($locales as $record) {
             if (!array_key_exists($record->getLocale(), $languages)) {
-                $languages[$record->getLocale()] = new Model\Translation();
+                $languages[$record->getLocale()] = new Model_Translation();
             }
         }
 

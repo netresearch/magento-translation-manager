@@ -2,7 +2,7 @@
 namespace Application\ResultSet;
 
 use \Zend\Db\ResultSet\ResultSet as ZendResultSet;
-use \Application\Model;
+use \Application\Model\TranslationBase as Model_TranslationBase;
 
 class TranslationBase extends ZendResultSet
 {
@@ -11,19 +11,19 @@ class TranslationBase extends ZendResultSet
      *
      * @param int $id Record id
      *
-     * @return Model\TranslationBase
+     * @return Model_TranslationBase
      */
-    public function getById(int $id): Model\TranslationBase
+    public function getById(int $id): Model_TranslationBase
     {
         while ($this->valid()) {
-            if ($this->current()->getBaseId() === $id) {
+            if ($this->current()->getId() === $id) {
                 return $this->current();
             }
 
             $this->next();
         }
 
-        return new Model\TranslationBase();
+        return new Model_TranslationBase();
     }
 
     /**
@@ -36,7 +36,7 @@ class TranslationBase extends ZendResultSet
         $ids = [];
 
         while ($this->valid()) {
-            $ids[] = $this->current()->getBaseId();
+            $ids[] = $this->current()->getId();
             $this->next();
         }
 
