@@ -8,7 +8,7 @@ class TranslationFile
     /**
      * @var int
      */
-    private $translationFileId = 0;
+    private $id = 0;
 
     /**
      * @var string
@@ -34,10 +34,10 @@ class TranslationFile
      */
     public function exchangeArray(array $data): void
     {
-        $this->translationFileId = ArrayAccess::getInt($data, 'translation_file_id');
-        $this->filename          = ArrayAccess::getString($data, 'filename');
-        $this->sourcePath        = ArrayAccess::getString($data, 'source_path');
-        $this->destinationPath   = ArrayAccess::getString($data, 'destination_path');
+        $this->id              = ArrayAccess::getInt($data, 'id');
+        $this->filename        = ArrayAccess::getString($data, 'filename');
+        $this->sourcePath      = ArrayAccess::getString($data, 'sourcePath');
+        $this->destinationPath = ArrayAccess::getString($data, 'destinationPath');
     }
 
     /**
@@ -48,19 +48,19 @@ class TranslationFile
     public function toArray(): array
     {
         return [
-            'translation_file_id' => $this->translationFileId,
-            'filename'            => $this->filename,
-            'source_path'         => $this->sourcePath,
-            'destination_path'    => $this->destinationPath,
+            'id'              => $this->id,
+            'filename'        => $this->filename,
+            'sourcePath'      => $this->sourcePath,
+            'destinationPath' => $this->destinationPath,
         ];
     }
 
     /**
      * @return int
      */
-    public function getTranslationFileId(): int
+    public function getId(): int
     {
-        return $this->translationFileId;
+        return $this->id;
     }
 
     /**
@@ -72,6 +72,15 @@ class TranslationFile
     }
 
     /**
+     * @return self
+     */
+    public function setFilename(string $filename): self
+    {
+        $this->filename = $filename;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getSourcePath(): string
@@ -80,10 +89,28 @@ class TranslationFile
     }
 
     /**
+     * @return self
+     */
+    public function setSourcePath(string $sourcePath): self
+    {
+        $this->sourcePath = $sourcePath;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getDestinationPath(): string
     {
         return $this->destinationPath;
+    }
+
+    /**
+     * @return self
+     */
+    public function setDestinationPath(string $destinationPath): self
+    {
+        $this->destinationPath = $destinationPath;
+        return $this;
     }
 }

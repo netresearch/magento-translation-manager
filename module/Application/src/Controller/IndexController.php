@@ -324,9 +324,9 @@ class IndexController extends AbstractActionController
     private function addSuggestion(int $translationId, string $content): bool
     {
         $suggestion = new Suggestion([
-            'suggestionId'         => null,
-            'translationId'        => (int) $translationId,
-            'suggestedTranslation' => $content,
+            'id'            => null,
+            'translationId' => (int) $translationId,
+            'suggestion'    => $content,
         ]);
 
         return (bool) $this->_suggestionTable->saveSuggestion($suggestion);

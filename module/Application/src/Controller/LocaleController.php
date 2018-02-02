@@ -2,18 +2,18 @@
 namespace Application\Controller;
 
 use \Zend\Mvc\Controller\AbstractActionController;
-use \Application\Form\SupportedLocaleForm;
-use \Application\Model\SupportedLocale;
-use \Application\Model\SupportedLocaleTable;
+use \Application\Form\LocaleForm;
+use \Application\Model\Locale;
+use \Application\Model\LocaleTable;
 
 class LocaleController extends AbstractActionController
 {
     /**
-     * @var SupportedLocaleTable
+     * @var LocaleTable
      */
     private $_supportedLocale;
 
-    public function __construct(SupportedLocaleTable $table)
+    public function __construct(LocaleTable $table)
     {
         $this->_supportedLocale = $table;
     }
@@ -37,20 +37,20 @@ class LocaleController extends AbstractActionController
      */
     public function addAction()
     {
-        $form = new SupportedLocaleForm();
+        $form = new LocaleForm();
         $form->get('submit')->setValue('Add');
 
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $locale = new SupportedLocale();
+            $locale = new Locale();
 
             $form->setInputFilter($locale->getInputFilter());
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
                 $locale->exchangeArray($form->getData());
-                $this->_supportedLocale->saveSupportedLocale($locale);
+                $this->_supportedLocale->saveLocale($locale);
 
                 // Redirect to list of locales
                 return $this->redirect()->toRoute('locale');
@@ -77,15 +77,15 @@ class LocaleController extends AbstractActionController
             ]);
         }
 
-        // Get the Album with the specified id.  An exception is thrown
+        // Get the locale with the specified id.  An exception is thrown
         // if it cannot be found, in which case go to the index page.
         try {
-            $locale = $this->_supportedLocale->getSupportedLocale($id);
+            $locale = $this->_supportedLocale->getLocale($id);
         } catch (\Exception $ex) {
             return $this->redirect()->toRoute('locale', [ 'action' => 'index' ]);
         }
 
-        $form  = new SupportedLocaleForm();
+        $form  = new LocaleForm();
         $form->bind($locale);
         $form->get('submit')->setAttribute('value', 'Edit');
 
@@ -96,7 +96,7 @@ class LocaleController extends AbstractActionController
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
-                $this->_supportedLocale->saveSupportedLocale($locale);
+                $this->_supportedLocale->saveLocale($locale);
 
                 // Redirect to list of locales
                 return $this->redirect()->toRoute('locale');
@@ -129,7 +129,7 @@ class LocaleController extends AbstractActionController
 
             if ($del == 'Yes') {
                 $id = (int) $request->getPost('id');
-                $this->_supportedLocale->deleteSupportedLocale($id);
+                $this->_supportedLocale->deleteLocale($id);
             }
 
             // Redirect to list of locales
@@ -138,7 +138,7 @@ class LocaleController extends AbstractActionController
 
         return [
             'id'     => $id,
-            'locale' => $this->_supportedLocale->getSupportedLocale($id)
+            'locale' => $this->_supportedLocale->getLocale($id)
         ];
     }
 }

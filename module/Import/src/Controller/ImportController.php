@@ -52,8 +52,7 @@ exit;
         }
 
         return [
-            'form'             => $form,
-            'supportedLocales' => $this->_supportedLocale->fetchAll(),
+            'form' => $form,
         ];
     }
 }

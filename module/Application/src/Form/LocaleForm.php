@@ -6,7 +6,7 @@ use \Zend\Form\Form;
 /**
  * Class representing the supported locale form.
  */
-class SupportedLocaleForm extends Form
+class LocaleForm extends Form
 {
     public function __construct($name = null)
     {

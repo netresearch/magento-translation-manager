@@ -6,14 +6,14 @@ use \Zend\Db\Sql\Select;
 use \Application\ResultSet\TranslationFile as ResultSet_TranslationFile;
 
 /**
- * Class handles access to the "translation_file" table.
+ * Class handles access to the "translationFile" table.
  */
 class TranslationFileTable extends AbstractTableGateway
 {
     use Traits\TableConstructor;
 
     /**
-     * Get all records from "translation_file" table.
+     * Get all records from "translationFile" table.
      *
      * @return ResultSet_TranslationFile
      */
@@ -26,7 +26,7 @@ class TranslationFileTable extends AbstractTableGateway
     }
 
     /**
-     * Get a single record from "translation_file" table by its record id.
+     * Get a single record from "translationFile" table by its record id.
      *
      * @param int $id ID of record
      *
@@ -36,7 +36,7 @@ class TranslationFileTable extends AbstractTableGateway
     public function getTranslationFile(int $id): TranslationFile
     {
         $record = $this->tableGateway
-            ->select([ 'translation_file_id' => (int) $id ])
+            ->select([ 'id' => $id ])
             ->current();
 
         if (!$record) {

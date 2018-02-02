@@ -30,19 +30,19 @@ class Module implements ConfigProviderInterface, ControllerProviderInterface, Se
     {
         return [
             'factories' => [
-//                 Model\SupportedLocaleTable::class => function (ServiceManager $sm) {
-//                     $tableGateway = $sm->get('Model\SupportedLocaleGateway');
-//                     return new Model\SupportedLocaleTable($tableGateway);
+//                 Model\LocaleTable::class => function (ServiceManager $sm) {
+//                     $tableGateway = $sm->get('Model\LocaleGateway');
+//                     return new Model\LocaleTable($tableGateway);
 //                 },
 
-//                 'Model\SupportedLocaleGateway' => function (ServiceManager $sm) {
+//                 'Model\LocaleGateway' => function (ServiceManager $sm) {
 //                     $dbAdapter = $sm->get(AdapterInterface::class);
 
-//                     $resultSetPrototype = new ResultSet\SupportedLocale();
-//                     $resultSetPrototype->setArrayObjectPrototype(new Model\SupportedLocale());
+//                     $resultSetPrototype = new ResultSet\Locale();
+//                     $resultSetPrototype->setArrayObjectPrototype(new Model\Locale());
 //                     $resultSetPrototype->buffer();
 
-//                     return new TableGateway('supported_locale', $dbAdapter, null, $resultSetPrototype);
+//                     return new TableGateway('locale', $dbAdapter, null, $resultSetPrototype);
 //                 },
             ],
         ];
@@ -60,7 +60,8 @@ class Module implements ConfigProviderInterface, ControllerProviderInterface, Se
             'factories' => [
                 Controller\ImportController::class => function (ServiceManager $sm) {
                     return new Controller\ImportController(
-                        $sm->get(\Application\Model\SupportedLocaleTable::class)
+                        $sm->get(\Application\Model\LocaleTable::class),
+                        $sm->get(\Application\Model\TranslationTable::class)
                     );
                 },
             ],

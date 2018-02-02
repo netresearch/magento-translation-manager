@@ -4,21 +4,21 @@ namespace Application\Model;
 use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Select;
 use \Application\Model\Traits;
-use \Application\ResultSet\SupportedLocale as ResultSet_SupportedLocale;
+use \Application\ResultSet\Locale as ResultSet_Locale;
 
 /**
- * Class handles access to the "supported_locale" table.
+ * Class handles access to the "locale" table.
  */
-class SupportedLocaleTable extends AbstractTableGateway
+class LocaleTable extends AbstractTableGateway
 {
     use Traits\TableConstructor;
 
     /**
-     * Get all records from "supported_locale" table.
+     * Get all records from "locale" table.
      *
-     * @return ResultSet_SupportedLocale
+     * @return ResultSet_Locale
      */
-    public function fetchAll(): ResultSet_SupportedLocale
+    public function fetchAll(): ResultSet_Locale
     {
         return $this->tableGateway
             ->select(function (Select $select) {
@@ -27,17 +27,38 @@ class SupportedLocaleTable extends AbstractTableGateway
     }
 
     /**
-     * Get a single record from "supported_locale" table by its record id.
+     * Get a single record from "locale" table by its record id.
      *
      * @param int $id ID of record
      *
-     * @return SupportedLocale
+     * @return Locale
      * @throws \Exception
      */
-    public function getSupportedLocale(int $id): SupportedLocale
+    public function getLocale(int $id): Locale
     {
         $record = $this->tableGateway
-            ->select([ 'id' => (int) $id ])
+            ->select([ 'id' => $id ])
+            ->current();
+
+        if (!$record) {
+            throw new \Exception('Could not find row <' . $id . '>');
+        }
+
+        return $record;
+    }
+
+    /**
+     * Get a single record from "locale" table by its record id.
+     *
+     * @param string $locale Locale string, e.g. de_DE
+     *
+     * @return Locale
+     * @throws \Exception
+     */
+    public function getLocaleByLocale(string $locale): Locale
+    {
+        $record = $this->tableGateway
+            ->select([ 'locale' => $locale ])
             ->current();
 
         if (!$record) {
@@ -50,15 +71,15 @@ class SupportedLocaleTable extends AbstractTableGateway
     /**
      * Save or update record.
      *
-     * @param SupportedLocale $supportedLocale Instance
+     * @param Locale $locale Instance
      *
      * @return bool|int ID of record on success, FALSE on failure
      * @throws \Exception
      */
-    public function saveSupportedLocale(SupportedLocale $supportedLocale)
+    public function saveLocale(Locale $locale)
     {
-        $data = $supportedLocale->toArray();
-        $id   = $supportedLocale->getId();
+        $data = $locale->toArray();
+        $id   = $locale->getId();
 
         if ($id === 0) {
             // Insert record
@@ -68,7 +89,7 @@ class SupportedLocaleTable extends AbstractTableGateway
 
             return $this->getLastInsertValue();
         } else {
-            if ($this->getSupportedLocale($id)) {
+            if ($this->getLocale($id)) {
                 // Update record
                 if (!$this->tableGateway->update($data, [ 'id' => $id ])) {
                     return false;
@@ -88,8 +109,8 @@ class SupportedLocaleTable extends AbstractTableGateway
      *
      * @return int Number of deleted records (should be one, because of PK)
      */
-    public function deleteSupportedLocale(int $id): int
+    public function deleteLocale(int $id): int
     {
-        return $this->tableGateway->delete([ 'id' => (int) $id ]);
+        return $this->tableGateway->delete([ 'id' => $id ]);
     }
 }

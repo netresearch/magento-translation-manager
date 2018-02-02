@@ -8,7 +8,7 @@ class Translation
     /**
      * @var int
      */
-    private $translationId = 0;
+    private $id = 0;
 
     /**
      * @var int
@@ -23,12 +23,12 @@ class Translation
     /**
      * @var string
      */
-    private $currentTranslation;
+    private $translation;
 
     /**
      * @var bool
      */
-    private $unclearTranslation = true;
+    private $unclear = true;
 
     /**
      * This method simply copies the data from the passed in array to our entities properties.
@@ -39,11 +39,11 @@ class Translation
      */
     public function exchangeArray(array $data): void
     {
-        $this->translationId      = ArrayAccess::getInt($data, 'translation_id');
-        $this->baseId             = ArrayAccess::getInt($data, 'base_id');
-        $this->locale             = ArrayAccess::getString($data, 'locale');
-        $this->currentTranslation = ArrayAccess::getString($data, 'current_translation');
-        $this->unclearTranslation = ArrayAccess::getBool($data, 'unclear_translation', true);
+        $this->id          = ArrayAccess::getInt($data, 'id');
+        $this->baseId      = ArrayAccess::getInt($data, 'baseId');
+        $this->locale      = ArrayAccess::getString($data, 'locale');
+        $this->translation = ArrayAccess::getString($data, 'translation');
+        $this->unclear     = ArrayAccess::getBool($data, 'unclear', true);
     }
 
     /**
@@ -54,17 +54,17 @@ class Translation
     public function toArray(): array
     {
         return [
-            'translation_id'      => $this->translationId,
-            'base_id'             => $this->baseId,
-            'locale'              => $this->locale,
-            'current_translation' => $this->currentTranslation,
-            'unclear_translation' => (int) $this->unclearTranslation,
+            'id'          => $this->id,
+            'baseId'      => $this->baseId,
+            'locale'      => $this->locale,
+            'translation' => $this->translation,
+            'unclear'     => (int) $this->unclear,
         ];
     }
 
-    public function getTranslationId(): int
+    public function getId(): int
     {
-        return $this->translationId;
+        return $this->id;
     }
 
     public function getBaseId(): int
@@ -77,13 +77,31 @@ class Translation
         return $this->locale;
     }
 
-    public function getCurrentTranslation(): string
+    public function setLocale(string $locale): self
     {
-        return (string) $this->currentTranslation;
+        $this->locale = $locale;
+        return $this;
     }
 
-    public function getUnclearTranslation(): bool
+    public function getTranslation(): string
     {
-        return $this->unclearTranslation;
+        return $this->translation;
+    }
+
+    public function setTranslation(string $translation): self
+    {
+        $this->translation = $translation;
+        return $this;
+    }
+
+    public function getUnclear(): bool
+    {
+        return $this->unclear;
+    }
+
+    public function setUnclear(bool $unclear): self
+    {
+        $this->unclear = $unclear;
+        return $this;
     }
 }

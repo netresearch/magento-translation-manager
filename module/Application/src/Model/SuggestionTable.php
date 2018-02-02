@@ -21,7 +21,7 @@ class SuggestionTable extends AbstractTableGateway
     {
         return $this->tableGateway
             ->select(function (Select $select) {
-                $select->order('suggestion_id ASC');
+                $select->order('id ASC');
             });
     }
 
@@ -36,8 +36,8 @@ class SuggestionTable extends AbstractTableGateway
     {
         return $this->tableGateway
             ->select(function (Select $select) use ($translationId) {
-                $select->where([ 'translation_id' => $translationId ]);
-                $select->order('suggestion_id ASC');
+                $select->where([ 'translationId' => $translationId ]);
+                $select->order('id ASC');
             });
     }
 
@@ -52,7 +52,7 @@ class SuggestionTable extends AbstractTableGateway
     public function getSuggestion(int $id): Suggestion
     {
         $record = $this->tableGateway
-            ->select([ 'suggestion_id' => (int) $id ])
+            ->select([ 'id' => $id ])
             ->current();
 
         if (!$record) {
@@ -73,7 +73,7 @@ class SuggestionTable extends AbstractTableGateway
     public function saveSuggestion(Suggestion $suggestion)
     {
         $data = $suggestion->toArray();
-        $id   = $suggestion->getSuggestionId();
+        $id   = $suggestion->getId();
 
         if ($id === 0) {
             // Insert record
@@ -85,7 +85,7 @@ class SuggestionTable extends AbstractTableGateway
         } else {
             if ($this->getSuggestion($id)) {
                 // Update record
-                if (!$this->tableGateway->update($data, [ 'suggestion_id' => $id ])) {
+                if (!$this->tableGateway->update($data, [ 'id' => $id ])) {
                     return false;
                 }
 
@@ -105,6 +105,6 @@ class SuggestionTable extends AbstractTableGateway
      */
     public function deleteSuggestion(int $id): int
     {
-        return $this->tableGateway->delete([ 'suggestion_id' => (int) $id ]);
+        return $this->tableGateway->delete([ 'id' => $id ]);
     }
 }

@@ -22,7 +22,7 @@ class TranslationTable extends AbstractTableGateway
     {
         return $this->tableGateway
             ->select(function (Select $select) {
-                $select->order('base_id ASC');
+                $select->order('baseId ASC');
             });
     }
 
@@ -79,8 +79,8 @@ class TranslationTable extends AbstractTableGateway
 
                 if (null !== $elementsPerPage) {
                     // React to pagination
-                    $select->limit((int) $elementsPerPage)
-                        ->offset(($page - 1) * ((int) $elementsPerPage));
+                    $select->limit($elementsPerPage)
+                        ->offset(($page - 1) * $elementsPerPage);
                 }
             });
     }
@@ -101,22 +101,22 @@ class TranslationTable extends AbstractTableGateway
         ?string $file = null,
         bool    $filterUnclear = false
     ): Select {
-        $select->order('translation.translation_id ASC');
+        $select->order('translation.id ASC');
 
-        $joinCondition  = $this->tableGateway->getTable() . '.base_id = translation_base.base_id';
+        $joinCondition  = $this->tableGateway->getTable() . '.baseId = translationBase.id';
         $joinCondition .= ' AND translation.locale = ' . $this->tableGateway->getAdapter()->getPlatform()->quoteValue($locale); // . ' OR locale IS NULL ';
 
         // quoteInto doesn't exist anymore and $this->adapter->getPlatform()->quoteValue() not working
-        $select->join('translation_base', new Expression($joinCondition), [], Select::JOIN_LEFT);
+        $select->join('translationBase', new Expression($joinCondition), [], Select::JOIN_LEFT);
 
         if (null !== $file) {
             $select->join(
-                'translation_file',
-                'translation_base.translation_file_id = translation_file.translation_file_id',
+                'translationFile',
+                'translationBase.fileId = translationFile.id',
                 []
             );
 
-            $select->where([ 'translation_file.filename' => $file ]);
+            $select->where([ 'translationFile.filename' => $file ]);
         }
 
         if ($filterUnclear) {
@@ -137,7 +137,7 @@ class TranslationTable extends AbstractTableGateway
     {
         return $this->tableGateway
             ->select(function (Select $select) use ($baseId) {
-                $select->where([ 'base_id' => $baseId ]);
+                $select->where([ 'baseId' => $baseId ]);
                 $select->order('locale ASC');
             });
     }
@@ -153,7 +153,7 @@ class TranslationTable extends AbstractTableGateway
     public function getTranslation(int $id): Translation
     {
         $record = $this->tableGateway
-            ->select([ 'translation_id' => (int) $id ])
+            ->select([ 'id' => $id ])
             ->current();
 
         if (!$record) {
@@ -174,7 +174,7 @@ class TranslationTable extends AbstractTableGateway
     public function saveTranslation(Translation $translation)
     {
         $data = $translation->toArray();
-        $id   = (int) $translation->getTranslationId();
+        $id   = $translation->getId();
 
         if ($id === 0) {
             // Insert record
@@ -186,7 +186,7 @@ class TranslationTable extends AbstractTableGateway
         } else {
             if ($this->getTranslation($id)) {
                 // Update record
-                if (!$this->tableGateway->update($data, [ 'translation_id' => $id ])) {
+                if (!$this->tableGateway->update($data, [ 'id' => $id ])) {
                     return false;
                 }
 
@@ -206,6 +206,6 @@ class TranslationTable extends AbstractTableGateway
      */
     public function deleteTranslation(int $id): int
     {
-        return $this->tableGateway->delete([ 'translation_id' => (int) $id ]);
+        return $this->tableGateway->delete([ 'id' => $id ]);
     }
 }

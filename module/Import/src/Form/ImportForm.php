@@ -7,20 +7,20 @@ use \Zend\Form\Element\Select;
 use \Zend\Form\Element\Submit;
 use \Zend\InputFilter\InputFilter;
 use \Zend\InputFilter\FileInput;
-use \Application\Model\SupportedLocale;
-use \Application\ResultSet\SupportedLocale as ResultSet_SupportedLocale;
+use \Application\Model\Locale;
+use \Application\ResultSet\Locale as ResultSet_Locale;
 
 /**
- * Class representing the supported locale form.
+ * Class representing the locale form.
  */
 class ImportForm extends Form
 {
     /**
      * Constructor.
      *
-     * @param ResultSet_SupportedLocale $locales List of available locales
+     * @param ResultSet_Locale $locales List of available locales
      */
-    public function __construct(ResultSet_SupportedLocale $locales)
+    public function __construct(ResultSet_Locale $locales)
     {
         // We want to ignore the name passed
         parent::__construct('import-form');
@@ -35,11 +35,11 @@ class ImportForm extends Form
     /**
      * This method adds elements to form (input fields and submit button).
      *
-     * @param ResultSet_SupportedLocale $locales List of available locales
+     * @param ResultSet_Locale $locales List of available locales
      *
      * @return void
      */
-    private function addElements(ResultSet_SupportedLocale $locales): void
+    private function addElements(ResultSet_Locale $locales): void
     {
         // File selector
         $this->add([
@@ -61,7 +61,7 @@ class ImportForm extends Form
         // Locale selector
         $valueOptions = [];
 
-        /** @var SupportedLocale $locale */
+        /** @var Locale $locale */
         foreach ($locales as $locale) {
             $valueOptions[$locale->getLocale()] = $locale->getLocale();
         }

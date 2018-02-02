@@ -7,7 +7,7 @@ use \Zend\InputFilter\InputFilterInterface;
 
 use \Application\Helper\ArrayAccess;
 
-class SupportedLocale implements InputFilterAwareInterface
+class Locale implements InputFilterAwareInterface
 {
     /**
      * @var int
@@ -19,6 +19,9 @@ class SupportedLocale implements InputFilterAwareInterface
      */
     private $locale;
 
+    /**
+     * @var InputFilter
+     */
     private $inputFilter;
 
     /**

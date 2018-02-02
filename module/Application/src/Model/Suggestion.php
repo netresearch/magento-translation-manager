@@ -8,7 +8,7 @@ class Suggestion
     /**
      * @var int
      */
-    private $suggestionId = 0;
+    private $id = 0;
 
     /**
      * @var int
@@ -18,7 +18,7 @@ class Suggestion
     /**
      * @var string
      */
-    private $suggestedTranslation;
+    private $suggestion;
 
     /**
      * This method simply copies the data from the passed in array to our entities properties.
@@ -29,9 +29,9 @@ class Suggestion
      */
     public function exchangeArray(array $data): void
     {
-        $this->suggestionId         = ArrayAccess::getInt($data, 'suggestion_id');
-        $this->translationId        = ArrayAccess::getInt($data, 'translation_id');
-        $this->suggestedTranslation = ArrayAccess::getString($data, 'suggested_translation');
+        $this->id            = ArrayAccess::getInt($data, 'id');
+        $this->translationId = ArrayAccess::getInt($data, 'translationId');
+        $this->suggestion    = ArrayAccess::getString($data, 'suggestion');
     }
 
     /**
@@ -42,18 +42,18 @@ class Suggestion
     public function toArray(): array
     {
         return [
-            'suggestion_id'         => $this->suggestionId,
-            'translation_id'        => $this->translationId,
-            'suggested_translation' => $this->suggestedTranslation,
+            'id'            => $this->id,
+            'translationId' => $this->translationId,
+            'suggestion'    => $this->suggestion,
         ];
     }
 
     /**
      * @return int
      */
-    public function getSuggestionId(): int
+    public function getId(): int
     {
-        return $this->suggestionId;
+        return $this->id;
     }
 
     /**
@@ -67,8 +67,8 @@ class Suggestion
     /**
      * @return string
      */
-    public function getSuggestedTranslation(): string
+    public function getSuggestion(): string
     {
-        return $this->suggestedTranslation;
+        return $this->suggestion;
     }
 }

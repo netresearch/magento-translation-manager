@@ -6,14 +6,14 @@ use \Zend\Db\Sql\Select;
 use \Application\ResultSet\TranslationBase as ResultSet_TranslationBase;
 
 /**
- * Class handles access to the "translation_base" table.
+ * Class handles access to the "translationBase" table.
  */
 class TranslationBaseTable extends AbstractTableGateway
 {
     use Traits\TableConstructor;
 
     /**
-     * Get all records from "translation_base" table.
+     * Get all records from "translationBase" table.
      *
      * @return ResultSet_TranslationBase
      */
@@ -21,12 +21,12 @@ class TranslationBaseTable extends AbstractTableGateway
     {
         return $this->tableGateway
             ->select(function (Select $select) {
-                $select->order('base_id ASC');
+                $select->order('id ASC');
             });
     }
 
     /**
-     * Get a single record from "translation_base" table by its record id.
+     * Get a single record from "translationBase" table by its record id.
      *
      * @param int $id ID of record
      *
@@ -36,7 +36,7 @@ class TranslationBaseTable extends AbstractTableGateway
     public function getTranslationBase(int $id): TranslationBase
     {
         $record = $this->tableGateway
-            ->select([ 'base_id' => (int) $id ])
+            ->select([ 'id' => $id ])
             ->current();
 
         if (!$record) {
@@ -57,7 +57,7 @@ class TranslationBaseTable extends AbstractTableGateway
     public function saveTranslationBase(TranslationBase $translationBase)
     {
         $data = $translationBase->toArray();
-        $id   = (int) $translationBase->getBaseId();
+        $id   = $translationBase->getId();
 
         if ($id === 0) {
             // Insert record
@@ -69,7 +69,7 @@ class TranslationBaseTable extends AbstractTableGateway
         } else {
             if ($this->getTranslationBase($id)) {
                 // Update record
-                if (!$this->tableGateway->update($data, [ 'base_id' => $id ])) {
+                if (!$this->tableGateway->update($data, [ 'id' => $id ])) {
                     return false;
                 }
 
@@ -89,6 +89,6 @@ class TranslationBaseTable extends AbstractTableGateway
      */
     public function deleteTranslationBase(int $id): int
     {
-        return $this->tableGateway->delete([ 'base_id' => (int) $id ]);
+        return $this->tableGateway->delete([ 'id' => $id ]);
     }
 }

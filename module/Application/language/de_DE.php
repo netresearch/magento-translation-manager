@@ -23,4 +23,6 @@ return [
     'Add suggestion' => 'Vorschlag hinzufügen',
     'See Details' => 'Details ansehen',
     'Submit all' => 'Alle abschicken',
+
+    'Locale configuration' => 'Sprachkonfiguration',
 ];

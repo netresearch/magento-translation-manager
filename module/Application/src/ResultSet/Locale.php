@@ -3,6 +3,6 @@ namespace Application\ResultSet;
 
 use \Zend\Db\ResultSet\ResultSet as ZendResultSet;
 
-class SupportedLocale extends ZendResultSet
+class Locale extends ZendResultSet
 {
 }
