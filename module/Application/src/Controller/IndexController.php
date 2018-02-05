@@ -13,7 +13,7 @@ class IndexController extends AbstractActionController
 
     const DEFAULT_LOCALE  = 'de_DE';
 
-    const DEFAULT_ENTRIES_PER_PAGE = 25;
+    const DEFAULT_ENTRIES_PER_PAGE = 10;
 
     const MESSAGE_INFO    = 'info';
     const MESSAGE_WARN    = 'warning';
