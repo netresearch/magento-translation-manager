@@ -59,8 +59,9 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
             'factories' => [
                 // Table "locale"
                 Model\LocaleTable::class => function (ServiceManager $sm) {
-                    $tableGateway = $sm->get('Model\LocaleGateway');
-                    return new Model\LocaleTable($tableGateway);
+                    return new Model\LocaleTable(
+                        $sm->get('Model\LocaleGateway')
+                    );
                 },
 
                 'Model\LocaleGateway' => function (ServiceManager $sm) {
@@ -75,8 +76,9 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
 
                 // Table "translation"
                 Model\TranslationTable::class => function (ServiceManager $sm) {
-                    $tableGateway = $sm->get('Model\TranslationGateway');
-                    return new Model\TranslationTable($tableGateway);
+                    return new Model\TranslationTable(
+                        $sm->get('Model\TranslationGateway')
+                    );
                 },
 
                 'Model\TranslationGateway' => function (ServiceManager $sm) {
@@ -91,8 +93,9 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
 
                 // Table "translationBase"
                 Model\TranslationBaseTable::class => function (ServiceManager $sm) {
-                    $tableGateway  = $sm->get('Model\TranslationBaseGateway');
-                    return new Model\TranslationBaseTable($tableGateway);
+                    return new Model\TranslationBaseTable(
+                        $sm->get('Model\TranslationBaseGateway')
+                    );
                 },
 
                 'Model\TranslationBaseGateway' => function (ServiceManager $sm) {
@@ -107,8 +110,9 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
 
                 // Table "translationFile"
                 Model\TranslationFileTable::class => function (ServiceManager $sm) {
-                    $tableGateway = $sm->get('Model\TranslationFileGateway');
-                    return new Model\TranslationFileTable($tableGateway);
+                    return new Model\TranslationFileTable(
+                        $sm->get('Model\TranslationFileGateway')
+                    );
                 },
 
                 'Model\TranslationFileGateway' => function (ServiceManager $sm) {
@@ -123,8 +127,9 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
 
                 // Table "suggestion"
                 Model\SuggestionTable::class => function (ServiceManager $sm) {
-                    $tableGateway = $sm->get('Model\SuggestionGateway');
-                    return new Model\SuggestionTable($tableGateway);
+                    return new Model\SuggestionTable(
+                        $sm->get('Model\SuggestionGateway')
+                    );
                 },
 
                 'Model\SuggestionGateway' => function (ServiceManager $sm) {

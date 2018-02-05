@@ -20,3 +20,11 @@ form ul {
 form ul li {
     color: red;
 }
+
+.input-group-prepend {
+    width: 200px;
+}
+
+.input-group-prepend label {
+    width: 100%;
+}

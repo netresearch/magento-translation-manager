@@ -121,7 +121,7 @@ class ImportController extends AbstractActionController
                             $translation = new Translation();
                             $translation->setBaseId($baseId)
                                 ->setLocale($locale)
-                                ->setUnclear(true)
+                                ->setUnclear(false)
                                 ->setTranslation($translatedValue);
 
                             $this->translationTable->saveTranslation($translation);

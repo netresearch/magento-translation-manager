@@ -118,18 +118,18 @@ class TranslationTable extends AbstractTableGateway
         ?string $file = null,
         bool    $filterUnclear = false
     ): Select {
-        $select->order('translation.id ASC');
+        $select->order('b.originSource ASC');
 
-        $joinCondition  = $this->tableGateway->getTable() . '.baseId = translationBase.id';
+        $joinCondition  = $this->tableGateway->getTable() . '.baseId = b.id';
         $joinCondition .= ' AND translation.locale = ' . $this->tableGateway->getAdapter()->getPlatform()->quoteValue($locale); // . ' OR locale IS NULL ';
 
         // quoteInto doesn't exist anymore and $this->adapter->getPlatform()->quoteValue() not working
-        $select->join('translationBase', new Expression($joinCondition), [], Select::JOIN_LEFT);
+        $select->join(['b' => 'translationBase'], new Expression($joinCondition), [ 'originSource', 'baseId' => 'id', 'fileId' ], Select::JOIN_RIGHT);
 
         if (null !== $file) {
             $select->join(
                 'translationFile',
-                'translationBase.fileId = translationFile.id',
+                'b.fileId = translationFile.id',
                 []
             );
 
@@ -137,7 +137,7 @@ class TranslationTable extends AbstractTableGateway
         }
 
         if ($filterUnclear) {
-//             $select->where([ 'translation.unclear_translation' => 1 ]);
+            $select->where([ 'translation.unclear' => 1 ]);
         }
 
         return $select;

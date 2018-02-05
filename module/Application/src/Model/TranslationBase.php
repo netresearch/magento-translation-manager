@@ -18,7 +18,7 @@ class TranslationBase
     /**
      * @var string
      */
-    private $file;
+//     private $file;
 
     /**
      * @var string
@@ -28,12 +28,12 @@ class TranslationBase
     /**
      * @var bool
      */
-    private $notInUse = true;
+//     private $notInUse = true;
 
     /**
      * @var string
      */
-    private $screenPath;
+//     private $screenPath;
 
     /**
      * This method simply copies the data from the passed in array to our entities properties.
@@ -46,10 +46,10 @@ class TranslationBase
     {
         $this->id           = ArrayAccess::getInt($data, 'id');
         $this->fileId       = ArrayAccess::getInt($data, 'fileId');
-        $this->file         = ArrayAccess::getString($data, 'file');
+//         $this->file         = ArrayAccess::getString($data, 'file');
         $this->originSource = ArrayAccess::getString($data, 'originSource');
-        $this->notInUse     = ArrayAccess::getBool($data, 'notInUse', true);
-        $this->screenPath   = ArrayAccess::getString($data, 'screenPath');
+//         $this->notInUse     = ArrayAccess::getBool($data, 'notInUse', true);
+//         $this->screenPath   = ArrayAccess::getString($data, 'screenPath');
     }
 
     /**
@@ -62,16 +62,22 @@ class TranslationBase
         return [
             'id'           => $this->id,
             'fileId'       => $this->fileId,
-            'file'         => $this->file,
+//             'file'         => $this->file,
             'originSource' => $this->originSource,
-            'notInUse'     => (int) $this->notInUse,
-            'screenPath'   => $this->screenPath,
+//             'notInUse'     => (int) $this->notInUse,
+//             'screenPath'   => $this->screenPath,
         ];
     }
 
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getFileId(): int
@@ -96,12 +102,12 @@ class TranslationBase
         return $this;
     }
 
-    public function getOriginSource(): string
+    public function getOriginSource(): ?string
     {
         return $this->originSource;
     }
 
-    public function setOriginSource(string $originSource): self
+    public function setOriginSource(?string $originSource): self
     {
         $this->originSource = $originSource;
         return $this;

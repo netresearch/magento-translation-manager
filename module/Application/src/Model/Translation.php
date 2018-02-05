@@ -31,6 +31,11 @@ class Translation
     private $unclear = true;
 
     /**
+     * @var TranslationBase
+     */
+    private $baseTranslation;
+
+    /**
      * This method simply copies the data from the passed in array to our entities properties.
      *
      * @param array $data Data from database
@@ -44,6 +49,11 @@ class Translation
         $this->locale      = ArrayAccess::getString($data, 'locale');
         $this->translation = ArrayAccess::getString($data, 'translation');
         $this->unclear     = ArrayAccess::getBool($data, 'unclear', true);
+
+        $this->baseTranslation = new TranslationBase();
+        $this->baseTranslation->setId($this->baseId)
+            ->setFileId(ArrayAccess::getInt($data, 'fileId'))
+            ->setOriginSource(ArrayAccess::getString($data, 'originSource'));
     }
 
     /**
@@ -60,6 +70,11 @@ class Translation
             'translation' => $this->translation,
             'unclear'     => (int) $this->unclear,
         ];
+    }
+
+    public function getTranslationBase(): TranslationBase
+    {
+        return $this->baseTranslation;
     }
 
     public function getId(): int

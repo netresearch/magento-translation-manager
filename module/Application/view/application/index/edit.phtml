@@ -68,13 +68,17 @@
             <div class="card">
                 <div class="card-header">
                     <strong>Origin source</strong>
-                    <?php if ($baseTranslation->getNotInUse()): ?><span class="label label-danger pull-right">Not in use anymore</span>
+<?php /*
+                    <?php if ($baseTranslation->getNotInUse()): ?>
+                        <span class="label label-danger pull-right">Not in use anymore</span>
                     <?php endif; ?>
+*/ ?>
                 </div>
                 <div class="card-body">
                     <?= $this->escapeHtml($baseTranslation->getOriginSource()); ?>
                 </div>
                 <div class="panel-footer">
+<?php /*
                     <?php if ('' !== $baseTranslation->getScreenPath()): ?>
                         <a href="<?= $this->basePath('usages/' . $baseTranslation->getScreenPath()) ?>" class="btn btn-info" role="button" data-target="#lightbox" data-toggle="lightbox">
                             <span class="fa fa-camera"></span> Show Context
@@ -84,6 +88,7 @@
                         <span class="fa fa-camera"></span> Show Context
                     </a>
                     <?php endif; ?>
+*/ ?>
                 </div>
             </div>
         </div>

@@ -13,7 +13,7 @@ class IndexController extends AbstractActionController
 
     const DEFAULT_LOCALE  = 'de_DE';
 
-    const DEFAULT_ENTRIES_PER_PAGE = 100;
+    const DEFAULT_ENTRIES_PER_PAGE = 25;
 
     const MESSAGE_INFO    = 'info';
     const MESSAGE_WARN    = 'warning';
@@ -76,6 +76,8 @@ class IndexController extends AbstractActionController
             // show all entries on one page
             $elementsPerPage = null;
         } else {
+            $elementsPerPage = (int) $elementsPerPage;
+
             $maxPage = (int) ceil($translationsCount / $elementsPerPage);
             $maxPage = $maxPage < 1 ? 1 : $maxPage;
         }
