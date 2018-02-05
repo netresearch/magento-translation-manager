@@ -17,7 +17,6 @@ $this->headTitle($title);
         <p class="form-group">
             <a class="btn btn-info" href="<?= $this->url('locale', [ 'action'=>'add' ]);?>"><?= $this->translate('Add new locale') ?></a>
         </p>
-
         <table class="table">
             <tr>
                 <th>Locale</th>
@@ -25,10 +24,13 @@ $this->headTitle($title);
             </tr>
             <?php foreach ($locales as $locale): ?>
                 <tr>
-                    <td><?= $this->escapeHtml($this->translate($locale->getLocale())); ?></td>
                     <td>
-                        <a class="badge badge-info" href="<?= $this->url('locale', [ 'action'=>'edit', 'id' => $locale->getId() ]);?>"><?= $this->translate('Edit') ?></a>
-                        <a class="badge badge-danger" href="<?= $this->url('locale', [ 'action'=>'delete', 'id' => $locale->getId() ]);?>"><?= $this->translate('Delete') ?></a>
+                        <img src="<?= $this->basePath('img/flags/' . strtolower(substr($locale->getLocale(), 3, 2))) ?>.png" alt="" />
+                        <?= $this->escapeHtml($this->translate($locale->getLocale())); ?>
+                    </td>
+                    <td>
+                        <a class="btn btn-info btn-sm" href="<?= $this->url('locale', [ 'action'=>'edit', 'id' => $locale->getId() ]);?>"><?= $this->translate('Edit') ?></a>
+                        <a class="btn btn-danger btn-sm" href="<?= $this->url('locale', [ 'action'=>'delete', 'id' => $locale->getId() ]);?>"><?= $this->translate('Delete') ?></a>
                     </td>
                 </tr>
             <?php endforeach; ?>

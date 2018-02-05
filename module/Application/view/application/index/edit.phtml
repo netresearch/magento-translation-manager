@@ -98,7 +98,7 @@
                 <div class="card-header">
                     <strong>Current translation</strong>
                     <span class="badge badge-info pull-right"><?= $currentLocale ?></span>
-                    <span class="pull-right">&nbsp;<img src="<?= $this->basePath('img/flags/' . strtolower(substr($currentLocale, 0, 2))) ?>.png" alt="<?= $currentLocale ?>" />&nbsp;</span>
+                    <span class="pull-right">&nbsp;<img src="<?= $this->basePath('img/flags/' . strtolower(substr($currentLocale, 3, 2))) ?>.png" alt="<?= $currentLocale ?>" />&nbsp;</span>
                     <?php if ($unclearSelected): ?>
                         <i class="fa fa-exclamation-triangle unclear " title="unclear translation"></i>
                     <?php endif; ?>
