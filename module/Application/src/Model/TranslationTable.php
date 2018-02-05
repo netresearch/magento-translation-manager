@@ -27,6 +27,23 @@ class TranslationTable extends AbstractTableGateway
     }
 
     /**
+     * Get all records by the given translation and base record id.
+     *
+     * @param string $translation Translated value
+     * @param int    $baseId      Base record id
+     *
+     * @return ResultSet_Translation
+     */
+    public function fetchByTranslationAndBaseId(string $translation, int $baseId): ResultSet_Translation
+    {
+        return $record = $this->tableGateway
+            ->select([
+                'translation' => $translation,
+                'baseId'      => $baseId,
+            ]);
+    }
+
+    /**
      * Count translations with given filter.
      *
      * @param string      $locale        Locale to select

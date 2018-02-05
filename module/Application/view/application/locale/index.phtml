@@ -25,7 +25,7 @@ $this->headTitle($title);
             </tr>
             <?php foreach ($locales as $locale): ?>
                 <tr>
-                    <td><?= $this->escapeHtml($locale->getLocale());?></td>
+                    <td><?= $this->escapeHtml($this->translate($locale->getLocale())); ?></td>
                     <td>
                         <a class="badge badge-info" href="<?= $this->url('locale', [ 'action'=>'edit', 'id' => $locale->getId() ]);?>"><?= $this->translate('Edit') ?></a>
                         <a class="badge badge-danger" href="<?= $this->url('locale', [ 'action'=>'delete', 'id' => $locale->getId() ]);?>"><?= $this->translate('Delete') ?></a>

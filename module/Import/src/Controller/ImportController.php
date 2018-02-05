@@ -100,7 +100,7 @@ class ImportController extends AbstractActionController
                         $translatedValue = $entry[1];
 
                         try {
-                            $baseRecord = $this->translationBaseTable->fetchByOriginSource($baseValue);
+                            $baseRecord = $this->translationBaseTable->fetchByOriginSourceAndFileId($baseValue, $fileId);
                             $baseId     = $baseRecord->getId();
                         } catch (\Exception $ex) {
                             // Add new base translation record
@@ -111,9 +111,12 @@ class ImportController extends AbstractActionController
                             $baseId = $this->translationBaseTable->saveTranslationBase($baseRecord);
                         }
 
-                        $translationRecord = $this->translationTable->fetchByBaseId($baseId);
+                        $translationRecord = $this->translationTable->fetchByTranslationAndBaseId($translatedValue, $baseId);
 
-                        if (!$translationRecord->count()) {
+                        // No record found, and translation differs from base value
+                        if (!$translationRecord->count()
+                            && ($baseValue !== $translatedValue)
+                        ) {
                             // Add new translation record
                             $translation = new Translation();
                             $translation->setBaseId($baseId)

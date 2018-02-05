@@ -26,20 +26,24 @@ class TranslationBaseTable extends AbstractTableGateway
     }
 
     /**
-     * Get a record by the given origin source.
+     * Get a record by the given origin source and file id.
      *
      * @param string $originSource Origin source
+     * @param int    $fileId       File record id
      *
      * @return TranslationBase
      */
-    public function fetchByOriginSource(string $originSource): TranslationBase
+    public function fetchByOriginSourceAndFileId(string $originSource, int $fileId): TranslationBase
     {
         $record = $this->tableGateway
-            ->select([ 'originSource' => $originSource ])
+            ->select([
+                'originSource' => $originSource,
+                'fileId'       => $fileId,
+            ])
             ->current();
 
         if (!$record) {
-            throw new \Exception('Could not find row <' . $originSource . '>');
+            throw new \Exception(sprintf('Could not find row <%d, %s>', $fileId, $originSource));
         }
 
         return $record;

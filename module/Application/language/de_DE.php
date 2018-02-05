@@ -25,4 +25,18 @@ return [
     'Submit all' => 'Alle abschicken',
 
     'Locale configuration' => 'Sprachkonfiguration',
+
+    // Languages
+    'de_DE' => 'Deutsch (Deutschland)',
+    'de_AT' => 'Deutsch (Österreich)',
+    'en_GB' => 'Englisch (Vereinigtes Königreich)',
+    'en_US' => 'Englisch (Vereinigte Staaten)',
+    'es_ES' => 'Spanisch (Spanien)',
+    'fr_FR' => 'Französisch (Frankreich)',
+    'da_DK' => 'Dänisch (Dänemark)',
+    'fr_BE' => 'Französisch (Belgien)',
+    'nb_NO' => 'Norwegisch (Norwegen)',
+    'nl_BE' => 'Flämisch (Belgien)',
+    'pl_PL' => 'Polnisch',
+    'sv_SE' => 'Schwedisch (Schweden)',
 ];

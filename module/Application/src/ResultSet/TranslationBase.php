@@ -15,6 +15,8 @@ class TranslationBase extends ZendResultSet
      */
     public function getById(int $id): Model_TranslationBase
     {
+        $this->rewind();
+
         while ($this->valid()) {
             if ($this->current()->getId() === $id) {
                 return $this->current();
@@ -35,6 +37,7 @@ class TranslationBase extends ZendResultSet
     {
         $ids = [];
 
+        $this->rewind();
         while ($this->valid()) {
             $ids[] = $this->current()->getId();
             $this->next();
