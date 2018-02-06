@@ -13,6 +13,10 @@ form ul li {
     color: red;
 }
 
+.no-fouc {
+    display: none;
+}
+
 .input-group-prepend {
     width: 200px;
 }
