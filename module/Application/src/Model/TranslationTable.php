@@ -118,7 +118,7 @@ class TranslationTable extends AbstractTableGateway
         ?string $file = null,
         bool    $filterUnclear = false
     ): Select {
-        $select->order('b.originSource ASC');
+        $select->order('b.id ASC');
 
         $joinCondition  = $this->tableGateway->getTable() . '.baseId = b.id';
         $joinCondition .= ' AND translation.locale = ' . $this->tableGateway->getAdapter()->getPlatform()->quoteValue($locale); // . ' OR locale IS NULL ';
