@@ -156,14 +156,12 @@
 */ ?>
     <div class="row">
         <div class="col-md-12 mt-4">
-            <div style="margin-bottom: 25px; overflow: hidden;">
-                <a class="btn btn-dark pull-left" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $previousItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">
-                    <i class="fa fa-angle-left"></i>&nbsp;<?= $this->translate('Previous translation') ?>
-                </a>
-                <a class="btn btn-dark pull-right" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $nextItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">
-                    <?= $this->translate('Next translation') ?>&nbsp;<i class="fa fa-angle-right"></i>
-                </a>
-            </div>
+            <a class="btn btn-dark pull-left" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $previousItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">
+                <i class="fa fa-angle-left"></i>&nbsp;<?= $this->translate('Previous translation') ?>
+            </a>
+            <a class="btn btn-dark pull-right" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $nextItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">
+                <?= $this->translate('Next translation') ?>&nbsp;<i class="fa fa-angle-right"></i>
+            </a>
         </div>
     </div>
 
