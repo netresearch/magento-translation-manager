@@ -39,8 +39,6 @@ CREATE TABLE IF NOT EXISTS `translationBase` (
     `fileId` int(10) UNSIGNED NOT NULL,
     `file` varchar(256) DEFAULT NULL,
     `originSource` text CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-    `notInUse` tinyint(4) NOT NULL DEFAULT 0,
-    `screenPath` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `fileId` (`fileId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

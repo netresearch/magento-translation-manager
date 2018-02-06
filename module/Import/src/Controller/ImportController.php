@@ -128,9 +128,6 @@ class ImportController extends AbstractActionController
                         }
                     }
                 }
-
-                // Redirect to home
-//                 return $this->redirect()->toRoute('home');
             }
         }
 

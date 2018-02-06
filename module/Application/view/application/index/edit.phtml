@@ -5,6 +5,7 @@
  * @var \Application\ResultSet\Suggestion  $suggestions
  * @var \Application\ResultSet\Locale      $supportedLocales
  * @var \Application\Model\TranslationBase $baseTranslation
+ * @var \Application\Model\Translation     $translation
  * @var \Application\Model\Locale          $locale
  * @var string $currentLocale
  * @var string $currentTranslationFile
@@ -13,8 +14,9 @@
  * @var int $nextItemId
  */
 ?>
-<ul class="messages row">
-    <?php if (isset($messages)): ?>
+
+<?php if (isset($messages) && count($messages)): ?>
+    <ul class="messages row">
         <?php foreach ($messages as $messageLevel => $messageLevelContainer): ?>
             <?php foreach ($messageLevelContainer as $message): ?>
                 <li class="alert alert-<?= $this->escapeHtmlAttr($messageLevel); ?>" role="alert">
@@ -22,29 +24,33 @@
                 </li>
             <?php endforeach; ?>
         <?php endforeach; ?>
-    <?php endif; ?>
-</ul>
+    </ul>
+<?php endif; ?>
 
-<div class="card">
-    <div class="card-header"><b>Basic data</b></div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-12">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-                        Language <span class="caret"></span>
-                    </button>
-                    <div class="dropdown-menu">
-                        <?php foreach ($supportedLocales as $locale): ?>
-                            <a class="dropdown-item" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getId() ], [ 'query' => [ 'locale' => $locale->getLocale() ] ]); ?>">
-                                <?= $locale->getLocale() ?></a>
-                        <?php endforeach; ?>
+<div class="row">
+    <div class="col-12">
+        <div class="card mt-4">
+            <div class="card-header">
+                <strong><?= $this->translate('Basic data') ?></strong>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <b><?= $this->translate('Selected file:') ?></b> <span class="label label-primary"><?= $this->escapeHtml($currentTranslationFile) ?></span>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupLocaleSelect"><?= $this->translate('Language') ?></label>
+                            </div>
+                            <select class="custom-select" id="inputGroupLocaleSelect">
+                                <?php foreach ($supportedLocales as $locale): ?>
+                                    <option value="<?= $locale->getLocale() ?>"<?php if ($currentLocale === $locale->getLocale()): ?> selected="selected"<?php endif; ?>><?= $this->translate($locale->getLocale()) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-12">
-                <b>selected file:</b> <span class="label label-primary"><?= $this->escapeHtml($currentTranslationFile) ?></span>
-                <b>selected language:</b> <span class="badge badge-info"><?= $this->escapeHtml($currentLocale) ?></span>
             </div>
         </div>
     </div>
@@ -52,70 +58,52 @@
 
 <form action="" method="post">
     <div class="row">
-        <div class="col-md-12">
-            <div style="margin-bottom: 25px; overflow: hidden;">
-                <a class="btn btn-info pull-left" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $previousItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Previous translation</a>
-                <a class="btn btn-info pull-right" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $nextItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Next translation</a>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <?php $rowName = 'row' .$currentLocale; ?>
-            <input type="hidden" name="base_id" value="<?= $baseTranslation->getId() ?>" />
-            <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $this->escapeHtmlAttr($currentLocale) ?>" />
-            <input type="hidden" name="<?= $rowName ?>_id" value="<?= $translations[$currentLocale]->getId() ?>" />
-            <div class="card">
+        <div class="col-12">
+            <?php $rowName         = 'row' . $currentLocale; ?>
+            <?php $unclearSelected = $translations[$currentLocale]->getUnclear() ?>
+
+            <input type="hidden" name="base_id" value="<?= $baseTranslation->getId() ?>">
+            <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $this->escapeHtmlAttr($currentLocale) ?>">
+            <input type="hidden" name="<?= $rowName ?>_id" value="<?= $translations[$currentLocale]->getId() ?>">
+
+            <div class="card mt-4">
                 <div class="card-header">
-                    <strong>Origin source</strong>
-<?php /*
-                    <?php if ($baseTranslation->getNotInUse()): ?>
-                        <span class="label label-danger pull-right">Not in use anymore</span>
-                    <?php endif; ?>
-*/ ?>
+                    <strong>
+                        <?= $this->translate('Translation') ?>
+                        <span class="pull-right">&nbsp;<img src="<?= $this->basePath('img/flags/' . strtolower(substr($currentLocale, 3, 2))) ?>.png" alt="<?= $currentLocale ?>" />&nbsp;</span>
+                        <?php if ($unclearSelected): ?>
+                            <span class="fa fa-exclamation-triangle pull-right text-warning" style="margin-top: 6px;" title="<?= $this->translate('Unclear translation') ?>">&nbsp;</span>
+                        <?php endif; ?>
+                    </strong>
                 </div>
                 <div class="card-body">
-                    <?= $this->escapeHtml($baseTranslation->getOriginSource()); ?>
-                </div>
-                <div class="panel-footer">
-<?php /*
-                    <?php if ('' !== $baseTranslation->getScreenPath()): ?>
-                        <a href="<?= $this->basePath('usages/' . $baseTranslation->getScreenPath()) ?>" class="btn btn-info" role="button" data-target="#lightbox" data-toggle="lightbox">
-                            <span class="fa fa-camera"></span> Show Context
-                        </a>
-                    <?php else: ?>
-                    <a href="<?= $this->basePath('img/fallback-no-screenshot.png') ?>" class="btn btn-info" role="button" data-target="#lightbox" data-toggle="lightbox" data-width="400">
-                        <span class="fa fa-camera"></span> Show Context
-                    </a>
-                    <?php endif; ?>
-*/ ?>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <?php $unclearSelected = $translations[$currentLocale]->getUnclear() ?>
-                <div class="card-header">
-                    <strong>Current translation</strong>
-                    <span class="badge badge-info pull-right"><?= $currentLocale ?></span>
-                    <span class="pull-right">&nbsp;<img src="<?= $this->basePath('img/flags/' . strtolower(substr($currentLocale, 3, 2))) ?>.png" alt="<?= $currentLocale ?>" />&nbsp;</span>
-                    <?php if ($unclearSelected): ?>
-                        <i class="fa fa-exclamation-triangle unclear " title="unclear translation"></i>
-                    <?php endif; ?>
-                </div>
-                <div class="card-body">
-                    <?= $this->escapeHtml($translations[$currentLocale]->getTranslation()); ?>
-                </div>
-                <div class="panel-footer">
-                    <input type="checkbox" name="<?= $rowName ?>_unclearTranslation" id="<?= $rowName ?>_unclearTranslation" value="1" <?php if ($unclearSelected) echo 'checked="checked"' ?>/>
-                    <label style="font-weight: normal" for="<?= $rowName ?>_unclearTranslation">translation is unclear</label>
+                    <div class="form-group">
+                        <label><?= $this->translate('Origin source') ?></label>
+                        <input type="text" class="form-control" readonly placeholder="<?= $this->escapeHtml($baseTranslation->getOriginSource()); ?>">
+                    </div>
+
+                    <div class="form-group">
+                        <label><?= $this->translate('Current translation') ?></label>
+                        <input type="text" class="form-control" value="<?= $translations[$currentLocale]->getTranslation(); ?>">
+                    </div>
+
+                    <div class="form-check">
+                        <?php $unclearSelected = $translations[$currentLocale]->getUnclear() ?>
+                        <input type="checkbox" class="form-check-input" name="<?= $rowName ?>_unclearTranslation" id="<?= $rowName ?>_unclearTranslation" value="1" <?php if ($unclearSelected) echo 'checked="checked"' ?>>
+                        <label class="form-check-label" for="<?= $rowName ?>_unclearTranslation"><?= $this->translate('Translation is unclear') ?></label>
+                        <small class="form-text text-muted">
+                            <?= $this->translate('String is usually marked as unclear if translation should be reviewed by another person.') ?>
+                        </small>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+<?php /*
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card mt-4">
                 <div class="card-header">
                     <strong>Existing suggestions</strong>
                     <span class="badge badge-info pull-right"><?= $currentLocale ?></span>
@@ -135,7 +123,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card mt-4">
                 <div class="card-header">
                     <strong>Submit a new suggestion</strong>
                     <span class="badge badge-info pull-right"><?= $currentLocale ?></span>
@@ -144,14 +132,15 @@
                 <div class="card-body">
                     <div class="input-group col-md-12">
                         <textarea class="form-control" rows="3" name="<?= $rowName ?>_suggestedTranslation"></textarea>
-                        <button type="submit" value="<?= $rowName ?>" name="rowid" class="btn btn-primary btn-lg pull-right" style="margin-top: 15px;">Submit suggestion</button>
                     </div>
+                    <button type="submit" value="<?= $rowName ?>" name="rowid" class="btn btn-primary btn-lg">Submit suggestion</button>
                 </div>
             </div>
         </div>
     </div>
+*/ ?>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 mt-4">
             <div style="margin-bottom: 25px; overflow: hidden;">
                 <a class="btn btn-info pull-left" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $previousItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Previous translation</a>
                 <a class="btn btn-info pull-right" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $nextItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Next translation</a>
@@ -159,11 +148,9 @@
         </div>
     </div>
 
-    <hr/>
-
     <div class="row">
         <div class="col-md-12">
-            <div class="card" id="accordion" role="tablist" aria-multiselectable="true" data-toggle="collapse" data-target="#MageVersions">
+            <div class="card mt-4" role="tablist" aria-multiselectable="true" data-toggle="collapse" data-target="#MageVersions">
                 <div class="card-header">
                     <strong>Further translations (MageVersions)</strong>
                 </div>
@@ -178,7 +165,7 @@
                         </tr>
                         <?php foreach ($translations as $locale => $translation): ?>
                             <?php if ($locale == $currentLocale) continue; ?>
-                            <?php /* @var $translation \Application\Model\Translation */ ?>
+                            <?php ?>
                             <?php $rowName = 'row' . $locale; ?>
                             <tr id="<?= $rowName ?>">
                                 <td><?= $this->escapeHtml($locale) ?><td>
@@ -206,7 +193,6 @@
                                 <td>
                             </tr>
                         <?php endforeach; ?>
-
                     </table>
                 </div>
             </div>
@@ -215,7 +201,7 @@
 
     <div class="row">
         <div class="col-md-12">
-                <div class="card" id="accordion" role="tablist" aria-multiselectable="true" data-toggle="collapse" data-target="#locales">
+                <div class="card mt-4" role="tablist" aria-multiselectable="true" data-toggle="collapse" data-target="#locales">
                 <div class="card-header">
                     <strong>Further translations (locales)</strong>
                 </div>
@@ -242,7 +228,6 @@
                                 </td>
                                 <td>
                                     <input type="radio" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclear()) ? 'checked="checked"':'' ?>>
-                                    <!-- <input type="checkbox" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclear()) ? 'checked="checked"':'' ?>> -->
                                 </td>
                                 <td class="suggested-translation">
                                     <input type="text" class="form-control" name="<?= $rowName?>_suggestedTranslation" value="" />
@@ -258,7 +243,6 @@
                                 <td>
                             </tr>
                         <?php endforeach; ?>
-
                     </table>
                 </div>
             </div>
@@ -267,15 +251,21 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div style="margin-bottom: 25px; overflow: hidden;">
-                <button class="btn btn-info pull-left" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $previousItemId ], [ 'query' => [ 'locale' => $currentLocale  ] ]) ?>">Previous translation</button>
-                <button class="btn btn-info pull-right" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $nextItemId ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>">Next translation</button>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
             <button type="submit" value="all" name="rowid" class="btn btn-primary pull-right" id="save-all-button">Submit all</button>
         </div>
     </div>
 </form>
+
+<?php $this->inlineScript()->captureStart(); ?>
+
+$("document").ready(function () {
+    $('#inputGroupLocaleSelect').change(function () {
+        var url = "<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getId() ]); ?>?";
+
+        url += "locale=" + $('#inputGroupLocaleSelect').val() + "&";
+
+        window.location.href = url;
+    });
+});
+
+<?php $this->inlineScript()->captureEnd(); ?>

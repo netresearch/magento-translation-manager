@@ -13,8 +13,8 @@ return [
     'per page:' => 'pro Seite:',
     'overall view list' => 'Übersichtsliste',
     'elements' => 'Elemente',
-    'Origin source' => 'Quelle',
-    'Current translation' => 'aktuelle Übersetzung',
+    'Origin source' => 'Ausgangszeichenkette',
+    'Current translation' => 'Aktuelle Übersetzung',
     'Status' => 'Status',
     'unclear translation' => 'unklare Übersetzung',
     'New suggested translation' => 'neuer Vorschlag',
@@ -23,6 +23,7 @@ return [
     'Add suggestion' => 'Vorschlag hinzufügen',
     'See Details' => 'Details ansehen',
     'Submit all' => 'Alle abschicken',
+    'Translation' => 'Übersetzung',
 
     'Locale configuration' => 'Sprachkonfiguration',
 

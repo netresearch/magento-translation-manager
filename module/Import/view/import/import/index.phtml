@@ -19,16 +19,16 @@ $form->prepare();
     <div class="card-body">
         <?= $this->form()->openTag($form); ?>
             <div class="form-group">
-                <?php $files = $form->get('files'); ?>
-                <?= $this->formLabel($files); ?>
-                <?= $this->formElement($files); ?>
-                <?= $this->formElementErrors($files); ?>
+                <?php $element = $form->get('files'); ?>
+                <?= $this->formLabel($element); ?>
+                <?= $this->formElement($element); ?>
+                <?= $this->formElementErrors($element); ?>
             </div>
             <div class="form-group">
-                <?php $locale = $form->get('locale'); ?>
-                <?= $this->formLabel($locale); ?>
-                <?= $this->formElement($locale); ?>
-                <?= $this->formElementErrors($locale); ?>
+                <?php $element = $form->get('locale'); ?>
+                <?= $this->formLabel($element); ?>
+                <?= $this->formElement($element); ?>
+                <?= $this->formElementErrors($element); ?>
             </div>
             <div class="form-group">
                 <?= $this->formElement($form->get('submit')); ?>
@@ -36,34 +36,3 @@ $form->prepare();
         <?= $this->form()->closeTag(); ?>
     </div>
 </div>
-
-<?php $this->inlineScript()->captureStart(); ?>
-
-/*
-$("document").ready(function () {
-    $("#filebutton").change(function () {
-        var fullPath   = $("#filebutton").val();
-
-        if (fullPath) {
-            var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
-            var filename   = fullPath.substring(startIndex);
-
-            if ((filename.indexOf('\\') === 0) || (filename.indexOf('/') === 0)) {
-                filename = filename.substring(1);
-            }
-
-            // Remove file extension
-            filename = filename.substring(0, filename.lastIndexOf(".csv"));
-
-            // Extract locale from file name
-            var tokens = filename.split('_').slice(-2);
-            var locale = tokens.join('_');
-
-            // Pre select locale
-            $("#locale").val(locale);
-        }
-    });
-});
-*/
-
-<?php $this->inlineScript()->captureEnd(); ?>

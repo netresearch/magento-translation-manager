@@ -3,14 +3,6 @@ body {
     padding-top: 4.5rem;
 }
 
-.filter-area .btn-group {
-    margin-bottom: 4px;
-}
-
-.filter-area .pagination {
-    margin-bottom: 0;
-}
-
 form ul {
     list-style-type: none;
     padding: 0px;

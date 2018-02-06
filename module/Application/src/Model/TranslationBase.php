@@ -26,16 +26,6 @@ class TranslationBase
     private $originSource;
 
     /**
-     * @var bool
-     */
-//     private $notInUse = true;
-
-    /**
-     * @var string
-     */
-//     private $screenPath;
-
-    /**
      * This method simply copies the data from the passed in array to our entities properties.
      *
      * @param array $data Data from database
@@ -48,8 +38,6 @@ class TranslationBase
         $this->fileId       = ArrayAccess::getInt($data, 'fileId');
 //         $this->file         = ArrayAccess::getString($data, 'file');
         $this->originSource = ArrayAccess::getString($data, 'originSource');
-//         $this->notInUse     = ArrayAccess::getBool($data, 'notInUse', true);
-//         $this->screenPath   = ArrayAccess::getString($data, 'screenPath');
     }
 
     /**
@@ -64,8 +52,6 @@ class TranslationBase
             'fileId'       => $this->fileId,
 //             'file'         => $this->file,
             'originSource' => $this->originSource,
-//             'notInUse'     => (int) $this->notInUse,
-//             'screenPath'   => $this->screenPath,
         ];
     }
 
@@ -110,22 +96,6 @@ class TranslationBase
     public function setOriginSource(?string $originSource): self
     {
         $this->originSource = $originSource;
-        return $this;
-    }
-
-    public function getNotInUse(): bool
-    {
-        return $this->notInUse;
-    }
-
-    public function getScreenPath(): ?string
-    {
-        return $this->screenPath;
-    }
-
-    public function setScreenPath(?string $screenPath): self
-    {
-        $this->screenPath = $screenPath;
         return $this;
     }
 }
