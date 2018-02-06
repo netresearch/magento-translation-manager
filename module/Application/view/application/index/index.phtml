@@ -103,49 +103,59 @@
                             <th><?= $this->translate('ID') ?></th>
                             <th><?= $this->translate('Origin source') ?></th>
                             <th><?= $this->translate('Current translation') ?></th>
-                            <th><span title="<?= $this->translate('unclear translation') ?>"><?= $this->translate('Status') ?></span></th>
+                            <th width="10%"></th>
 <?php /*
                             <th><?= $this->translate('New suggested translation') ?></th>
-*/ ?>
                             <th></th>
+*/ ?>
                         </tr>
                         <?php foreach ($translations as $translation): ?>
-                            <?php $base = $translation->getTranslationBase(); //$translationBase->getById($translation->getBaseId()) ?>
-                            <?php $rowName = 'row' . $base->getId(); ?>
+                            <?php $base      = $translation->getTranslationBase(); ?>
+                            <?php $rowName   = 'row' . $base->getId(); ?>
+                            <?php $detailUrl = $this->url('index', [ 'action' => 'edit', 'base_id' => $base->getId() ], [ 'query' => [ 'locale' => $currentLocale ] ]); ?>
                             <tr id="<?= $rowName ?>">
-                                <td><?= $base->getId() ?></td>
+                                <td>
+                                    <?= $base->getId() ?>
+                                </td>
                                 <td>
                                     <?php if ($base): ?>
-                                        <?= $this->escapeHtml($base->getOriginSource()) ?>
+                                        <a href="<?= $detailUrl ?>">
+                                            <?= $this->escapeHtml($base->getOriginSource()) ?>
+                                        </a>
                                     <?php endif; ?>
                                 </td>
-                                <td><?= $this->escapeHtml($translation->getTranslation()) ?></td>
-                                <td class="text-center">
+                                <td>
+                                    <a href="<?= $detailUrl ?>">
+                                        <?= $this->escapeHtml($translation->getTranslation()) ?>
+                                    </a>
+                                </td>
+                                <td class="text-right">
                                     <?php if ($translation->getUnclear()): ?>
-                                        <button class="btn btn-warning unclear-translation" title="<?= $this->translate('unclear translation at the moment') ?>" type="button"
+                                        <button class="btn btn-warning btn-sm unclear-translation" title="<?= $this->translate('unclear translation at the moment') ?>" type="button"
                                             onclick="toggleUnclearTranslation($(this))" data-translation-id="<?= $this->escapeHtmlAttr($translation->getId())?>">
                                             <i class="fa fa-exclamation-triangle unclear"></i>
                                         </button>
                                     <?php else: ?>
-                                        <button class="btn btn-success unclear-translation" title="<?= $this->translate('clear translation at the moment') ?>" type="button"
+                                        <button class="btn btn-success btn-sm unclear-translation" title="<?= $this->translate('clear translation at the moment') ?>" type="button"
                                             onclick="toggleUnclearTranslation($(this))" data-translation-id="<?= $this->escapeHtmlAttr($translation->getId())?>">
                                             <i class="fa fa-check-circle clear"></i>
                                         </button>
                                     <?php endif; ?>
-                                </td>
+
 <?php /*
+                                </td>
                                 <td class="suggested-translation">
                                     <input type="text" class="form-control" name="<?= $rowName?>_suggestedTranslation" value="" />
                                 </td>
-*/ ?>
                                 <td>
+*/ ?>
                                     <input type="hidden" name="<?= $rowName?>_baseId" value="<?= $this->escapeHtmlAttr($base->getId())?>" />
                                     <input type="hidden" name="<?= $rowName?>_translationId" value="<?= $this->escapeHtmlAttr($translation->getId())?>" />
 <?php /*
                                         <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="<?= $this->translate('Add suggestion') ?>"><span class="fa fa-plus"></span></button>
                                         &nbsp;
 */ ?>
-                                    <a class="btn btn-info" data-toggle="tooltip" data-placement="right" title="<?= $this->translate('See Details') ?>" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $base->getId() ], [ 'query' => [ 'locale' => $currentLocale ] ]) ?>"><span class="fa fa-search"></span></a>
+                                    <a class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="right" title="<?= $this->translate('See Details') ?>" href="<?= $detailUrl ?>"><span class="fa fa-search"></span></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

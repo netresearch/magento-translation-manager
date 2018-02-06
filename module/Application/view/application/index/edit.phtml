@@ -31,7 +31,7 @@
     <div class="col-12">
         <div class="card mt-4">
             <div class="card-header">
-                <strong><?= $this->translate('Basic data') ?></strong>
+                <strong><?= $this->translate('Filter') ?></strong>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -83,8 +83,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label><?= $this->translate('Current translation') ?></label>
-                        <input type="text" class="form-control" value="<?= $translations[$currentLocale]->getTranslation(); ?>">
+                        <label for="translationInput"><?= $this->translate('Current translation') ?></label>
+                        <input id="translationInput" type="text" class="form-control" autofocus="true" value="<?= $translations[$currentLocale]->getTranslation(); ?>">
                     </div>
 
                     <div class="form-check">
@@ -97,6 +97,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mt-4">
+            <button type="submit" value="all" name="rowid" class="btn btn-primary pull-right" id="save-all-button"><?= $this->translate('Save') ?></button>
         </div>
     </div>
 
@@ -133,7 +139,7 @@
                     <div class="input-group col-md-12">
                         <textarea class="form-control" rows="3" name="<?= $rowName ?>_suggestedTranslation"></textarea>
                     </div>
-                    <button type="submit" value="<?= $rowName ?>" name="rowid" class="btn btn-primary btn-lg">Submit suggestion</button>
+                    <button type="submit" value="<?= $rowName ?>" name="rowid" class="btn btn-primary">Submit suggestion</button>
                 </div>
             </div>
         </div>
@@ -148,6 +154,7 @@
         </div>
     </div>
 
+<?php /*
     <div class="row">
         <div class="col-md-12">
             <div class="card mt-4" role="tablist" aria-multiselectable="true" data-toggle="collapse" data-target="#MageVersions">
@@ -186,9 +193,9 @@
                                     <div style="min-width: 125px">
                                         <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $locale ?>" />
                                         <input type="hidden" name="<?= $rowName?>_id" value="<?= $this->escapeHtmlAttr($translation->getId())?>" />
-                                        <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="fa fa-plus"></span></button>
+                                        <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="fa fa-plus"></span></button>
                                         &nbsp;
-                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="fa fa-search"></span></a>
+                                        <a class="btn btn-info" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="fa fa-search"></span></a>
                                     </div>
                                 <td>
                             </tr>
@@ -198,32 +205,37 @@
             </div>
         </div>
     </div>
+*/ ?>
 
     <div class="row">
         <div class="col-md-12">
-                <div class="card mt-4" role="tablist" aria-multiselectable="true" data-toggle="collapse" data-target="#locales">
+                <div class="card mt-4" role="tablist" aria-multiselectable="true" data-target="#locales">
                 <div class="card-header">
                     <strong>Further translations (locales)</strong>
                 </div>
-                <div class="card-body collapse" id="locales">
+                <div class="card-body" id="locales">
                     <table class="table table-hover table-striped" id="translation-grid">
                         <tr>
                             <th>Locale<th>
                             <th>Current translation<th>
                             <th colspan="2" class="text-center"><span title="unclear translation">Status</span></th>
                             <th>Add Suggestion<th>
-                            <th><th>
+                            <th width="10%"><th>
                         </tr>
                         <?php foreach ($translations as $locale => $translation): ?>
                             <?php if ($locale === $currentLocale) continue; ?>
-                            <?php /* @var $translation \Application\Model\Translation */ ?>
                             <?php $rowName = 'row' . $locale; ?>
                             <tr id="<?= $rowName ?>">
-                                <td><?= $this->escapeHtml($locale) ?><td>
-                                <td><?= $this->escapeHtml($translation->getTranslation()) ?><td>
+                                <td>
+                                    <img src="<?= $this->basePath('img/flags/' . strtolower(substr($locale, 3, 2))) ?>.png" alt="">
+                                    <?= $this->escapeHtml($locale) ?>
+                                <td>
+                                <td>
+                                    <?= $this->escapeHtml($translation->getTranslation()) ?>
+                                <td>
                                 <td>
                                     <?php if ($translation->getUnclear()): ?>
-                                        <i class="fa fa-exclamation-triangle unclear" title="unclear translation"></i>
+                                        <i class="fa fa-exclamation-triangle text-warning unclear" title="unclear translation"></i>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -232,14 +244,11 @@
                                 <td class="suggested-translation">
                                     <input type="text" class="form-control" name="<?= $rowName?>_suggestedTranslation" value="" />
                                 <td>
-                                <td>
-                                    <div style="min-width: 125px">
-                                        <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $locale ?>" />
-                                        <input type="hidden" name="<?= $rowName?>_id" value="<?= $this->escapeHtmlAttr($translation->getId())?>" />
-                                        <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="fa fa-plus"></span></button>
-                                        &nbsp;
-                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="fa fa-search"></span></a>
-                                    </div>
+                                <td class="text-right">
+                                    <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $locale ?>" />
+                                    <input type="hidden" name="<?= $rowName?>_id" value="<?= $this->escapeHtmlAttr($translation->getId())?>" />
+                                    <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="fa fa-plus"></span></button>
+                                    <a class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="fa fa-search"></span></a>
                                 <td>
                             </tr>
                         <?php endforeach; ?>

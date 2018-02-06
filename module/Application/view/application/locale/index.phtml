@@ -25,7 +25,7 @@ $this->headTitle($title);
             <?php foreach ($locales as $locale): ?>
                 <tr>
                     <td>
-                        <img src="<?= $this->basePath('img/flags/' . strtolower(substr($locale->getLocale(), 3, 2))) ?>.png" alt="" />
+                        <img src="<?= $this->basePath('img/flags/' . strtolower(substr($locale->getLocale(), 3, 2))) ?>.png" alt="">
                         <?= $this->escapeHtml($this->translate($locale->getLocale())); ?>
                     </td>
                     <td class="text-right">
