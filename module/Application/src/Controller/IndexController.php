@@ -72,15 +72,10 @@ class IndexController extends AbstractActionController
         $translationsCount = $this->_translationTable
             ->countByLanguageAndFile($this->_currentLocale, $currentFile, $currentFilterUnclear);
 
-        if ('all' == $elementsPerPage) {
-            // show all entries on one page
-            $elementsPerPage = null;
-        } else {
-            $elementsPerPage = (int) $elementsPerPage;
+        $elementsPerPage = (int) $elementsPerPage;
 
-            $maxPage = (int) ceil($translationsCount / $elementsPerPage);
-            $maxPage = $maxPage < 1 ? 1 : $maxPage;
-        }
+        $maxPage = (int) ceil($translationsCount / $elementsPerPage);
+        $maxPage = $maxPage < 1 ? 1 : $maxPage;
 
         if ($page <= 0) {
             $page = 1;
@@ -111,13 +106,34 @@ class IndexController extends AbstractActionController
     }
 
     /**
+     * Get the next base id starting from the given one.
+     *
+     * @param int $baseId Base translation record id
+     *
+     * @return int
+     */
+    private function getNextBaseId(int $baseId): int
+    {
+        $allBaseIds = $this->_translationBaseTable->fetchAll()->getIds();
+        $currentKey = array_search($baseId, $allBaseIds);
+        $nextKey    = $currentKey === false ? 0 : ($currentKey + 1);
+        $maxKey     = max(array_keys($allBaseIds));
+
+        if ($nextKey > $maxKey) {
+            $nextKey = min(array_keys($allBaseIds));
+        }
+
+        return $allBaseIds[$nextKey];
+    }
+
+    /**
      * translation detail page
      * HTTP-Param: base_id
      * HTTP-Param: row_id
      *
-     * @return ViewModel
+     * @return mixed
      */
-    public function editAction(): ViewModel
+    public function editAction()
     {
         $this->init();
         $baseId = $this->params('base_id');
@@ -133,20 +149,32 @@ class IndexController extends AbstractActionController
             $translation->exchangeArray($data->toArray());
 
             try {
+                if (empty($translation->getTranslation())) {
+                    throw new \Exception('Unable to save empty translation');
+                }
+
                 $modified = $this->_translationTable->saveTranslation($translation);
 
-                if (!$modified) {
-                    $this->addMessage('No changes.', self::MESSAGE_INFO);
-                } else {
-                    $this->addMessage('Element successfully modified', self::MESSAGE_SUCCESS);
+                if ($modified) {
+                    // Redirect to next translation record on success
+                    return $this->redirect()->toRoute(
+                        'index',
+                        [
+                            'action' => 'edit',
+                            'base_id' => $this->getNextBaseId($data['baseId']),
+                        ],
+                        [
+                            'query' => [
+                                'locale' => $data['locale']
+                            ]
+                        ]
+                    );
                 }
+
+                $this->addMessage('No changes', self::MESSAGE_INFO);
             } catch (\Exception $ex) {
                 $this->addMessage($ex->getMessage(), self::MESSAGE_ERROR);
             }
-
-//             return;
-// var_dump($data, $translation);
-// exit;
         }
 
 
