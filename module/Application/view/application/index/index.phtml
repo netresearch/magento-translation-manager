@@ -20,15 +20,16 @@
 ?>
 
 <?php if (isset($messages) && count($messages)): ?>
-    <ul class="messages row">
-        <?php foreach ($messages as $messageLevel => $messageLevelContainer): ?>
-            <?php foreach ($messageLevelContainer as $message): ?>
-                <li class="alert alert-<?= $this->escapeHtmlAttr($messageLevel); ?>" role="alert">
-                    <?= $this->escapeHtml($message); ?>
-                </li>
-            <?php endforeach; ?>
+    <?php foreach ($messages as $messageLevel => $messageLevelContainer): ?>
+        <?php foreach ($messageLevelContainer as $message): ?>
+        <div class="alert alert-<?= $this->escapeHtmlAttr($messageLevel); ?> alert-dismissible fade show" role="alert">
+            <?= $this->escapeHtml($message); ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
         <?php endforeach; ?>
-    </ul>
+    <?php endforeach; ?>
 <?php endif; ?>
 
 <div class="row">

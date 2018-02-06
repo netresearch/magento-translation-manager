@@ -16,7 +16,6 @@ return [
     'Origin source' => 'Ausgangszeichenkette',
     'Current translation' => 'Aktuelle Übersetzung',
     'Status' => 'Status',
-    'unclear translation' => 'unklare Übersetzung',
     'New suggested translation' => 'neuer Vorschlag',
     'unclear translation at the moment' => 'momentan unklare Übersetzung',
     'clear translation at the moment' => 'momentan klare Übersetzung',
@@ -26,6 +25,10 @@ return [
     'Translation' => 'Übersetzung',
 
     'Locale configuration' => 'Sprachkonfiguration',
+
+    'Unclear translation' => 'Unklare Übersetzung',
+    'Missing translation' => 'Fehlende Übersetzung',
+
 
     // Languages
     'de_DE' => 'Deutsch (Deutschland)',
@@ -39,5 +42,6 @@ return [
     'nb_NO' => 'Norwegisch (Norwegen)',
     'nl_BE' => 'Flämisch (Belgien)',
     'pl_PL' => 'Polnisch',
+    'ru_RU' => 'Russisch (Russland)',
     'sv_SE' => 'Schwedisch (Schweden)',
 ];

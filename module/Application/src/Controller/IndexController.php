@@ -123,65 +123,92 @@ class IndexController extends AbstractActionController
         $baseId = $this->params('base_id');
         $baseTranslation = $this->_translationBaseTable->getTranslationBase($baseId);
 
-        // save data
-        if ($this->params()->fromPost('rowid')) {
-            // split POST params into rows
-            $formRows = [ /* rowid => [ field => value ] */ ];
-            $postParams = $this->params()->fromPost();
-            foreach ($postParams as $postKey => $postValue) {
-                if (preg_match('@(row.{5})_(.+)@', $postKey, $matches)) {
-                    $formRows[$matches[1]][$matches[2]] = $postValue;
-                }
-            }
+        $request = $this->getRequest();
 
+        if ($request->isPost()) {
+            /** @var \Zend\Stdlib\Parameters $data */
+            $data = $request->getPost();
 
-            // decide if one or all elements should be saved
-            if ('all' == $this->params()->fromPost('rowid')) {
-                $errors = 0;
-                $elementsModified = 0;
-                foreach ($formRows as $row) {
-                    try {
-                        if (empty($row['suggestedTranslation'])) {
-                            continue;
-                        }
-                        $row['baseId'] = $baseTranslation->getId();
-                        $modified = $this->saveTranslationElement($row);
-                        if (false !== $modified) {
-                            $elementsModified++;
-                        }
-                    } catch(\Exception $e) {
-                        $errors++;
-                    }
-                }
+            $translation = new Translation();
+            $translation->exchangeArray($data->toArray());
 
-                if (0 < $errors) {
-                    $this->addMessage(sprintf('Error saving %d elements', $errors), self::MESSAGE_ERROR);
-                }
-                if (0 < $elementsModified) {
-                    $this->addMessage(sprintf('%d elements modified successfully', $elementsModified), self::MESSAGE_SUCCESS);
-                }
-                if (0 == $elementsModified && 0 == $errors) {
+            try {
+                $modified = $this->_translationTable->saveTranslation($translation);
+
+                if (!$modified) {
                     $this->addMessage('No changes.', self::MESSAGE_INFO);
+                } else {
+                    $this->addMessage('Element successfully modified', self::MESSAGE_SUCCESS);
                 }
-            } else {
-                $rowId = $this->params()->fromPost('rowid');
-                $formRows[$rowId]['baseId'] = $baseTranslation->getId();
-                try {
-                    $success = false;
-                    if (!empty($formRows[$rowId]['suggestedTranslation'])) {
-                        $success = $this->saveTranslationElement($formRows[$rowId]);
-                    }
-
-                    if (false == $success) {
-                        $this->addMessage('No changes.', self::MESSAGE_INFO);
-                    } else {
-                        $this->addMessage(sprintf('Element saved successfully (element #%d)', $success), self::MESSAGE_SUCCESS);
-                    }
-                } catch(\Exception $e) {
-                    $this->addMessage('Error saving element', self::MESSAGE_ERROR);
-                }
+            } catch (\Exception $ex) {
+                $this->addMessage($ex->getMessage(), self::MESSAGE_ERROR);
             }
+
+//             return;
+// var_dump($data, $translation);
+// exit;
         }
+
+
+//         // save data
+//         if ($this->params()->fromPost('rowid')) {
+//             // split POST params into rows
+//             $formRows = [ /* rowid => [ field => value ] */ ];
+//             $postParams = $this->params()->fromPost();
+//             foreach ($postParams as $postKey => $postValue) {
+//                 if (preg_match('@(row.{5})_(.+)@', $postKey, $matches)) {
+//                     $formRows[$matches[1]][$matches[2]] = $postValue;
+//                 }
+//             }
+
+
+//             // decide if one or all elements should be saved
+//             if ('all' == $this->params()->fromPost('rowid')) {
+//                 $errors = 0;
+//                 $elementsModified = 0;
+//                 foreach ($formRows as $row) {
+//                     try {
+//                         if (empty($row['suggestedTranslation'])) {
+//                             continue;
+//                         }
+//                         $row['baseId'] = $baseTranslation->getId();
+//                         $modified = $this->saveTranslationElement($row);
+//                         if (false !== $modified) {
+//                             $elementsModified++;
+//                         }
+//                     } catch(\Exception $e) {
+//                         $errors++;
+//                     }
+//                 }
+
+//                 if (0 < $errors) {
+//                     $this->addMessage(sprintf('Error saving %d elements', $errors), self::MESSAGE_ERROR);
+//                 }
+//                 if (0 < $elementsModified) {
+//                     $this->addMessage(sprintf('%d elements modified successfully', $elementsModified), self::MESSAGE_SUCCESS);
+//                 }
+//                 if (0 == $elementsModified && 0 == $errors) {
+//                     $this->addMessage('No changes.', self::MESSAGE_INFO);
+//                 }
+//             } else {
+//                 $rowId = $this->params()->fromPost('rowid');
+//                 $formRows[$rowId]['baseId'] = $baseTranslation->getId();
+//                 try {
+//                     $success = false;
+//                     if (!empty($formRows[$rowId]['suggestedTranslation'])) {
+//                         $success = $this->saveTranslationElement($formRows[$rowId]);
+//                     }
+
+//                     if (false == $success) {
+//                         $this->addMessage('No changes.', self::MESSAGE_INFO);
+//                     } else {
+//                         $this->addMessage(sprintf('Element saved successfully (element #%d)', $success), self::MESSAGE_SUCCESS);
+//                     }
+//                 } catch(\Exception $e) {
+//                     $this->addMessage('Error saving element', self::MESSAGE_ERROR);
+//                 }
+//             }
+//         }
 
         // prepare previous and next item
         $allBaseIds = $this->_translationBaseTable->fetchAll()->getIds();

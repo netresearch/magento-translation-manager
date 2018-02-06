@@ -48,7 +48,7 @@ class Translation
         $this->baseId      = ArrayAccess::getInt($data, 'baseId');
         $this->locale      = ArrayAccess::getString($data, 'locale');
         $this->translation = ArrayAccess::getString($data, 'translation');
-        $this->unclear     = ArrayAccess::getBool($data, 'unclear', true);
+        $this->unclear     = ArrayAccess::getBool($data, 'unclear', false);
 
         $this->baseTranslation = new TranslationBase();
         $this->baseTranslation->setId($this->baseId)

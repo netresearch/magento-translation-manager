@@ -16,15 +16,16 @@
 ?>
 
 <?php if (isset($messages) && count($messages)): ?>
-    <ul class="messages row">
-        <?php foreach ($messages as $messageLevel => $messageLevelContainer): ?>
-            <?php foreach ($messageLevelContainer as $message): ?>
-                <li class="alert alert-<?= $this->escapeHtmlAttr($messageLevel); ?>" role="alert">
-                    <?= $this->escapeHtml($message); ?>
-                </li>
-            <?php endforeach; ?>
+    <?php foreach ($messages as $messageLevel => $messageLevelContainer): ?>
+        <?php foreach ($messageLevelContainer as $message): ?>
+        <div class="alert alert-<?= $this->escapeHtmlAttr($messageLevel); ?> alert-dismissible fade show" role="alert">
+            <?= $this->escapeHtml($message); ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
         <?php endforeach; ?>
-    </ul>
+    <?php endforeach; ?>
 <?php endif; ?>
 
 <div class="row">
@@ -60,37 +61,40 @@
     <div class="row">
         <div class="col-12">
             <?php $rowName         = 'row' . $currentLocale; ?>
-            <?php $unclearSelected = $translations[$currentLocale]->getUnclear() ?>
+            <?php $unclearSelected = $translations[$currentLocale]->getUnclear(); ?>
 
-            <input type="hidden" name="base_id" value="<?= $baseTranslation->getId() ?>">
-            <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $this->escapeHtmlAttr($currentLocale) ?>">
-            <input type="hidden" name="<?= $rowName ?>_id" value="<?= $translations[$currentLocale]->getId() ?>">
+            <input type="hidden" name="baseId" value="<?= $baseTranslation->getId() ?>">
+            <input type="hidden" name="locale" value="<?= $this->escapeHtmlAttr($currentLocale) ?>">
+            <input type="hidden" name="id" value="<?= $translations[$currentLocale]->getId() ?>">
 
             <div class="card mt-4">
                 <div class="card-header">
                     <strong>
                         <?= $this->translate('Translation') ?>
                         <span class="pull-right">&nbsp;<img src="<?= $this->basePath('img/flags/' . strtolower(substr($currentLocale, 3, 2))) ?>.png" alt="<?= $currentLocale ?>" />&nbsp;</span>
-                        <?php if ($unclearSelected): ?>
-                            <span class="fa fa-exclamation-triangle pull-right text-warning" style="margin-top: 6px;" title="<?= $this->translate('Unclear translation') ?>">&nbsp;</span>
+                        <?php if (empty($translations[$currentLocale]->getTranslation())): ?>
+                            <i class="fa fa-ban pull-right text-danger" style="margin-top: 6px;" title="<?= $this->translate('Missing translation') ?>"></i>
+                        <?php else: ?>
+                            <?php if ($unclearSelected): ?>
+                                <span class="fa fa-exclamation-triangle pull-right text-warning" style="margin-top: 6px;" title="<?= $this->translate('Unclear translation') ?>">&nbsp;</span>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </strong>
                 </div>
                 <div class="card-body">
                     <div class="form-group">
                         <label><?= $this->translate('Origin source') ?></label>
-                        <input type="text" class="form-control" readonly placeholder="<?= $this->escapeHtml($baseTranslation->getOriginSource()); ?>">
+                        <input type="text" class="form-control" readonly value="<?= $this->escapeHtml($baseTranslation->getOriginSource()); ?>">
                     </div>
 
                     <div class="form-group">
                         <label for="translationInput"><?= $this->translate('Current translation') ?></label>
-                        <input id="translationInput" type="text" class="form-control" autofocus="true" value="<?= $translations[$currentLocale]->getTranslation(); ?>">
+                        <input id="translationInput" type="text" class="form-control" autofocus name="translation" value="<?= $translations[$currentLocale]->getTranslation(); ?>">
                     </div>
 
                     <div class="form-check">
-                        <?php $unclearSelected = $translations[$currentLocale]->getUnclear() ?>
-                        <input type="checkbox" class="form-check-input" name="<?= $rowName ?>_unclearTranslation" id="<?= $rowName ?>_unclearTranslation" value="1" <?php if ($unclearSelected) echo 'checked="checked"' ?>>
-                        <label class="form-check-label" for="<?= $rowName ?>_unclearTranslation"><?= $this->translate('Translation is unclear') ?></label>
+                        <input class="form-check-input" type="checkbox" name="unclear" id="unclearInput" value="1"<?php if ($unclearSelected): ?> checked="checked"<?php endif; ?>>
+                        <label class="form-check-label" for="unclearInput"><?= $this->translate('Translation is unclear') ?></label>
                         <small class="form-text text-muted">
                             <?= $this->translate('String is usually marked as unclear if translation should be reviewed by another person.') ?>
                         </small>
@@ -166,7 +170,7 @@
                         <tr>
                             <th>MageVersion<th>
                             <th>Current translation<th>
-                            <th colspan="2" class="text-center"><span title="unclear translation">Status</span></th>
+                            <th colspan="2" class="text-center"><span title="Unclear translation">Status</span></th>
                             <th>t.b.d.<th>
                             <th><th>
                         </tr>
@@ -179,7 +183,7 @@
                                 <td><?= $this->escapeHtml($translation->getTranslation()) ?><td>
                                 <td>
                                     <?php if ($translation->getUnclear()): ?>
-                                        <i class="fa fa-exclamation-triangle unclear" title="unclear translation"></i>
+                                        <i class="fa fa-exclamation-triangle unclear" title="Unclear translation"></i>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -214,53 +218,61 @@
                     <strong>Further translations (locales)</strong>
                 </div>
                 <div class="card-body" id="locales">
-                    <table class="table table-hover table-striped" id="translation-grid">
+                    <table class="table table-hover" id="translation-grid">
                         <tr>
                             <th>Locale<th>
                             <th>Current translation<th>
-                            <th colspan="2" class="text-center"><span title="unclear translation">Status</span></th>
+                            <th>Status</th>
+<?php /*
                             <th>Add Suggestion<th>
+*/ ?>
                             <th width="10%"><th>
                         </tr>
                         <?php foreach ($translations as $locale => $translation): ?>
                             <?php if ($locale === $currentLocale) continue; ?>
-                            <?php $rowName = 'row' . $locale; ?>
+
+                            <?php $detailUrl = $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getId() ], [ 'query' => [ 'locale' => $locale ] ]); ?>
+                            <?php $rowName   = 'row' . $locale; ?>
                             <tr id="<?= $rowName ?>">
                                 <td>
                                     <img src="<?= $this->basePath('img/flags/' . strtolower(substr($locale, 3, 2))) ?>.png" alt="">
                                     <?= $this->escapeHtml($locale) ?>
                                 <td>
                                 <td>
-                                    <?= $this->escapeHtml($translation->getTranslation()) ?>
+                                    <a href="<?= $detailUrl ?>">
+                                        <?= $this->escapeHtml($translation->getTranslation()) ?>
+                                    </a>
                                 <td>
                                 <td>
-                                    <?php if ($translation->getUnclear()): ?>
-                                        <i class="fa fa-exclamation-triangle text-warning unclear" title="unclear translation"></i>
+                                    <?php if (empty($translation->getTranslation())): ?>
+                                        <i class="fa fa-ban text-danger" title="<?= $this->translate('Missing translation') ?>"></i>
+                                    <?php else: ?>
+                                        <?php if ($translation->getUnclear()): ?>
+                                            <i class="fa fa-exclamation-triangle text-warning" title="<?= $this->translate('Unclear translation') ?>"></i>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </td>
+<?php /*
                                 <td>
                                     <input type="radio" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclear()) ? 'checked="checked"':'' ?>>
                                 </td>
                                 <td class="suggested-translation">
                                     <input type="text" class="form-control" name="<?= $rowName?>_suggestedTranslation" value="" />
                                 <td>
+*/ ?>
                                 <td class="text-right">
+<?php /*
                                     <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $locale ?>" />
                                     <input type="hidden" name="<?= $rowName?>_id" value="<?= $this->escapeHtmlAttr($translation->getId())?>" />
                                     <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="fa fa-plus"></span></button>
-                                    <a class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="fa fa-search"></span></a>
+*/ ?>
+                                    <a class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $detailUrl ?>"><span class="fa fa-search"></span></a>
                                 <td>
                             </tr>
                         <?php endforeach; ?>
                     </table>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <button type="submit" value="all" name="rowid" class="btn btn-primary pull-right" id="save-all-button">Submit all</button>
         </div>
     </div>
 </form>
