@@ -53,9 +53,9 @@ class IndexController extends AbstractActionController
         $currentFile = null;
 
         // save form on user interaction
-        if ($this->params()->fromPost('rowid')) {
-            $jumpToRow = $this->saveIndexForm();
-        }
+//         if ($this->params()->fromPost('rowid')) {
+//             $jumpToRow = $this->saveIndexForm();
+//         }
 
         // prepare filter
         $currentFilterUnclear = (bool) $this->params()->fromQuery('filter_unclear_translation');

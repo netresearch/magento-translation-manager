@@ -29,6 +29,9 @@ return [
     'Unclear translation' => 'Unklare Übersetzung',
     'Missing translation' => 'Fehlende Übersetzung',
 
+    'Save' => 'Speichern',
+    'Previous translation' => 'Vorherige Übersetzung',
+    'Next translation' => 'Nächste Übersetzung',
 
     // Languages
     'de_DE' => 'Deutsch (Deutschland)',
