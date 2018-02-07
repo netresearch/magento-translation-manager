@@ -10,8 +10,9 @@ return [
     'Start import' => 'Import beginnen',
 
     // Error messages
-    'File was not uploaded' => '',
-    'File is not readable or does not exist' => '',
-    'File has an incorrect extension' => '',
+    'File was not uploaded' => 'Die Datei wurde nicht hochgeladen',
+    'File was only partially uploaded' => 'Die Datei wurde nur teilweise hochgeladen',
+    'File is not readable or does not exist' => 'Die Datei ist nicht lesbar oder existiert nicht',
+    'File has an incorrect extension' => 'Datei hat eine falsche Erweiterung',
     'Value is required and can\'t be empty' => 'Wert ist erforderlich und kann nicht leer sein',
 ];

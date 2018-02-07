@@ -29,17 +29,17 @@ class TranslationTable extends AbstractTableGateway
     /**
      * Get all records by the given translation and base record id.
      *
-     * @param string $translation Translated value
-     * @param int    $baseId      Base record id
+     * @param int    $baseId Base record id
+     * @param string $locale Locale
      *
      * @return ResultSet_Translation
      */
-    public function fetchByTranslationAndBaseId(string $translation, int $baseId): ResultSet_Translation
+    public function fetchByBaseIdAndLocale(int $baseId, string $locale): ResultSet_Translation
     {
         return $record = $this->tableGateway
             ->select([
-                'translation' => $translation,
-                'baseId'      => $baseId,
+                'baseId' => $baseId,
+                'locale' => $locale,
             ]);
     }
 

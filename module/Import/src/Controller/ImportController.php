@@ -114,7 +114,7 @@ class ImportController extends AbstractActionController implements ControllerInt
                             $baseId = $this->translationBaseTable->saveTranslationBase($baseRecord);
                         }
 
-                        $translationRecord = $this->translationTable->fetchByTranslationAndBaseId($translatedValue, $baseId);
+                        $translationRecord = $this->translationTable->fetchByBaseIdAndLocale($baseId, $locale);
 
                         // No record found, and translation differs from base value
                         if (!$translationRecord->count()
