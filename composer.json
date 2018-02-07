@@ -30,7 +30,8 @@
     "autoload": {
         "psr-4": {
             "Application\\": "module/Application/src/",
-            "Import\\": "module/Import/src/"
+            "Import\\": "module/Import/src/",
+            "Export\\": "module/Export/src/"
         }
     }
 }

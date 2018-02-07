@@ -1,0 +1,68 @@
+<?php
+/**
+ * @var \Zend\View\Renderer\PhpRenderer $this
+ * @var \Export\Form\ExportForm         $form
+ */
+
+$title = $this->translate('Export magento language CSV file(s)');
+$this->headTitle($title);
+
+$form = $this->form;
+$form->setAttribute('action', $this->url('export', [ 'action' => 'index' ]));
+$form->prepare();
+?>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <?= $this->escapeHtml($title); ?>
+    </div>
+    <div class="card-body">
+        <?= $this->form()->openTag($form); ?>
+            <div class="form-group">
+                <?php $element = $form->get('files'); ?>
+                <?= $this->formLabel($element); ?>
+                <?= $this->formElement($element); ?>
+                <?= $this->formElementErrors($element); ?>
+            </div>
+            <div class="form-group">
+                <?php $element = $form->get('locales'); ?>
+                <?= $this->formLabel($element); ?>
+                <?= $this->formElement($element); ?>
+                <?= $this->formElementErrors($element); ?>
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <?php $element = $form->get('exportCsv'); ?>
+                    <?= $this->formElement($element); ?>
+                    <?= $this->formLabel($element); ?>
+                    <small class="form-text text-muted">
+                        <?= $this->translate('Export the translations into downloadable CSV files') ?>
+                    </small>
+                </div>
+                <?= $this->formElementErrors($element); ?>
+            </div>
+            <div class="form-group">
+                <?= $this->formElement($form->get('submit')); ?>
+            </div>
+        <?= $this->form()->closeTag(); ?>
+    </div>
+</div>
+
+<?php if (count($downloadFiles)): ?>
+    <p>Please download the following files:</p>
+<?php else: ?>
+    <p>No files exported.</p>
+<?php endif; ?>
+
+<ul>
+    <?php foreach ($downloadFiles as $file): ?>
+    <li><a href="<?= $this->serverUrl($file['path']) ?>"><?= $file['locale']?> - <?= $file['filename'] ?></a></li>
+    <?php endforeach; ?>
+</ul>
+
+<p>
+    <a href="<?= $this->url('admin') ?>">
+        <span class="fa fa-arrow-left"></span>
+        Back to admin
+    </a>
+</p>

@@ -1,20 +1,20 @@
 <?php
-namespace Import;
+namespace Export;
 
 use \Zend\Router\Http\Segment;
 
 return [
     'router' => [
         'routes' => [
-            'import' => [
+            'export' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route'    => '/import/[:action]',
+                    'route'    => '/export/[:action]',
                     'constraints' => [
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     ],
                     'defaults' => [
-                        'controller' => Controller\ImportController::class,
+                        'controller' => Controller\ExportController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -24,7 +24,7 @@ return [
 
     'view_manager' => [
         'template_path_stack' => [
-             'import' => __DIR__ . '/../view',
+             'export' => __DIR__ . '/../view',
          ],
     ],
 
@@ -33,9 +33,9 @@ return [
             'admin' => [
                 'route' => 'admin',
                 'pages' => [
-                    'admin/import' => [
-                        'label' => 'Import',
-                        'route' => 'import',
+                    'admin/export' => [
+                        'label' => 'Export',
+                        'route' => 'export',
                     ],
                 ],
             ],

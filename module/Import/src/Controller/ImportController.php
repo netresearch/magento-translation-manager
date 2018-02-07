@@ -3,7 +3,7 @@ namespace Import\Controller;
 
 use \Zend\Mvc\Controller\AbstractActionController;
 use \Application\Controller\ControllerInterface;
-use \Application\Controller\Traits\ControllerMessage;
+use \Application\Controller\Traits;
 use \Application\Model\LocaleTable;
 use \Application\Model\TranslationTable;
 use \Application\Model\TranslationBaseTable;
@@ -15,7 +15,7 @@ use \Import\Form\ImportForm;
 
 class ImportController extends AbstractActionController implements ControllerInterface
 {
-    use ControllerMessage;
+    use Traits\ControllerMessage;
 
     /**
      * @var LocaleTable

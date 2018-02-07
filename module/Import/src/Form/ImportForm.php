@@ -4,9 +4,12 @@ namespace Import\Form;
 use \Zend\Form\Form;
 use \Zend\Form\Element\File;
 use \Zend\Form\Element\Select;
-use \Zend\Form\Element\Submit;
+use \Zend\Form\Element\Button;
 use \Zend\InputFilter\InputFilter;
 use \Zend\InputFilter\FileInput;
+use \Zend\Validator\File\UploadFile;
+use \Zend\Validator\File\Extension;
+use \Zend\Filter\File\RenameUpload;
 use \Application\Model\Locale;
 use \Application\ResultSet\Locale as ResultSet_Locale;
 
@@ -15,6 +18,8 @@ use \Application\ResultSet\Locale as ResultSet_Locale;
  */
 class ImportForm extends Form
 {
+    const UPLOAD_FOLDER = './data/upload';
+
     /**
      * Constructor.
      *
@@ -46,8 +51,8 @@ class ImportForm extends Form
             'name' => 'files',
             'type' => File::class,
             'attributes' => [
-                'id'       => 'filebutton',
-                'class'    => 'form-control-file',
+                'id' => 'filebutton',
+                'class' => 'form-control-file',
                 'multiple' => true,
             ],
             'options' => [
@@ -70,12 +75,12 @@ class ImportForm extends Form
             'name' => 'locale',
             'type' => Select::class,
             'attributes' => [
-                'id'    => 'locale',
+                'id' => 'locale',
                 'class' => 'form-control',
             ],
             'options' => [
-                'label'         => 'Import as locale',
-                'empty_option'  => '-- Please select --',
+                'label' => 'Import as locale',
+                'empty_option' => '-- Please select --',
                 'value_options' => $valueOptions,
             ],
         ]);
@@ -83,10 +88,13 @@ class ImportForm extends Form
         // Submit button
         $this->add([
             'name' => 'submit',
-            'type' => Submit::class,
+            'type' => Button::class,
+            'options' => [
+                'label' => 'Start import',
+            ],
             'attributes' => [
-                'value' => 'Start import',
-                'id'    => 'submitbutton',
+                'id' => 'submitbutton',
+                'type' => 'submit',
                 'class' => 'btn btn-info',
             ],
         ]);
@@ -104,25 +112,25 @@ class ImportForm extends Form
 
         // Add validation rules for the "file" field
         $inputFilter->add([
-            'type'     => FileInput::class,
-            'name'     => 'files',
+            'type' => FileInput::class,
+            'name' => 'files',
             'required' => true,
             'validators' => [
                 [
-                    'name' => 'FileUploadFile'
+                    'name' => UploadFile::class,
                 ],
                 [
-                    'name' => 'FileExtension',
+                    'name' => Extension::class,
                     'options' => [
-                        'extension'  => ['csv']
+                        'extension' => ['csv']
                     ]
                 ],
             ],
-            'filters'  => [
+            'filters' => [
                 [
-                    'name' => 'FileRenameUpload',
+                    'name' => RenameUpload::class,
                     'options' => [
-                        'target' => './data/upload',
+                        'target' => self::UPLOAD_FOLDER,
                         'useUploadName' => true,
                         'useUploadExtension' => true,
                         'overwrite' => true,

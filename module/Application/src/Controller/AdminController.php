@@ -8,7 +8,7 @@ class AdminController extends AbstractActionController implements ControllerInte
 {
     use Traits\ControllerConstructor;
 
-    const EXPORT_PATH = 'export/';
+    const EXPORT_PATH = './data/export';
 
     /**
      * Admin dashboard
