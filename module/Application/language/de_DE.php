@@ -47,4 +47,5 @@ return [
     'pl_PL' => 'Polnisch',
     'ru_RU' => 'Russisch (Russland)',
     'sv_SE' => 'Schwedisch (Schweden)',
+    'xx_XX' => 'Debug',
 ];

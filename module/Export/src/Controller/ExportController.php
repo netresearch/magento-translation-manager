@@ -98,21 +98,6 @@ class ExportController extends AbstractActionController implements ControllerInt
 
                         /** @var Translation $translation */
                         foreach ($translations as $translation) {
-// var_dump($translation);
-//                             Cannot use "fputcsv" here, as this only enclose values with certain delimiters,
-//                             not single words, but we need to enclose always
-//                             fwrite(
-//                                 $outputFile,
-//                                 sprintf(
-//                                     '"%s","%s"' . PHP_EOL,
-//                                     $translation->getTranslationBase()->getOriginSource(),
-//                                     $translation->getTranslation()
-// //                                     empty($translation->getTranslation())
-// //                                         ? $translation->getTranslationBase()->getOriginSource()
-// //                                         : $translation->getTranslation()
-//                                 )
-//                             );
-
                             fputcsv(
                                 $outputFile,
                                 [
