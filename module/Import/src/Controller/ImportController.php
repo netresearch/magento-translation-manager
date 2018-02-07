@@ -2,18 +2,21 @@
 namespace Import\Controller;
 
 use \Zend\Mvc\Controller\AbstractActionController;
-use \Import\Form\ImportForm;
+use \Application\Controller\ControllerInterface;
+use \Application\Controller\Traits\ControllerMessage;
 use \Application\Model\LocaleTable;
 use \Application\Model\TranslationTable;
 use \Application\Model\TranslationBaseTable;
 use \Application\Model\TranslationFileTable;
-use \Application\Model\Locale;
 use \Application\Model\Translation;
 use \Application\Model\TranslationBase;
 use \Application\Model\TranslationFile;
+use \Import\Form\ImportForm;
 
-class ImportController extends AbstractActionController
+class ImportController extends AbstractActionController implements ControllerInterface
 {
+    use ControllerMessage;
+
     /**
      * @var LocaleTable
      */
@@ -128,11 +131,14 @@ class ImportController extends AbstractActionController
                         }
                     }
                 }
+
+                $this->addMessage('Import successfully done', self::MESSAGE_SUCCESS);
             }
         }
 
         return [
-            'form' => $form,
+            'form'     => $form,
+            'messages' => $this->_messages,
         ];
     }
 }

@@ -6,19 +6,13 @@ use \Zend\View\Model\ViewModel;
 use \Application\Model\Suggestion;
 use \Application\Model\Translation;
 
-class IndexController extends AbstractActionController
+class IndexController extends AbstractActionController implements ControllerInterface
 {
     use Traits\ControllerConstructor;
     use Traits\ControllerMessage;
 
-    const DEFAULT_LOCALE  = 'de_DE';
-
+    const DEFAULT_LOCALE           = 'de_DE';
     const DEFAULT_ENTRIES_PER_PAGE = 10;
-
-    const MESSAGE_INFO    = 'info';
-    const MESSAGE_WARN    = 'warning';
-    const MESSAGE_ERROR   = 'danger';
-    const MESSAGE_SUCCESS = 'success';
 
     /**
      * @var string - current locale selected by user

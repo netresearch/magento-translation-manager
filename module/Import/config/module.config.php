@@ -9,10 +9,9 @@ return [
             'import' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route'    => '/import/[:action][/:id]',
+                    'route'    => '/import/[:action]',
                     'constraints' => [
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
                     ],
                     'defaults' => [
                         'controller' => Controller\ImportController::class,
@@ -35,7 +34,7 @@ return [
                 'label' => 'Admin',
                 'route' => 'admin',
                 'pages' => [
-                    'admin/locale' => [
+                    'admin/import' => [
                         'label' => 'Import',
                         'route' => 'import',
                     ],

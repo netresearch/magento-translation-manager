@@ -6,7 +6,7 @@ use \Application\Form\LocaleForm;
 use \Application\Model\Locale;
 use \Application\Model\LocaleTable;
 
-class LocaleController extends AbstractActionController
+class LocaleController extends AbstractActionController implements ControllerInterface
 {
     /**
      * @var LocaleTable

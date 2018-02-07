@@ -4,7 +4,7 @@ namespace Application\Controller;
 use \Zend\Mvc\Controller\AbstractActionController;
 use \Zend\Http\PhpEnvironment\Response as HttpResponse;
 
-class AjaxController extends AbstractActionController
+class AjaxController extends AbstractActionController implements ControllerInterface
 {
     use Traits\ControllerConstructor;
 
