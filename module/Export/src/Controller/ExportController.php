@@ -68,7 +68,7 @@ class ExportController extends AbstractActionController implements ControllerInt
      *
      * @return ExportForm
      */
-    protected function getFormInstance(): ExportForm
+    protected function getFormInstance()
     {
         return new ExportForm($this->translationFileTable->fetchAll(), $this->localeTable->fetchAll());
     }

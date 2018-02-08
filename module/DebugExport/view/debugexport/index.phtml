@@ -1,0 +1,23 @@
+<div class="form-group">
+    <div class="form-check">
+        <?php $element = $form->get('masterFile'); ?>
+        <?= $this->formElement($element); ?>
+        <?= $this->formLabel($element); ?>
+        <small class="form-text text-muted">
+            <?= $this->translate('Export all selected translation files into a single master CSV file') ?>
+        </small>
+    </div>
+    <?= $this->formElementErrors($element); ?>
+</div>
+
+<div class="form-group">
+    <div class="form-check">
+        <?php $element = $form->get('debugTranslations'); ?>
+        <?= $this->formElement($element); ?>
+        <?= $this->formLabel($element); ?>
+        <small class="form-text text-muted">
+            <?= $this->translate('Export translations as debug translation strings, useful to help editors to find translatable string in frontend') ?>
+        </small>
+    </div>
+    <?= $this->formElementErrors($element); ?>
+</div>
