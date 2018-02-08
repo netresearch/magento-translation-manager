@@ -13,6 +13,7 @@ use \Application\Model\Locale;
 use \Application\Model\Translation;
 use \Application\Model\TranslationBase;
 use \Application\Model\TranslationFile;
+use \Application\ResultSet\Translation as ResultSet_Translation;
 use \Export\Form\ExportForm;
 
 class ExportController extends AbstractActionController implements ControllerInterface
@@ -73,14 +74,86 @@ class ExportController extends AbstractActionController implements ControllerInt
         return new ExportForm($this->translationFileTable->fetchAll(), $this->localeTable->fetchAll());
     }
 
+    /**
+     * Get the translated string or the original source string if no translation is available.
+     *
+     * @param Translation $translation Translation record instance
+     *
+     * @return string
+     */
+    public function getTranslatedString(Translation $translation)
+    {
+        return empty($translation->getTranslation())
+            ? $translation->getTranslationBase()->getOriginSource()
+            : $translation->getTranslation();
+    }
+
+    /**
+     * Write an translation record to CSV file
+     *
+     * @param resource    $outputFile  Output file handle
+     * @param Translation $translation Translation record instance
+     * @param string      $delimiter   Character used as delimiter
+     * @param string      $enclosure   Character used as enclosure
+     *
+     * @return void
+     */
+    public function writeCsv($outputFile, Translation $translation, $delimiter = ',', $enclosure = '"')
+    {
+        fputcsv(
+            $outputFile,
+            [
+                $translation->getTranslationBase()->getOriginSource(),
+                $this->getTranslatedString($translation),
+            ],
+            $delimiter,
+            $enclosure
+        );
+    }
+
+    /**
+     * Get file iterator instance.
+     *
+     * @param array $files List of selected file names
+     *
+     * @return \ArrayIterator
+     */
+    public function getFileIterator(array $files): \ArrayIterator
+    {
+        return new \ArrayIterator($files);
+    }
+
+    /**
+     * Get translations from database.
+     *
+     * @param string $locale   Locale used to fetch translations from
+     * @param string $fileName File name used to fetch translations from
+     *
+     * @return ResultSet_Translation
+     */
+    public function getTranslations(string $locale, ?string $fileName): ResultSet_Translation
+    {
+        return $this->translationTable->fetchByLanguageAndFile($locale, $fileName, false, null);
+    }
+
+    /**
+     *
+     * @param array $formData Submitted form data
+     *
+     * @return array
+     */
     protected function performExport(array $formData): array
     {
         foreach ($formData['locales'] as $locale) {
-            foreach ($formData['files'] as $fileName) {
-                // Get all translations
-                $translations = $this->translationTable->fetchByLanguageAndFile($locale, $fileName, false, null);
+            $it = $this->getFileIterator($formData['files']);
 
-                // prepare file to output in export folder
+            while ($it->valid()) {
+                $fileName = $it->current();
+
+                // Get all translations
+                $translations = $this->getTranslations($locale, $fileName);
+
+                // Prepare file to output in export folder
                 $outputDirectory = self::EXPORT_PATH . "$locale/";
 
                 if (!is_dir($outputDirectory)) {
@@ -91,27 +164,19 @@ class ExportController extends AbstractActionController implements ControllerInt
 
                 /** @var Translation $translation */
                 foreach ($translations as $translation) {
-                    fputcsv(
-                        $outputFile,
-                        [
-                            $translation->getTranslationBase()->getOriginSource(),
-                            empty($translation->getTranslation())
-                            ? $translation->getTranslationBase()->getOriginSource()
-                            : $translation->getTranslation()
-                        ],
-                        ',',
-                        '"'
-                        );
+                    $this->writeCsv($outputFile, $translation);
                 }
 
                 fclose($outputFile);
 
-                // store download filenames for template
+                // Store download filenames for template
                 $downloadFiles[] = [
                     'path'     => '/' . self::EXPORT_PATH . "$locale/" . $fileName,
                     'locale'   => $locale,
                     'filename' => $fileName,
                 ];
+
+                $it->next();
             }
         }
 

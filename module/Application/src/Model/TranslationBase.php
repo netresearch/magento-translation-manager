@@ -18,11 +18,6 @@ class TranslationBase
     /**
      * @var string
      */
-//     private $file;
-
-    /**
-     * @var string
-     */
     private $originSource;
 
     /**
@@ -36,7 +31,6 @@ class TranslationBase
     {
         $this->id           = ArrayAccess::getInt($data, 'id');
         $this->fileId       = ArrayAccess::getInt($data, 'fileId');
-//         $this->file         = ArrayAccess::getString($data, 'file');
         $this->originSource = ArrayAccess::getString($data, 'originSource');
     }
 
@@ -50,7 +44,6 @@ class TranslationBase
         return [
             'id'           => $this->id,
             'fileId'       => $this->fileId,
-//             'file'         => $this->file,
             'originSource' => $this->originSource,
         ];
     }
@@ -74,17 +67,6 @@ class TranslationBase
     public function setFileId(int $fileId): self
     {
         $this->fileId = $fileId;
-        return $this;
-    }
-
-    public function getFile(): ?string
-    {
-        return $this->file;
-    }
-
-    public function setFile(?string $file): self
-    {
-        $this->file = $file;
         return $this;
     }
 
