@@ -2,6 +2,7 @@
 namespace Export\Controller;
 
 use \Zend\Mvc\Controller\AbstractActionController;
+use \Zend\View\Model\ViewModel;
 use \Application\Controller\ControllerInterface;
 use \Application\Controller\Traits;
 use \Application\Model\LocaleTable;
@@ -24,22 +25,22 @@ class ExportController extends AbstractActionController implements ControllerInt
     /**
      * @var LocaleTable
      */
-    private $localeTable;
+    protected $localeTable;
 
     /**
      * @var TranslationTable
      */
-    private $translationTable;
+    protected $translationTable;
 
     /**
      * @var TranslationBaseTable
      */
-    private $translationBaseTable;
+    protected $translationBaseTable;
 
     /**
      * @var TranslationFileTable
      */
-    private $translationFileTable;
+    protected $translationFileTable;
 
     public function __construct(
         LocaleTable          $localeTable,
@@ -63,13 +64,68 @@ class ExportController extends AbstractActionController implements ControllerInt
     }
 
     /**
+     * Get instance of export form.
+     *
+     * @return ExportForm
+     */
+    protected function getFormInstance(): ExportForm
+    {
+        return new ExportForm($this->translationFileTable->fetchAll(), $this->localeTable->fetchAll());
+    }
+
+    protected function performExport(array $formData): array
+    {
+        foreach ($formData['locales'] as $locale) {
+            foreach ($formData['files'] as $fileName) {
+                // Get all translations
+                $translations = $this->translationTable->fetchByLanguageAndFile($locale, $fileName, false, null);
+
+                // prepare file to output in export folder
+                $outputDirectory = self::EXPORT_PATH . "$locale/";
+
+                if (!is_dir($outputDirectory)) {
+                    mkdir($outputDirectory, 0777, true);
+                }
+
+                $outputFile = fopen($outputDirectory . $fileName, 'w');
+
+                /** @var Translation $translation */
+                foreach ($translations as $translation) {
+                    fputcsv(
+                        $outputFile,
+                        [
+                            $translation->getTranslationBase()->getOriginSource(),
+                            empty($translation->getTranslation())
+                            ? $translation->getTranslationBase()->getOriginSource()
+                            : $translation->getTranslation()
+                        ],
+                        ',',
+                        '"'
+                        );
+                }
+
+                fclose($outputFile);
+
+                // store download filenames for template
+                $downloadFiles[] = [
+                    'path'     => '/' . self::EXPORT_PATH . "$locale/" . $fileName,
+                    'locale'   => $locale,
+                    'filename' => $fileName,
+                ];
+            }
+        }
+
+        return $downloadFiles;
+    }
+
+    /**
      * Action "index".
      *
      * @return mixed
      */
     public function indexAction()
     {
-        $form    = new ExportForm($this->translationFileTable->fetchAll(), $this->localeTable->fetchAll());
+        $form    = $this->getFormInstance();
         $request = $this->getRequest();
 
         $downloadFiles = [];
@@ -80,55 +136,16 @@ class ExportController extends AbstractActionController implements ControllerInt
             // Validate form
             if ($form->isValid()) {
                 // Get filtered and validated data
-                $data = $form->getData();
-
-                foreach ($data['locales'] as $locale) {
-                    foreach ($data['files'] as $fileName) {
-                        // Get all translations
-                        $translations = $this->translationTable->fetchByLanguageAndFile($locale, $fileName, false, null);
-
-                        // prepare file to output in export folder
-                        $outputDirectory = self::EXPORT_PATH . "$locale/";
-
-                        if (!is_dir($outputDirectory)) {
-                            mkdir($outputDirectory, 0777, true);
-                        }
-
-                        $outputFile = fopen($outputDirectory . $fileName, 'w');
-
-                        /** @var Translation $translation */
-                        foreach ($translations as $translation) {
-                            fputcsv(
-                                $outputFile,
-                                [
-                                    $translation->getTranslationBase()->getOriginSource(),
-                                    empty($translation->getTranslation())
-                                        ? $translation->getTranslationBase()->getOriginSource()
-                                        : $translation->getTranslation()
-                                ],
-                                ',',
-                                '"'
-                            );
-                        }
-
-                        fclose($outputFile);
-
-                        // store download filenames for template
-                        $downloadFiles[] = [
-                            'path'     => '/' . self::EXPORT_PATH . "$locale/" . $fileName,
-                            'locale'   => $locale,
-                            'filename' => $fileName,
-                        ];
-                    }
-                }
+                $formData      = $form->getData();
+                $downloadFiles = $this->performExport($formData);
             }
         }
 
-        return [
+        return new ViewModel([
             'form'             => $form,
             'translationFiles' => $this->translationFileTable->fetchAll(),
             'supportedLocales' => $this->localeTable->fetchAll(),
             'downloadFiles'    => $downloadFiles,
-        ];
+        ]);
     }
 }

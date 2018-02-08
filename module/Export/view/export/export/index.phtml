@@ -1,6 +1,7 @@
 <?php
 /**
  * @var \Zend\View\Renderer\PhpRenderer $this
+ * @var \Zend\View\Model\ViewModel      $viewModel
  * @var \Export\Form\ExportForm         $form
  */
 
@@ -41,6 +42,11 @@ $form->prepare();
                 </div>
                 <?= $this->formElementErrors($element); ?>
             </div>
+
+            <?php foreach ($this->viewModel()->getCurrent()->getChildren() as $viewModel): ?>
+                <?= $this->render($viewModel) ?>
+            <?php endforeach; ?>
+
             <div class="form-group">
                 <?= $this->formElement($form->get('submit')); ?>
             </div>

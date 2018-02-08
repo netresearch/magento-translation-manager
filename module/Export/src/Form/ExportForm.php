@@ -4,14 +4,11 @@ namespace Export\Form;
 use \Zend\Form\Form;
 use \Zend\Form\Element\Checkbox;
 use \Zend\Form\Element\Select;
-use \Zend\Form\Element\Submit;
+use \Zend\Form\Element\Button;
 use \Zend\InputFilter\InputFilter;
 use \Zend\Validator\NotEmpty;
-use \Application\Model\Locale;
-use \Application\Model\TranslationFile;
 use \Application\ResultSet\Locale as ResultSet_Locale;
 use \Application\ResultSet\TranslationFile as ResultSet_TranslationFile;
-use \Zend\Form\Element\Button;
 
 /**
  * Class representing the locale form.
@@ -48,7 +45,7 @@ class ExportForm extends Form
         // File selector
         $valueOptions = [];
 
-        /** @var TranslationFile $file */
+        /** @var \Application\Model\TranslationFile $file */
         foreach ($files as $file) {
             $valueOptions[$file->getFilename()] = $file->getFilename();
         }
@@ -71,7 +68,7 @@ class ExportForm extends Form
         // Locale selector
         $valueOptions = [];
 
-        /** @var Locale $locale */
+        /** @var \Application\Model\Locale $locale */
         foreach ($locales as $locale) {
             $valueOptions[$locale->getLocale()] = $locale->getLocale();
         }

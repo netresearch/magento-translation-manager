@@ -7,7 +7,7 @@ return [
     'Translation file' => 'Übersetzungsdatei',
     'Language' => 'Sprache',
     'CSV (Download)' => 'CSV (Download)',
-    'Export the translations into downloadable CSV files' => 'Exportieren Sie die Übersetzungen in herunterladbare CSV-Dateien',
+    'Export the translations into downloadable CSV files' => 'Exportieren Sie die Übersetzungen in herunterladbaren CSV-Dateien',
     'Start export' => 'Export beginnen',
 
     // Error messages
