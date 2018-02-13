@@ -4,6 +4,8 @@ namespace Application\Model;
 use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Expression;
 use \Zend\Db\Sql\Select;
+use \Zend\Paginator\Adapter\DbSelect;
+use \Zend\Paginator\Paginator;
 use \Application\ResultSet\Translation as ResultSet_Translation;
 
 /**
@@ -75,31 +77,28 @@ class TranslationTable extends AbstractTableGateway
     /**
      * Search all translations by given locale and file.
      *
-     * @param string      $locale          Locale to select
-     * @param string|null $file            File to select (null = all files)
-     * @param bool        $filterUnclear   Filter only unclear translations
-     * @param int|null    $elementsPerPage Entries to show per page (null = all entries)
-     * @param int         $page            Page to show
+     * @param string      $locale        Locale to select
+     * @param string|null $file          File to select (null = all files)
+     * @param bool        $filterUnclear Filter only unclear translations
      *
-     * @return ResultSet_Translation
+     * @return Paginator
      */
     public function fetchByLanguageAndFile(
         string  $locale,
-        ?string $file            = null,
-        bool    $filterUnclear   = false,
-        ?int    $elementsPerPage = 25,
-        int     $page            = 1
-    ): ResultSet_Translation {
-        return $this->tableGateway
-            ->select(function (Select $select) use ($locale, $file, $filterUnclear, $elementsPerPage, $page) {
-                $this->prepareSqlByLanguageAndFile($select, $locale, $file, $filterUnclear);
+        ?string $file          = null,
+        bool    $filterUnclear = false
+    ): Paginator {
+        $select = new Select($this->tableGateway->getTable());
 
-                if (null !== $elementsPerPage) {
-                    // React to pagination
-                    $select->limit($elementsPerPage)
-                        ->offset(($page - 1) * $elementsPerPage);
-                }
-            });
+        $this->prepareSqlByLanguageAndFile($select, $locale, $file, $filterUnclear);
+
+        $paginatorAdapter = new DbSelect(
+            $select,
+            $this->tableGateway->getAdapter(),
+            $this->tableGateway->getResultSetPrototype()
+        );
+
+        return new Paginator($paginatorAdapter);
     }
 
     /**
@@ -118,7 +117,8 @@ class TranslationTable extends AbstractTableGateway
         ?string $file = null,
         bool    $filterUnclear = false
     ): Select {
-        $select->order('b.id ASC');
+        $select->columns([ 'id', 'locale', 'translation', 'unclear' ])
+            ->order('b.id ASC');
 
         $joinCondition  = $this->tableGateway->getTable() . '.baseId = b.id';
         $joinCondition .= ' AND translation.locale = ' . $this->tableGateway->getAdapter()->getPlatform()->quoteValue($locale); // . ' OR locale IS NULL ';

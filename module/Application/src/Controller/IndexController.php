@@ -32,7 +32,7 @@ class IndexController extends AbstractActionController implements ControllerInte
 
     /**
      * translation grid page
-     * HTTP-Param: filter_unclear_translation
+     * HTTP-Param: unclear
      * HTTP-Param: file
      * HTTP-Param: rowid
      *
@@ -42,8 +42,7 @@ class IndexController extends AbstractActionController implements ControllerInte
     {
         $this->init();
 
-        // init grid
-        $jumpToRow = null;
+        $jumpToRow   = null;
         $currentFile = null;
 
         // save form on user interaction
@@ -52,46 +51,34 @@ class IndexController extends AbstractActionController implements ControllerInte
 //         }
 
         // prepare filter
-        $currentFilterUnclear = (bool) $this->params()->fromQuery('filter_unclear_translation');
+        $currentFilterUnclear = (bool) $this->params()->fromQuery('unclear');
 
         if ($this->params()->fromQuery('file')) {
             $currentFile = $this->params()->fromQuery('file');
         }
 
         // prepare pagination
-        $page            = (int) $this->params()->fromQuery('page') ?: 1;
-        $maxPage         = 1;
-        $elementsPerPage = $this->params()->fromQuery('epp') ?: self::DEFAULT_ENTRIES_PER_PAGE;
+        $page            = $this->params()->fromQuery('page', 1);
+        $elementsPerPage = $this->params()->fromQuery('epp', self::DEFAULT_ENTRIES_PER_PAGE);
 
-        $translationsCount = $this->_translationTable
-            ->countByLanguageAndFile($this->_currentLocale, $currentFile, $currentFilterUnclear);
+        $translationPaginator = $this->_translationTable->fetchByLanguageAndFile($this->_currentLocale, $currentFile, $currentFilterUnclear);
 
-        $elementsPerPage = (int) $elementsPerPage;
-
-        $maxPage = (int) ceil($translationsCount / $elementsPerPage);
-        $maxPage = $maxPage < 1 ? 1 : $maxPage;
-
-        if ($page <= 0) {
-            $page = 1;
-        }
-
-        if ($page > $maxPage) {
-            $page = $maxPage;
-        }
+        $translationPaginator->setCurrentPageNumber($page)
+            ->setItemCountPerPage($elementsPerPage)
+            ->setPageRange(11);
 
         // Prepare view
         $view =  new ViewModel([
+            'translations'         => $translationPaginator,
+            'translationsCount'    => $translationPaginator->getTotalItemCount(),
             'supportedLocales'     => $this->_supportedLocale->fetchAll(),
-            'translations'         => $this->_translationTable->fetchByLanguageAndFile($this->_currentLocale, $currentFile, $currentFilterUnclear, $elementsPerPage, $page),
             'translationBase'      => $this->_translationBaseTable->fetchAll(),
             'translationFiles'     => $this->_translationFileTable->fetchAll(),
-            'translationsCount'    => $translationsCount,
             'currentLocale'        => $this->_currentLocale,
             'currentFile'          => $currentFile,
             'currentFilterUnclear' => $currentFilterUnclear,
             'currentPage'          => $page,
             'currentEPP'           => $elementsPerPage,
-            'maxPages'             => $maxPage,
             'messages'             => $this->_messages,
             'jumpToRow'            => $jumpToRow,
         ]);

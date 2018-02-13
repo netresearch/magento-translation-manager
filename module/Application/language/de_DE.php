@@ -33,6 +33,12 @@ return [
     'Previous translation' => 'Vorherige Übersetzung',
     'Next translation' => 'Nächste Übersetzung',
 
+    'First' => 'Erste',
+    'Previous' => 'Vorherige',
+    'Next' => 'Nächste',
+    'Last' => 'Letzte',
+
+
     // Languages
     'de_DE' => 'Deutsch (Deutschland)',
     'de_AT' => 'Deutsch (Österreich)',

@@ -13,7 +13,6 @@
  * @var bool $currentFilterUnclear
  * @var int $currentPage
  * @var int $currentEPP - entries per page
- * @var int $maxPages
  * @var string[] messages with index messageLevel
  * @var string $jumpToRow
  */
@@ -78,11 +77,11 @@
                         <p>
                             <strong><?= $this->translate('unclear translations:') ?> </strong>
                             <?php if ($currentFilterUnclear): ?>
-                                <button class="btn btn-info" onclick="location.href='<?= $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => 0 ] ]) ?>'">
+                                <button class="btn btn-info" onclick="location.href='<?= $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'unclear' => 0 ] ]) ?>'">
                                     <?= $this->translate('show only unclear') ?>
                                 </button>
                             <?php else: ?>
-                                <button class="btn btn-outline-info" onclick="location.href='<?= $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => 1 ] ]) ?>'">
+                                <button class="btn btn-outline-info" onclick="location.href='<?= $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'unclear' => 1 ] ]) ?>'">
                                     <?= $this->translate('show only unclear') ?>
                                 </button>
                             <?php endif; ?>
@@ -108,7 +107,7 @@
                             <th></th>
 */ ?>
                         </tr>
-                        <?php foreach ($translations as $translation): ?>
+                        <?php foreach ($this->translations as $translation): ?>
                             <?php $base      = $translation->getTranslationBase(); ?>
                             <?php $rowName   = 'row' . $base->getId(); ?>
                             <?php $detailUrl = $this->url('index', [ 'action' => 'edit', 'base_id' => $base->getId() ], [ 'query' => [ 'locale' => $currentLocale ] ]); ?>
@@ -167,19 +166,21 @@
         </div>
 
         <nav class="mt-4">
-            <ul class="pagination justify-content-center">
-                <li class="page-item<?php if ($currentPage <= 1): ?> disabled<?php endif; ?>">
-                    <a class="page-link" href="<?= $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear, 'page' => $currentPage - 1, 'epp' => $currentEPP ] ]); ?>">Previous</a>
-                </li>
-                <?php for ($i = 1; $i <= $maxPages; $i++): ?>
-                    <li class="page-item<?php if ($i === $currentPage): ?> active<?php endif; ?>">
-                        <a class="page-link" href="<?= $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear, 'page' => $i, 'epp' => $currentEPP ] ]); ?>"><?= $i ?></a>
-                    </li>
-                <?php endfor; ?>
-                <li class="page-item<?php if ($currentPage >= $maxPages): ?> disabled<?php endif; ?>">
-                    <a class="page-link" href="<?= $this->url('home', [], [ 'query' => [ 'locale' => $currentLocale, 'file' => $currentFile, 'filter_unclear_translation' => $currentFilterUnclear, 'page' => $currentPage + 1, 'epp' => $currentEPP ] ]); ?>">Next</a>
-                </li>
-            </ul>
+            <?= $this->paginationControl(
+                    $this->translations,
+                    'sliding',
+                    'partial/paginator.phtml',
+                    [
+                        'route' => 'home',
+                        'query' => [
+                            'locale'  => $currentLocale,
+                            'file'    => $currentFile,
+                            'unclear' => $currentFilterUnclear,
+                            'epp'     => $currentEPP,
+                        ],
+                    ]
+                );
+            ?>
         </nav>
     </div>
 </div>
@@ -193,7 +194,7 @@ $("document").ready(function () {
         url += "locale=" + $('#inputGroupLocaleSelect').val() + "&";
         url += "file=" + $('#inputGroupFileSelect').val() + "&";
         url += "epp=" + $('#inputGroupPageSelect').val() + "&";
-        url += "filter_unclear_translation=<?= $currentFilterUnclear ?>&";
+        url += "unclear=<?= $currentFilterUnclear ?>&";
 
         window.location.href = url;
     });
