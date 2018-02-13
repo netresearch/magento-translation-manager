@@ -6,7 +6,7 @@ use \Zend\Form\Element\Checkbox;
 use \Zend\Form\Element\Select;
 use \Zend\Form\Element\Button;
 use \Zend\InputFilter\InputFilter;
-use \Zend\Validator\NotEmpty;
+// use \Zend\Validator\NotEmpty;
 use \Application\ResultSet\Locale as ResultSet_Locale;
 use \Application\ResultSet\TranslationFile as ResultSet_TranslationFile;
 

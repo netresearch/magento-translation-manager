@@ -5,8 +5,8 @@ use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Expression;
 use \Zend\Db\Sql\Select;
 use \Zend\Paginator\Adapter\DbSelect;
-use \Zend\Paginator\Paginator;
 use \Application\ResultSet\Translation as ResultSet_Translation;
+use \Application\Model\TranslationTablePaginator;
 
 /**
  * Class handles access to the "translation" table.
@@ -81,13 +81,13 @@ class TranslationTable extends AbstractTableGateway
      * @param string|null $file          File to select (null = all files)
      * @param bool        $filterUnclear Filter only unclear translations
      *
-     * @return Paginator
+     * @return TranslationTablePaginator
      */
     public function fetchByLanguageAndFile(
         string  $locale,
         ?string $file          = null,
         bool    $filterUnclear = false
-    ): Paginator {
+    ): TranslationTablePaginator {
         $select = new Select($this->tableGateway->getTable());
 
         $this->prepareSqlByLanguageAndFile($select, $locale, $file, $filterUnclear);
@@ -98,7 +98,7 @@ class TranslationTable extends AbstractTableGateway
             $this->tableGateway->getResultSetPrototype()
         );
 
-        return new Paginator($paginatorAdapter);
+        return new TranslationTablePaginator($paginatorAdapter);
     }
 
     /**

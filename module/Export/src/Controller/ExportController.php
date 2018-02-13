@@ -7,19 +7,13 @@ use \Application\Controller\ControllerInterface;
 use \Application\Controller\Traits;
 use \Application\Model\LocaleTable;
 use \Application\Model\TranslationTable;
-use \Application\Model\TranslationBaseTable;
 use \Application\Model\TranslationFileTable;
-use \Application\Model\Locale;
 use \Application\Model\Translation;
-use \Application\Model\TranslationBase;
-use \Application\Model\TranslationFile;
-use \Application\ResultSet\Translation as ResultSet_Translation;
 use \Export\Form\ExportForm;
 
 class ExportController extends AbstractActionController implements ControllerInterface
 {
     use Traits\ControllerMessage;
-    use Traits\ControllerConstructor;
 
     const EXPORT_PATH = 'public/csv-export/';
 
@@ -34,34 +28,25 @@ class ExportController extends AbstractActionController implements ControllerInt
     protected $translationTable;
 
     /**
-     * @var TranslationBaseTable
-     */
-    protected $translationBaseTable;
-
-    /**
      * @var TranslationFileTable
      */
     protected $translationFileTable;
 
+    /**
+     * Constructor.
+     *
+     * @param LocaleTable          $localeTable          Locale table instance
+     * @param TranslationTable     $translationTable     Translation table instance
+     * @param TranslationFileTable $translationFileTable Translation file table instance
+     */
     public function __construct(
         LocaleTable          $localeTable,
         TranslationTable     $translationTable,
-        TranslationBaseTable $translationBaseTable,
         TranslationFileTable $translationFileTable
     ) {
         $this->localeTable          = $localeTable;
         $this->translationTable     = $translationTable;
-        $this->translationBaseTable = $translationBaseTable;
         $this->translationFileTable = $translationFileTable;
-    }
-
-    /**
-     * Loads the CSV file into array. Removes empty lines.
-     */
-    private function loadCsv($filename)
-    {
-        $csv = array_map('str_getcsv', file($filename));
-        return array_filter($csv, function ($value) { return !empty($value[0]); });
     }
 
     /**
@@ -81,7 +66,7 @@ class ExportController extends AbstractActionController implements ControllerInt
      *
      * @return string
      */
-    public function getTranslatedString(Translation $translation)
+    protected function getTranslatedString(Translation $translation)
     {
         return empty($translation->getTranslation())
             ? $translation->getTranslationBase()->getOriginSource()
@@ -98,7 +83,7 @@ class ExportController extends AbstractActionController implements ControllerInt
      *
      * @return void
      */
-    public function writeCsv($outputFile, Translation $translation, $delimiter = ',', $enclosure = '"')
+    protected function writeCsv($outputFile, Translation $translation, $delimiter = ',', $enclosure = '"')
     {
         fputcsv(
             $outputFile,
@@ -112,31 +97,55 @@ class ExportController extends AbstractActionController implements ControllerInt
     }
 
     /**
-     * Get file iterator instance.
+     * Create output directory if it not exists and return it.
      *
-     * @param array $files List of selected file names
+     * @param string $locale Locale used to fetch translations from
      *
-     * @return \ArrayIterator
+     * @return string
      */
-    public function getFileIterator(array $files): \ArrayIterator
+    protected function createOutputDirectory(string $locale): string
     {
-        return new \ArrayIterator($files);
+        // Prepare export folder
+        $outputDirectory = self::EXPORT_PATH . "$locale/";
+
+        if (!is_dir($outputDirectory)) {
+            mkdir($outputDirectory, 0777, true);
+        }
+
+        return $outputDirectory;
     }
 
     /**
-     * Get translations from database.
+     * Loads records from database and write them to the specified output file.
      *
-     * @param string $locale   Locale used to fetch translations from
-     * @param string $fileName File name used to fetch translations from
+     * @param resource $outputFile Output file handle
+     * @param string   $locale     Locale used to fetch translations from
+     * @param string   $fileName   File name used to fetch translations from
      *
-     * @return ResultSet_Translation
+     * @return void
      */
-    public function getTranslations(string $locale, ?string $fileName): ResultSet_Translation
+    protected function writeCsvRecords($outputFile, string $locale, string $fileName)
     {
-        return $this->translationTable->fetchByLanguageAndFile($locale, $fileName, false, null);
+        // Get all translations
+        $translationsPaginator = $this->translationTable->fetchByLanguageAndFile($locale, $fileName);
+        $translationsPaginator->setItemCountPerPage(250)
+            ->setCurrentPageNumber(1);
+
+        $totalPages = $translationsPaginator->getPages()->last;
+
+        // Iterate over all pages and write records to CSV file
+        for ($page = 1; $page <= $totalPages; ++$page) {
+            $translationsPaginator->setCurrentPageNumber($page);
+
+            /** @var Translation $translation */
+            foreach ($translationsPaginator as $translation) {
+                $this->writeCsv($outputFile, $translation);
+            }
+        }
     }
 
     /**
+     * Perform the export.
      *
      * @param array $formData Submitted form data
      *
@@ -145,27 +154,15 @@ class ExportController extends AbstractActionController implements ControllerInt
     protected function performExport(array $formData): array
     {
         foreach ($formData['locales'] as $locale) {
-            $it = $this->getFileIterator($formData['files']);
+            // Prepare export folder
+            $outputDirectory = $this->createOutputDirectory($locale);
 
-            while ($it->valid()) {
-                $fileName = $it->current();
-
-                // Get all translations
-                $translations = $this->getTranslations($locale, $fileName);
-
-                // Prepare file to output in export folder
-                $outputDirectory = self::EXPORT_PATH . "$locale/";
-
-                if (!is_dir($outputDirectory)) {
-                    mkdir($outputDirectory, 0777, true);
-                }
-
+            foreach ($formData['files'] as $fileName) {
+                // Create export file for each selected file record
                 $outputFile = fopen($outputDirectory . $fileName, 'w');
 
-                /** @var Translation $translation */
-                foreach ($translations as $translation) {
-                    $this->writeCsv($outputFile, $translation);
-                }
+                // Write all records of same type to same file
+                $this->writeCsvRecords($outputFile, $locale, $fileName);
 
                 fclose($outputFile);
 
@@ -175,8 +172,6 @@ class ExportController extends AbstractActionController implements ControllerInt
                     'locale'   => $locale,
                     'filename' => $fileName,
                 ];
-
-                $it->next();
             }
         }
 
@@ -186,9 +181,9 @@ class ExportController extends AbstractActionController implements ControllerInt
     /**
      * Action "index".
      *
-     * @return mixed
+     * @return ViewModel
      */
-    public function indexAction()
+    public function indexAction(): ViewModel
     {
         $form    = $this->getFormInstance();
         $request = $this->getRequest();

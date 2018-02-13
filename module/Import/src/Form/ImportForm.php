@@ -10,7 +10,6 @@ use \Zend\InputFilter\FileInput;
 use \Zend\Validator\File\UploadFile;
 use \Zend\Validator\File\Extension;
 use \Zend\Filter\File\RenameUpload;
-use \Application\Model\Locale;
 use \Application\ResultSet\Locale as ResultSet_Locale;
 
 /**
@@ -66,7 +65,7 @@ class ImportForm extends Form
         // Locale selector
         $valueOptions = [];
 
-        /** @var Locale $locale */
+        /** @var \Application\Model\Locale $locale */
         foreach ($locales as $locale) {
             $valueOptions[$locale->getLocale()] = $locale->getLocale();
         }

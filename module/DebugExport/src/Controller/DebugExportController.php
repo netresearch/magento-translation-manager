@@ -2,37 +2,23 @@
 namespace DebugExport\Controller;
 
 use \Zend\View\Model\ViewModel;
-use \Application\Model\LocaleTable;
-use \Application\Model\TranslationTable;
-use \Application\Model\TranslationBaseTable;
-use \Application\Model\TranslationFileTable;
-use \Application\Model\Locale;
 use \Application\Model\Translation;
-use \Application\Model\TranslationBase;
-use \Application\Model\TranslationFile;
-use \Application\ResultSet\Translation as ResultSet_Translation;
 use \Export\Controller\ExportController;
 use \DebugExport\Form\DebugExportForm;
 
 class DebugExportController extends ExportController
 {
+    const MASTER_FILENAME = 'MasterFile.csv';
+
     /**
-     *
-     * @var \Export\Module
+     * @var bool
      */
-    private $exportModule;
+    private $masterFile = false;
 
-    public function __construct(
-        $exportModule,
-        LocaleTable          $localeTable,
-        TranslationTable     $translationTable,
-        TranslationBaseTable $translationBaseTable,
-        TranslationFileTable $translationFileTable
-    ) {
-        $this->exportModule = $exportModule;
-
-        parent::__construct($localeTable, $translationTable, $translationBaseTable, $translationFileTable);
-    }
+    /**
+     * @var bool
+     */
+    private $debugTranslations = false;
 
     /**
      * Get instance of export form.
@@ -44,7 +30,14 @@ class DebugExportController extends ExportController
         return new DebugExportForm($this->translationFileTable->fetchAll(), $this->localeTable->fetchAll());
     }
 
-    public function getFileName(int $fileId): string
+    /**
+     * Get the file name of origin file of a translation record.
+     *
+     * @param int $fileId File record id
+     *
+     * @return string
+     */
+    private function getFileName(int $fileId): string
     {
         return $this->translationFileTable->getTranslationFile($fileId)->getFilename();
     }
@@ -56,56 +49,69 @@ class DebugExportController extends ExportController
      *
      * @return string
      */
-    public function getTranslatedString(Translation $translation)
+    protected function getTranslatedString(Translation $translation)
     {
-        return sprintf(
-            'DEBUG-ID_%d_%s_%s',
-            $translation->getBaseId(),
-            $this->getFileName($translation->getTranslationBase()->getFileId()),
-            empty($translation->getTranslation()) ? $translation->getTranslationBase()->getOriginSource() : $translation->getTranslation()
-        );
+        if ($this->debugTranslations) {
+            return sprintf(
+                'DEBUG-ID_%d_%s_%s',
+                $translation->getBaseId(),
+                $this->getFileName($translation->getTranslationBase()->getFileId()),
+                empty($translation->getTranslation()) ? $translation->getTranslationBase()->getOriginSource() : $translation->getTranslation()
+            );
+        }
+
+        return parent::getTranslatedString($translation);
     }
 
     /**
-     * Get file iterator instance.
      *
-     * @param array $files List of selected file names
+     * @param array $formData Submitted form data
      *
-     * @return \ArrayIterator
+     * @return array
      */
-    public function getFileIterator(array $files): \ArrayIterator
+    protected function performExport(array $formData): array
     {
-        return new \ArrayIterator([ 'MasterFile.csv' ]);
-    }
+        $this->masterFile        = (bool) $formData['masterFile'];
+        $this->debugTranslations = (bool) $formData['debugTranslations'];
 
-    public function getTranslations(string $locale, ?string $fileName): ResultSet_Translation
-    {
-        return $this->translationTable->fetchByLanguageAndFile($locale, null, false, null);
+        if (!$this->masterFile) {
+            return parent::performExport($formData);
+        }
+
+        foreach ($formData['locales'] as $locale) {
+            // Prepare export folder
+            $outputDirectory = $this->createOutputDirectory($locale);
+
+            // Create a single export file for each selected file record
+            $outputFile = fopen($outputDirectory . self::MASTER_FILENAME, 'w');
+
+            // Write everything in one file
+            foreach ($formData['files'] as $fileName) {
+                $this->writeCsvRecords($outputFile, $locale, $fileName);
+            }
+
+            fclose($outputFile);
+
+            // Store download filenames for template
+            $downloadFiles[] = [
+                'path'     => '/' . self::EXPORT_PATH . "$locale/" . self::MASTER_FILENAME,
+                'locale'   => $locale,
+                'filename' => self::MASTER_FILENAME,
+            ];
+        }
+
+        return $downloadFiles;
     }
 
     /**
      * Action "index".
      *
-     * @return mixed
+     * @return ViewModel
      */
-    public function indexAction()
+    public function indexAction(): ViewModel
     {
         $view = parent::indexAction();
         $form = $view->getVariable('form');
-
-//         $request = $this->getRequest();
-
-//         if ($request->isPost()) {
-//             $form->setData($request->getPost()->toArray());
-
-//             // Validate form
-//             if ($form->isValid()) {
-// var_dump($form->getData());
-// exit;
-//                 parent::performExport($data);
-//             }
-//         }
-
 
         $debugView = new ViewModel([
             'form' => $form,
