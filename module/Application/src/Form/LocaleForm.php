@@ -2,6 +2,8 @@
 namespace Application\Form;
 
 use \Zend\Form\Form;
+use \Zend\Form\Element\Text;
+use \Zend\Form\Element\Button;
 
 /**
  * Class representing the supported locale form.
@@ -20,7 +22,7 @@ class LocaleForm extends Form
 
         $this->add(array(
             'name' => 'locale',
-            'type' => 'Text',
+            'type' => Text::class,
             'options' => array(
                 'label' => 'Locale',
             ),
@@ -30,14 +32,18 @@ class LocaleForm extends Form
             ),
         ));
 
-        $this->add(array(
+        // Submit button
+        $this->add([
             'name' => 'submit',
-            'type' => 'Submit',
-            'attributes' => array(
-                'value' => 'Submit',
-                'id'    => 'submitbutton',
+            'type' => Button::class,
+            'options' => [
+                'label' => 'Save',
+            ],
+            'attributes' => [
+                'id' => 'submitbutton',
+                'type' => 'submit',
                 'class' => 'btn btn-info',
-            ),
-        ));
+            ],
+        ]);
     }
 }
