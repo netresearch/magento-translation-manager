@@ -1,0 +1,19 @@
+<?php
+/**
+ * @var \Zend\Navigation\Page\Mvc $page
+ */
+?>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <?php foreach ($this->pages as $key => $page): ?>
+            <li class="breadcrumb-item<?php if ($page->isActive(true)): ?> active<?php endif; ?>"<?php if ($page->isActive(true)): ?> aria-current="page"<?php endif; ?>>
+                <?php if ($key < count($this->pages) - 1): ?>
+                    <a href="<?= $page->getHref(); ?>"><?= $this->translate($page->getLabel()) ?></a>
+                <?php else: ?>
+                    <?= $this->translate($page->getLabel()) ?>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ol>
+</nav>

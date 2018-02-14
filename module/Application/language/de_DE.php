@@ -1,5 +1,8 @@
 <?php
 return [
+    'Admin' => 'Administration',
+    'Home' => '',
+
     'Filter' => 'Filter',
     'Translation file' => 'Übersetzungsdatei',
     'all files' => 'alle Dateien',
@@ -37,7 +40,6 @@ return [
     'Previous' => 'Vorherige',
     'Next' => 'Nächste',
     'Last' => 'Letzte',
-
 
     // Languages
     'de_DE' => 'Deutsch (Deutschland)',

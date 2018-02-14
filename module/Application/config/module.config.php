@@ -22,16 +22,16 @@ return [
                 ],
             ],
 
-            'application' => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'    => '/application[/:action]',
-                    'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                        'action'     => 'index',
-                    ],
-                ],
-            ],
+//             'application' => [
+//                 'type'    => Segment::class,
+//                 'options' => [
+//                     'route'    => '/application[/:action]',
+//                     'defaults' => [
+//                         'controller' => Controller\IndexController::class,
+//                         'action'     => 'index',
+//                     ],
+//                 ],
+//             ],
 
             'index' => [
                 'type' => Segment::class,
@@ -81,36 +81,36 @@ return [
                 ],
             ],
 
-            // The following is a route to simplify getting started creating
-            // new controllers and actions without needing to create a new
-            // module. Simply drop new controllers in, and you can access them
-            // using the path /application/:controller/:action
-            'application' => [
-                'type'    => 'Segment',
-                'options' => [
-                    'route'    => '/application[/:action][/:id]',
-                    'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Index',
-                        'action'        => 'index',
-                    ],
-                ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'default' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => [
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ],
-                            'defaults' => [
-                            ],
-                        ],
-                    ],
-                ],
-            ],
+//             // The following is a route to simplify getting started creating
+//             // new controllers and actions without needing to create a new
+//             // module. Simply drop new controllers in, and you can access them
+//             // using the path /application/:controller/:action
+//             'application' => [
+//                 'type'    => 'Segment',
+//                 'options' => [
+//                     'route'    => '/application[/:action][/:id]',
+//                     'defaults' => [
+//                         '__NAMESPACE__' => 'Application\Controller',
+//                         'controller'    => 'Index',
+//                         'action'        => 'index',
+//                     ],
+//                 ],
+//                 'may_terminate' => true,
+//                 'child_routes' => [
+//                     'default' => [
+//                         'type'    => 'Segment',
+//                         'options' => [
+//                             'route'    => '/[:controller[/:action]]',
+//                             'constraints' => [
+//                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+//                                 'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+//                             ],
+//                             'defaults' => [
+//                             ],
+//                         ],
+//                     ],
+//                 ],
+//             ],
         ],
     ],
 
