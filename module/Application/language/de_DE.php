@@ -40,6 +40,9 @@ return [
     'Are you sure that you want to delete "%s"?' => 'Sind Sie sicher, dass Sie "%s" löschen möchten?',
     'Yes' => 'Ja',
     'No' => 'Nein',
+    'Locale added' => 'Sprache hinzugefügt',
+    'Locale updated' => 'Sprache aktualisiert',
+    'Locale deleted' => 'Sprache gelöscht',
 
     'Unclear translation' => 'Unklare Übersetzung',
     'Missing translation' => 'Fehlende Übersetzung',

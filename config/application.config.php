@@ -3,6 +3,8 @@
 return array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
+        'Zend\Mvc\Plugin\FlashMessenger',
+        'Zend\Session',
         'Zend\Paginator',
         'Zend\Navigation',
         'Zend\Form',

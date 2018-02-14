@@ -11,7 +11,7 @@ $url = $this->url('locale', [ 'action' => 'delete', 'id' => $this->id ]);
 
 <div class="card mt-4">
     <div class="card-header">
-        <p><?= $this->translate(sprintf('Are you sure that you want to delete "%s"?', $this->escapeHtml($locale->getLocale()))) ?></p>
+        <p><?= sprintf($this->translate('Are you sure that you want to delete "%s"?'), $this->escapeHtml($locale->getLocale())) ?></p>
     </div>
     <div class="card-body">
         <form action="<?= $url; ?>" method="post">

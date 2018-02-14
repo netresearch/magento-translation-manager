@@ -1,0 +1,24 @@
+<?php
+/**
+ * @var \Zend\View\Helper\FlashMessenger $flashMessenger
+ */
+?>
+
+<?php
+    $flashMessenger = $this->flashMessenger();
+    $flashMessenger->setMessageOpenFormat(
+<<<HTML
+<div%s>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+<div>
+HTML
+    )
+    ->setMessageCloseString('</div></div>');
+?>
+
+<?= $flashMessenger->renderCurrent('error', array('alert', 'alert-dismissable', 'alert-danger')); ?>
+<?= $flashMessenger->renderCurrent('info', array('alert', 'alert-dismissable', 'alert-info')); ?>
+<?= $flashMessenger->renderCurrent('default', array('alert', 'alert-dismissable', 'alert-warning')); ?>
+<?= $flashMessenger->renderCurrent('success', array('alert', 'alert-dismissable', 'alert-success')); ?>

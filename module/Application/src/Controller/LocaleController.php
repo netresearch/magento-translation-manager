@@ -52,6 +52,8 @@ class LocaleController extends AbstractActionController implements ControllerInt
                 $locale->exchangeArray($form->getData());
                 $this->_supportedLocale->saveLocale($locale);
 
+                $this->flashMessenger()->addSuccessMessage('Locale added');
+
                 // Redirect to list of locales
                 return $this->redirect()->toRoute('locale');
             }
@@ -98,6 +100,8 @@ class LocaleController extends AbstractActionController implements ControllerInt
             if ($form->isValid()) {
                 $this->_supportedLocale->saveLocale($locale);
 
+                $this->flashMessenger()->addSuccessMessage('Locale updated');
+
                 // Redirect to list of locales
                 return $this->redirect()->toRoute('locale');
             }
@@ -125,12 +129,13 @@ class LocaleController extends AbstractActionController implements ControllerInt
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $del    = $request->getPost('del', 'No');
-            $locale = $this->_supportedLocale->getLocale($id);
+            $del = $request->getPost('del', 'No');
 
             if ($del === 'Yes') {
                 $id = (int) $request->getPost('id');
                 $this->_supportedLocale->deleteLocale($id);
+
+                $this->flashMessenger()->addSuccessMessage('Locale deleted');
             }
 
             // Redirect to list of locales

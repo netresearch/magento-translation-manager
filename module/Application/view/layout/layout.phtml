@@ -40,6 +40,8 @@
 
         <main role="main" class="container">
             <?= $this->navigation('navigation')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb.phtml'); ?>
+            <?= $this->partial('partial/flashmessenger.phtml') ?>
+
             <?= $this->content; ?>
             <hr />
             <footer>
