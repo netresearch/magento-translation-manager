@@ -1,7 +1,6 @@
 <?php
 namespace Application\Model;
 
-use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Select;
 use \Application\Model\Traits;
 use \Application\ResultSet\Locale as ResultSet_Locale;
@@ -9,7 +8,7 @@ use \Application\ResultSet\Locale as ResultSet_Locale;
 /**
  * Class handles access to the "locale" table.
  */
-class LocaleTable extends AbstractTableGateway
+class LocaleTable
 {
     use Traits\TableConstructor;
 

@@ -1,14 +1,13 @@
 <?php
 namespace Application\Model;
 
-use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Select;
 use \Application\ResultSet\TranslationFile as ResultSet_TranslationFile;
 
 /**
  * Class handles access to the "translationFile" table.
  */
-class TranslationFileTable extends AbstractTableGateway
+class TranslationFileTable
 {
     use Traits\TableConstructor;
 

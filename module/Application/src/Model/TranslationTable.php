@@ -1,7 +1,6 @@
 <?php
 namespace Application\Model;
 
-use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Expression;
 use \Zend\Db\Sql\Select;
 use \Zend\Paginator\Adapter\DbSelect;
@@ -11,7 +10,7 @@ use \Application\Model\TranslationTablePaginator;
 /**
  * Class handles access to the "translation" table.
  */
-class TranslationTable extends AbstractTableGateway
+class TranslationTable
 {
     use Traits\TableConstructor;
 

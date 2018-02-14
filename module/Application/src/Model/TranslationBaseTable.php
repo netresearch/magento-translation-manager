@@ -1,14 +1,13 @@
 <?php
 namespace Application\Model;
 
-use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Select;
 use \Application\ResultSet\TranslationBase as ResultSet_TranslationBase;
 
 /**
  * Class handles access to the "translationBase" table.
  */
-class TranslationBaseTable extends AbstractTableGateway
+class TranslationBaseTable
 {
     use Traits\TableConstructor;
 

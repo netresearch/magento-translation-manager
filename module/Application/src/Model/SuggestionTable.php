@@ -1,14 +1,13 @@
 <?php
 namespace Application\Model;
 
-use \Zend\Db\TableGateway\AbstractTableGateway;
 use \Zend\Db\Sql\Select;
 use \Application\ResultSet\Suggestion as ResultSet_Suggestion;
 
 /**
  * Class handles access to the "suggestion" table.
  */
-class SuggestionTable extends AbstractTableGateway
+class SuggestionTable
 {
     use Traits\TableConstructor;
 
