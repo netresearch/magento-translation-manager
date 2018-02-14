@@ -10,5 +10,5 @@ nbproject
 composer.phar
 /vendor/
 /test/
-/public/export/
+/public/csv-export/
 /config/autoload/db.local.php
