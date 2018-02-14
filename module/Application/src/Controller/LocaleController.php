@@ -125,9 +125,10 @@ class LocaleController extends AbstractActionController implements ControllerInt
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $del = $request->getPost('del', 'No');
+            $del    = $request->getPost('del', 'No');
+            $locale = $this->_supportedLocale->getLocale($id);
 
-            if ($del == 'Yes') {
+            if ($del === 'Yes') {
                 $id = (int) $request->getPost('id');
                 $this->_supportedLocale->deleteLocale($id);
             }

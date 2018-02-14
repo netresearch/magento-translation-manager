@@ -27,7 +27,19 @@ return [
     'Submit all' => 'Alle abschicken',
     'Translation' => 'Übersetzung',
 
+    // Locale controller
     'Locale configuration' => 'Sprachkonfiguration',
+    'Add locale' => 'Sprache hinzufügen',
+    'Edit locale' => 'Sprache bearbeiten',
+    'Delete locale' => 'Sprache löschen',
+    'Add new locale' => 'Neue Sprache hinzufügen',
+    'Locale' => 'Sprache (Sprachgebietsschema, z.B. de_DE)',
+    'Add' => 'Hinzufügen',
+    'Edit' => 'Bearbeiten',
+    'Delete' => 'Löschen',
+    'Are you sure that you want to delete "%s"?' => 'Sind Sie sicher, dass Sie "%s" löschen möchten?',
+    'Yes' => 'Ja',
+    'No' => 'Nein',
 
     'Unclear translation' => 'Unklare Übersetzung',
     'Missing translation' => 'Fehlende Übersetzung',
