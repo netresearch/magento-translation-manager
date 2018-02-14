@@ -2,7 +2,7 @@
 namespace Application\Model;
 
 use \Zend\Db\Sql\Select;
-use \Application\ResultSet\Suggestion as ResultSet_Suggestion;
+use \Zend\Db\ResultSet\ResultSet;
 
 /**
  * Class handles access to the "suggestion" table.
@@ -14,9 +14,9 @@ class SuggestionTable
     /**
      * Get all records from "suggestion" table.
      *
-     * @return ResultSet_Suggestion
+     * @return ResultSet
      */
-    public function fetchAll(): ResultSet_Suggestion
+    public function fetchAll(): ResultSet
     {
         return $this->tableGateway
             ->select(function (Select $select) {
@@ -29,9 +29,9 @@ class SuggestionTable
      *
      * @param int $translationId
      *
-     * @return ResultSet_Suggestion
+     * @return ResultSet
      */
-    public function fetchByTranslationId(int $translationId): ResultSet_Suggestion
+    public function fetchByTranslationId(int $translationId): ResultSet
     {
         return $this->tableGateway
             ->select(function (Select $select) use ($translationId) {

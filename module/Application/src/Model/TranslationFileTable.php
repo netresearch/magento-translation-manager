@@ -2,7 +2,7 @@
 namespace Application\Model;
 
 use \Zend\Db\Sql\Select;
-use \Application\ResultSet\TranslationFile as ResultSet_TranslationFile;
+use \Zend\Db\ResultSet\ResultSet;
 
 /**
  * Class handles access to the "translationFile" table.
@@ -14,9 +14,9 @@ class TranslationFileTable
     /**
      * Get all records from "translationFile" table.
      *
-     * @return ResultSet_TranslationFile
+     * @return ResultSet
      */
-    public function fetchAll(): ResultSet_TranslationFile
+    public function fetchAll(): ResultSet
     {
         return $this->tableGateway
             ->select(function (Select $select) {

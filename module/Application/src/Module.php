@@ -119,7 +119,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
                 'Model\TranslationFileGateway' => function (ServiceManager $sm) {
                     $dbAdapter = $sm->get(AdapterInterface::class);
 
-                    $resultSetPrototype = new ResultSet\TranslationFile();
+                    $resultSetPrototype = new ZendResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\TranslationFile());
                     $resultSetPrototype->buffer();
 
@@ -136,7 +136,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
                 'Model\SuggestionGateway' => function (ServiceManager $sm) {
                     $dbAdapter = $sm->get(AdapterInterface::class);
 
-                    $resultSetPrototype = new ResultSet\Suggestion();
+                    $resultSetPrototype = new ZendResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Suggestion());
                     $resultSetPrototype->buffer();
 

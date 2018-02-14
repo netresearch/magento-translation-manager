@@ -3,7 +3,6 @@ namespace Application\Model;
 
 use \Zend\Db\Sql\Select;
 use \Zend\Db\ResultSet\ResultSet;
-use \Application\Model\Traits;
 
 /**
  * Class handles access to the "locale" table.
