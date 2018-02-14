@@ -37,6 +37,10 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route'    => '/index/[:action][/:base_id]',
+                    'constraints' => [
+                        'action'  => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'base_id' => '[0-9]+',
+                    ],
                     'defaults' => [
                         'controller' => Controller\IndexController::class,
                         'action'     => 'index',
@@ -47,7 +51,10 @@ return [
             'admin' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route'    => '/admin/[:action][/:base_id]',
+                    'route'    => '/admin/[:action]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ],
                     'defaults' => [
                         'controller' => Controller\AdminController::class,
                         'action'     => 'index',
@@ -69,14 +76,15 @@ return [
             'locale' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route'    => '/locale/[:action][/:id]',
-                    'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
-                    ],
+                    'route'    => '/locale[/:action][/:id]',
                     'defaults' => [
                         'controller' => Controller\LocaleController::class,
                         'action'     => 'index',
+                    ],
+                    'constraints' => [
+                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'         => '[0-9]+',
                     ],
                 ],
             ],
@@ -127,6 +135,23 @@ return [
                     'locale' => [
                         'label' => 'Locale configuration',
                         'route' => 'locale',
+                        'pages' => [
+                            [
+                                'label'      => 'Add locale',
+                                'controller' => Controller\LocaleController::class,
+                                'action'     => 'add',
+                            ],
+                                        [
+                                'label'      => 'Edit locale',
+                                'controller' => Controller\LocaleController::class,
+                                'action'     => 'edit',
+                            ],
+                            [
+                                'label'      => 'Delete locale',
+                                'controller' => Controller\LocaleController::class,
+                                'action'    => 'delete',
+                            ],
+                        ],
                     ],
                 ],
             ],
