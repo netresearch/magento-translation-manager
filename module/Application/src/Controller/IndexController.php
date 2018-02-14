@@ -9,7 +9,6 @@ use \Application\Model\Translation;
 class IndexController extends AbstractActionController implements ControllerInterface
 {
     use Traits\ControllerConstructor;
-    use Traits\ControllerMessage;
 
     const DEFAULT_LOCALE           = 'de_DE';
     const DEFAULT_ENTRIES_PER_PAGE = 10;
@@ -79,7 +78,6 @@ class IndexController extends AbstractActionController implements ControllerInte
             'currentFilterUnclear' => $currentFilterUnclear,
             'currentPage'          => $page,
             'currentEPP'           => $elementsPerPage,
-            'messages'             => $this->_messages,
             'jumpToRow'            => $jumpToRow,
         ]);
 
@@ -137,6 +135,8 @@ class IndexController extends AbstractActionController implements ControllerInte
                 $modified = $this->_translationTable->saveTranslation($translation);
 
                 if ($modified) {
+                    $this->flashMessenger()->addInfoMessage('Changes successfully saved');
+
                     // Redirect to next translation record on success
                     return $this->redirect()->toRoute(
                         'index',
@@ -152,9 +152,9 @@ class IndexController extends AbstractActionController implements ControllerInte
                     );
                 }
 
-                $this->addMessage('No changes', self::MESSAGE_INFO);
+                $this->flashMessenger()->addInfoMessage('No changes');
             } catch (\Exception $ex) {
-                $this->addMessage($ex->getMessage(), self::MESSAGE_ERROR);
+                $this->flashMessenger()->addErrorMessage($ex->getMessage());
             }
         }
 
@@ -191,13 +191,13 @@ class IndexController extends AbstractActionController implements ControllerInte
 //                 }
 
 //                 if (0 < $errors) {
-//                     $this->addMessage(sprintf('Error saving %d elements', $errors), self::MESSAGE_ERROR);
+//                     $this->flashMessenger()->addErrorMessage(sprintf('Error saving %d elements', $errors));
 //                 }
 //                 if (0 < $elementsModified) {
-//                     $this->addMessage(sprintf('%d elements modified successfully', $elementsModified), self::MESSAGE_SUCCESS);
+//                     $this->flashMessenger()->addSuccessMessage(sprintf('%d elements modified successfully', $elementsModified));
 //                 }
 //                 if (0 == $elementsModified && 0 == $errors) {
-//                     $this->addMessage('No changes.', self::MESSAGE_INFO);
+//                     $this->flashMessenger()->addInfoMessage('No changes.');
 //                 }
 //             } else {
 //                 $rowId = $this->params()->fromPost('rowid');
@@ -209,12 +209,12 @@ class IndexController extends AbstractActionController implements ControllerInte
 //                     }
 
 //                     if (false == $success) {
-//                         $this->addMessage('No changes.', self::MESSAGE_INFO);
+//                         $this->flashMessenger()->addInfoMessage('No changes.');
 //                     } else {
-//                         $this->addMessage(sprintf('Element saved successfully (element #%d)', $success), self::MESSAGE_SUCCESS);
+//                         $this->flashMessenger()->addSuccessMessage(sprintf('Element saved successfully (element #%d)', $success));
 //                     }
 //                 } catch(\Exception $e) {
-//                     $this->addMessage('Error saving element', self::MESSAGE_ERROR);
+//                     $this->flashMessenger()->addErrorMessage('Error saving element');
 //                 }
 //             }
 //         }
@@ -239,7 +239,6 @@ class IndexController extends AbstractActionController implements ControllerInte
             'supportedLocales'       => $supportedLocales,
             'currentLocale'          => $this->_currentLocale,
             'currentTranslationFile' => $this->_translationFileTable->getTranslationFile($baseTranslation->getFileId())->getFilename(),
-            'messages'               => $this->_messages,
             'baseTranslation'        => $baseTranslation,
             'translations'           => $translations,
             'suggestions'            => $this->_suggestionTable->fetchByTranslationId($translations[$this->_currentLocale]->getId()),
@@ -285,13 +284,13 @@ class IndexController extends AbstractActionController implements ControllerInte
             }
 
             if (0 < $errors) {
-                $this->addMessage(sprintf('Error saving %d elements', $errors), self::MESSAGE_ERROR);
+                $this->flashMessenger()->addErrorMessage(sprintf('Error saving %d elements', $errors));
             }
             if (0 < $elementsModified) {
-                $this->addMessage(sprintf('%d elements saved successfully', $elementsModified), self::MESSAGE_SUCCESS);
+                $this->flashMessenger()->addSuccessMessage(sprintf('%d elements saved successfully', $elementsModified));
             }
             if (0 == $elementsModified && 0 == $errors) {
-                $this->addMessage('No changes.', self::MESSAGE_INFO);
+                $this->flashMessenger()->addInfoMessage('No changes.');
             }
         } else {
             $rowId = $this->params()->fromPost('rowid');
@@ -303,12 +302,12 @@ class IndexController extends AbstractActionController implements ControllerInte
                 }
 
                 if (false == $success) {
-                    $this->addMessage('No changes.', self::MESSAGE_INFO);
+                    $this->flashMessenger()->addInfoMessage('No changes.');
                 } else {
-                    $this->addMessage(sprintf('Element saved successfully (element #%d)', $success), self::MESSAGE_SUCCESS);
+                    $this->flashMessenger()->addSuccessMessage(sprintf('Element saved successfully (element #%d)', $success));
                 }
             } catch(\Exception $e) {
-                $this->addMessage('Error saving element', self::MESSAGE_ERROR);
+                $this->flashMessenger()->addErrorMessage('Error saving element');
             }
         }
 

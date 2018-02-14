@@ -15,8 +15,6 @@ use \Import\Form\ImportForm;
 
 class ImportController extends AbstractActionController implements ControllerInterface
 {
-    use Traits\ControllerMessage;
-
     /**
      * @var LocaleTable
      */
@@ -132,13 +130,12 @@ class ImportController extends AbstractActionController implements ControllerInt
                     }
                 }
 
-                $this->addMessage('Import successfully done', self::MESSAGE_SUCCESS);
+                $this->flashMessenger()->addSuccessMessage('Import successfully done');
             }
         }
 
         return [
-            'form'     => $form,
-            'messages' => $this->_messages,
+            'form' => $form,
         ];
     }
 }

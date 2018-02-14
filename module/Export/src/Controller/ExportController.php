@@ -13,8 +13,6 @@ use \Export\Form\ExportForm;
 
 class ExportController extends AbstractActionController implements ControllerInterface
 {
-    use Traits\ControllerMessage;
-
     const EXPORT_PATH = 'public/csv-export/';
 
     /**

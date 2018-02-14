@@ -44,6 +44,7 @@ return [
     'Locale updated' => 'Sprache aktualisiert',
     'Locale deleted' => 'Sprache gelöscht',
 
+    // Index controller
     'Unclear translation' => 'Unklare Übersetzung',
     'Missing translation' => 'Fehlende Übersetzung',
 
