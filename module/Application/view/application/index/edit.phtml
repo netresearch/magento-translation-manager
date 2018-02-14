@@ -160,21 +160,21 @@
                     <strong>Further translations (MageVersions)</strong>
                 </div>
                 <div class="card-body collapse" id="MageVersions">
-                    <table class="table table-hover table-striped" id="translation-grid">
+                    <table class="table table-hover table-striped">
                         <tr>
-                            <th>MageVersion<th>
-                            <th>Current translation<th>
+                            <th>MageVersion</th>
+                            <th>Current translation</th>
                             <th colspan="2" class="text-center"><span title="Unclear translation">Status</span></th>
-                            <th>t.b.d.<th>
-                            <th><th>
+                            <th>t.b.d.</th>
+                            <th></th>
                         </tr>
                         <?php foreach ($translations as $locale => $translation): ?>
                             <?php if ($locale == $currentLocale) continue; ?>
                             <?php ?>
                             <?php $rowName = 'row' . $locale; ?>
                             <tr id="<?= $rowName ?>">
-                                <td><?= $this->escapeHtml($locale) ?><td>
-                                <td><?= $this->escapeHtml($translation->getTranslation()) ?><td>
+                                <td><?= $this->escapeHtml($locale) ?></td>
+                                <td><?= $this->escapeHtml($translation->getTranslation()) ?></td>
                                 <td>
                                     <?php if ($translation->getUnclear()): ?>
                                         <i class="fa fa-exclamation-triangle unclear" title="Unclear translation"></i>
@@ -186,7 +186,7 @@
                                 </td>
                                 <td class="suggested-translation">
                                     <input type="text" class="form-control" name="<?= $rowName?>_suggestedTranslation" value="" />
-                                <td>
+                                </td>
                                 <td>
                                     <div style="min-width: 125px">
                                         <input type="hidden" name="<?= $rowName ?>_locale" value="<?= $locale ?>" />
@@ -195,7 +195,7 @@
                                         &nbsp;
                                         <a class="btn btn-info" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $this->url('index', [ 'action' => 'edit', 'base_id' => $baseTranslation->getId() ], [ 'query' => [ 'locale' => $locale ] ]) ?>"><span class="fa fa-search"></span></a>
                                     </div>
-                                <td>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </table>
@@ -205,22 +205,22 @@
     </div>
 */ ?>
 
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-md-12">
-                <div class="card mt-4" role="tablist" aria-multiselectable="true" data-target="#locales">
+            <div class="card" role="tablist" aria-multiselectable="true" data-target="#locales">
                 <div class="card-header">
                     <strong>Further translations (locales)</strong>
                 </div>
                 <div class="card-body" id="locales">
-                    <table class="table table-hover" id="translation-grid">
+                    <table class="table table-hover">
                         <tr>
-                            <th>Locale<th>
-                            <th>Current translation<th>
+                            <th>Locale</th>
+                            <th>Current translation</th>
                             <th>Status</th>
 <?php /*
-                            <th>Add Suggestion<th>
+                            <th>Suggest translation</th>
 */ ?>
-                            <th width="10%"><th>
+                            <th width="10%"></th>
                         </tr>
                         <?php foreach ($translations as $locale => $translation): ?>
                             <?php if ($locale === $currentLocale) continue; ?>
@@ -231,12 +231,12 @@
                                 <td>
                                     <img src="<?= $this->basePath('img/flags/' . strtolower(substr($locale, 3, 2))) ?>.png" title="<?= $this->translate($locale) ?>" alt="">
                                     <?= $this->escapeHtml($locale) ?>
-                                <td>
+                                </td>
                                 <td>
                                     <a href="<?= $detailUrl ?>">
                                         <?= $this->escapeHtml($translation->getTranslation()) ?>
                                     </a>
-                                <td>
+                                </td>
                                 <td>
                                     <?php if (empty($translation->getTranslation())): ?>
                                         <i class="fa fa-ban text-danger" title="<?= $this->translate('Missing translation') ?>"></i>
@@ -247,12 +247,12 @@
                                     <?php endif; ?>
                                 </td>
 <?php /*
+                                <td class="suggested-translation">
+                                    <input type="text" class="form-control" name="<?= $rowName?>_suggestedTranslation" value="" />
+                                </td>
                                 <td>
                                     <input type="radio" name="<?= $rowName?>_unclearTranslation" value="1" <?= ($translation->getUnclear()) ? 'checked="checked"':'' ?>>
                                 </td>
-                                <td class="suggested-translation">
-                                    <input type="text" class="form-control" name="<?= $rowName?>_suggestedTranslation" value="" />
-                                <td>
 */ ?>
                                 <td class="text-right">
 <?php /*
@@ -261,7 +261,7 @@
                                     <button type="submit" value="<?= $rowName?>" name="rowid" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="right" title="Submit Suggestion"><span class="fa fa-plus"></span></button>
 */ ?>
                                     <a class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="right" title="See Details" href="<?= $detailUrl ?>"><span class="fa fa-search"></span></a>
-                                <td>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </table>
