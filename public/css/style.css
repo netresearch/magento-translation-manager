@@ -1,6 +1,6 @@
 body {
     min-height: 75rem;
-    padding-top: 4.5rem;
+    padding-top: 4rem;
 }
 
 form ul {
@@ -23,4 +23,12 @@ form ul li {
 
 .input-group-prepend label {
     width: 100%;
+}
+
+.breadcrumb {
+    background-color: transparent;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    font-size: 70%;
 }
