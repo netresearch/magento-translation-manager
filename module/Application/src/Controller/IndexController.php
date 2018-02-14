@@ -69,7 +69,6 @@ class IndexController extends AbstractActionController implements ControllerInte
         // Prepare view
         $view =  new ViewModel([
             'translations'         => $translationPaginator,
-            'translationsCount'    => $translationPaginator->getTotalItemCount(),
             'supportedLocales'     => $this->_supportedLocale->fetchAll(),
             'translationBase'      => $this->_translationBaseTable->fetchAll(),
             'translationFiles'     => $this->_translationFileTable->fetchAll(),

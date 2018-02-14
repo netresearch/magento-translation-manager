@@ -45,6 +45,9 @@ return [
     'Locale deleted' => 'Sprache gelöscht',
 
     // Index controller
+    'page' => 'Seite',
+    'of' => 'von',
+
     'Unclear translation' => 'Unklare Übersetzung',
     'Missing translation' => 'Fehlende Übersetzung',
 
