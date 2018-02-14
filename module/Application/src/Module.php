@@ -6,6 +6,7 @@ use \Zend\ModuleManager\Feature\ConfigProviderInterface;
 use \Zend\ModuleManager\Feature\ControllerProviderInterface;
 use \Zend\ModuleManager\Feature\ServiceProviderInterface;
 use \Zend\Db\Adapter\AdapterInterface;
+use \Zend\Db\ResultSet\ResultSet as ZendResultSet;
 use \Zend\Db\TableGateway\TableGateway;
 use \Zend\ServiceManager\ServiceManager;
 use \Zend\Mvc\ModuleRouteListener;
@@ -67,7 +68,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
                 'Model\LocaleGateway' => function (ServiceManager $sm) {
                     $dbAdapter = $sm->get(AdapterInterface::class);
 
-                    $resultSetPrototype = new ResultSet\Locale();
+                    $resultSetPrototype = new ZendResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Locale());
                     $resultSetPrototype->buffer();
 

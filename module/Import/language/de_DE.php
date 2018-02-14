@@ -9,6 +9,8 @@ return [
     '-- Please select --' => '-- Bitte wählen --',
     'Start import' => 'Import beginnen',
 
+    'Import successfully done' => 'Import erfolgreich abgeschlossen',
+
     // Error messages
     'File was not uploaded' => 'Die Datei wurde nicht hochgeladen',
     'File was only partially uploaded' => 'Die Datei wurde nur teilweise hochgeladen',

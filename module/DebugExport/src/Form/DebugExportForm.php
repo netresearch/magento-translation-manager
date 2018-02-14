@@ -2,7 +2,7 @@
 namespace DebugExport\Form;
 
 use \Zend\Form\Element\Checkbox;
-use \Application\ResultSet\Locale as ResultSet_Locale;
+use \Zend\Db\ResultSet\ResultSet;
 use \Application\ResultSet\TranslationFile as ResultSet_TranslationFile;
 use \Export\Form\ExportForm;
 
@@ -15,9 +15,9 @@ class DebugExportForm extends ExportForm
      * Constructor.
      *
      * @param ResultSet_TranslationFile $files   List of files
-     * @param ResultSet_Locale          $locales List of available locales
+     * @param ResultSet                 $locales List of available locales
      */
-    public function __construct(ResultSet_TranslationFile $files, ResultSet_Locale $locales)
+    public function __construct(ResultSet_TranslationFile $files, ResultSet $locales)
     {
         parent::__construct($files, $locales);
 

@@ -2,8 +2,8 @@
 namespace Application\Model;
 
 use \Zend\Db\Sql\Select;
+use \Zend\Db\ResultSet\ResultSet;
 use \Application\Model\Traits;
-use \Application\ResultSet\Locale as ResultSet_Locale;
 
 /**
  * Class handles access to the "locale" table.
@@ -15,9 +15,9 @@ class LocaleTable
     /**
      * Get all records from "locale" table.
      *
-     * @return ResultSet_Locale
+     * @return ResultSet
      */
-    public function fetchAll(): ResultSet_Locale
+    public function fetchAll(): ResultSet
     {
         return $this->tableGateway
             ->select(function (Select $select) {

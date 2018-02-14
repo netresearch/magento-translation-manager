@@ -7,7 +7,7 @@ use \Zend\Form\Element\Select;
 use \Zend\Form\Element\Button;
 use \Zend\InputFilter\InputFilter;
 // use \Zend\Validator\NotEmpty;
-use \Application\ResultSet\Locale as ResultSet_Locale;
+use \Zend\Db\ResultSet\ResultSet;
 use \Application\ResultSet\TranslationFile as ResultSet_TranslationFile;
 
 /**
@@ -19,9 +19,9 @@ class ExportForm extends Form
      * Constructor.
      *
      * @param ResultSet_TranslationFile $files   List of files
-     * @param ResultSet_Locale          $locales List of available locales
+     * @param ResultSet                 $locales List of available locales
      */
-    public function __construct(ResultSet_TranslationFile $files, ResultSet_Locale $locales)
+    public function __construct(ResultSet_TranslationFile $files, ResultSet $locales)
     {
         // We want to ignore the name passed
         parent::__construct('export-form');
@@ -36,11 +36,11 @@ class ExportForm extends Form
      * This method adds elements to form (input fields and submit button).
      *
      * @param ResultSet_TranslationFile $files   List of files
-     * @param ResultSet_Locale          $locales List of available locales
+     * @param ResultSet                 $locales List of available locales
      *
      * @return void
      */
-    private function addElements(ResultSet_TranslationFile $files, ResultSet_Locale $locales): void
+    private function addElements(ResultSet_TranslationFile $files, ResultSet $locales): void
     {
         // File selector
         $valueOptions = [];

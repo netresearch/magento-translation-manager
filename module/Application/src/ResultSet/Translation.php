@@ -1,18 +1,17 @@
 <?php
 namespace Application\ResultSet;
 
-use \Zend\Db\ResultSet\ResultSet as ZendResultSet;
-use \Application\ResultSet\Locale as ResultSet_Locale;
+use \Zend\Db\ResultSet\ResultSet;
 use \Application\Model\Translation as Model_Translation;
 
-class Translation extends ZendResultSet
+class Translation extends ResultSet
 {
     /**
-     * @param ResultSet_Locale $locales
+     * @param ResultSet $locales
      *
      * @return Model_Translation[]
      */
-    public function groupByLocales(ResultSet_Locale $locales): array
+    public function groupByLocales(ResultSet $locales): array
     {
         $languages = [];
 

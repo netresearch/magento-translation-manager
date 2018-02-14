@@ -10,7 +10,7 @@ use \Zend\InputFilter\FileInput;
 use \Zend\Validator\File\UploadFile;
 use \Zend\Validator\File\Extension;
 use \Zend\Filter\File\RenameUpload;
-use \Application\ResultSet\Locale as ResultSet_Locale;
+use \Zend\Db\ResultSet\ResultSet;
 
 /**
  * Class representing the locale form.
@@ -22,9 +22,9 @@ class ImportForm extends Form
     /**
      * Constructor.
      *
-     * @param ResultSet_Locale $locales List of available locales
+     * @param ResultSet $locales List of available locales
      */
-    public function __construct(ResultSet_Locale $locales)
+    public function __construct(ResultSet $locales)
     {
         // We want to ignore the name passed
         parent::__construct('import-form');
@@ -39,11 +39,11 @@ class ImportForm extends Form
     /**
      * This method adds elements to form (input fields and submit button).
      *
-     * @param ResultSet_Locale $locales List of available locales
+     * @param ResultSet $locales List of available locales
      *
      * @return void
      */
-    private function addElements(ResultSet_Locale $locales): void
+    private function addElements(ResultSet $locales): void
     {
         // File selector
         $this->add([
