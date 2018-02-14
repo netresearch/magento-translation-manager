@@ -247,125 +247,125 @@ class IndexController extends AbstractActionController implements ControllerInte
         ]);
     }
 
-    /**
-     * save suggestions of index form (all or just a single element)
-     *
-     * @return int|null - if we do a single insert we can jump to this id of row
-     */
-    private function saveIndexForm()
-    {
-        $jumpToRow = null;
+//     /**
+//      * save suggestions of index form (all or just a single element)
+//      *
+//      * @return int|null - if we do a single insert we can jump to this id of row
+//      */
+//     private function saveIndexForm()
+//     {
+//         $jumpToRow = null;
 
-        // split POST params into rows
-        $formRows = [ /* rowid => [field => value] */ ];
-        $postParams = $this->params()->fromPost();
-        foreach ($postParams as $postKey => $postValue) {
-            if (preg_match('@(row\d+)_(.+)@', $postKey, $matches)) {
-                $formRows[$matches[1]][$matches[2]] = $postValue;
-            }
-        }
+//         // split POST params into rows
+//         $formRows = [ /* rowid => [field => value] */ ];
+//         $postParams = $this->params()->fromPost();
+//         foreach ($postParams as $postKey => $postValue) {
+//             if (preg_match('@(row\d+)_(.+)@', $postKey, $matches)) {
+//                 $formRows[$matches[1]][$matches[2]] = $postValue;
+//             }
+//         }
 
-        // decide if one or all elements should be saved
-        if ('all' == $this->params()->fromPost('rowid')) {
-            $errors = 0;
-            $elementsModified = 0;
-            foreach ($formRows as $row) {
-                if (empty($row['suggestedTranslation'])) {
-                    continue;
-                }
-                try {
-                    $modified = $this->addSuggestion((int)$row['translationId'], $row['suggestedTranslation']);
-                    if (false !== $modified) {
-                        $elementsModified++;
-                    }
-                } catch(\Exception $e) {
-                    $errors++;
-                }
-            }
+//         // decide if one or all elements should be saved
+//         if ('all' == $this->params()->fromPost('rowid')) {
+//             $errors = 0;
+//             $elementsModified = 0;
+//             foreach ($formRows as $row) {
+//                 if (empty($row['suggestedTranslation'])) {
+//                     continue;
+//                 }
+//                 try {
+//                     $modified = $this->addSuggestion((int)$row['translationId'], $row['suggestedTranslation']);
+//                     if (false !== $modified) {
+//                         $elementsModified++;
+//                     }
+//                 } catch(\Exception $e) {
+//                     $errors++;
+//                 }
+//             }
 
-            if (0 < $errors) {
-                $this->flashMessenger()->addErrorMessage(sprintf('Error saving %d elements', $errors));
-            }
-            if (0 < $elementsModified) {
-                $this->flashMessenger()->addSuccessMessage(sprintf('%d elements saved successfully', $elementsModified));
-            }
-            if (0 == $elementsModified && 0 == $errors) {
-                $this->flashMessenger()->addInfoMessage('No changes.');
-            }
-        } else {
-            $rowId = $this->params()->fromPost('rowid');
-            $jumpToRow = $rowId;
-            try {
-                $success = false;
-                if (!empty($formRows[$rowId]['suggestedTranslation'])) {
-                    $success = $this->addSuggestion((int)$formRows[$rowId]['translationId'], $formRows[$rowId]['suggestedTranslation']);
-                }
+//             if (0 < $errors) {
+//                 $this->flashMessenger()->addErrorMessage(sprintf('Error saving %d elements', $errors));
+//             }
+//             if (0 < $elementsModified) {
+//                 $this->flashMessenger()->addSuccessMessage(sprintf('%d elements saved successfully', $elementsModified));
+//             }
+//             if (0 == $elementsModified && 0 == $errors) {
+//                 $this->flashMessenger()->addInfoMessage('No changes.');
+//             }
+//         } else {
+//             $rowId = $this->params()->fromPost('rowid');
+//             $jumpToRow = $rowId;
+//             try {
+//                 $success = false;
+//                 if (!empty($formRows[$rowId]['suggestedTranslation'])) {
+//                     $success = $this->addSuggestion((int)$formRows[$rowId]['translationId'], $formRows[$rowId]['suggestedTranslation']);
+//                 }
 
-                if (false == $success) {
-                    $this->flashMessenger()->addInfoMessage('No changes.');
-                } else {
-                    $this->flashMessenger()->addSuccessMessage(sprintf('Element saved successfully (element #%d)', $success));
-                }
-            } catch(\Exception $e) {
-                $this->flashMessenger()->addErrorMessage('Error saving element');
-            }
-        }
+//                 if (false == $success) {
+//                     $this->flashMessenger()->addInfoMessage('No changes.');
+//                 } else {
+//                     $this->flashMessenger()->addSuccessMessage(sprintf('Element saved successfully (element #%d)', $success));
+//                 }
+//             } catch(\Exception $e) {
+//                 $this->flashMessenger()->addErrorMessage('Error saving element');
+//             }
+//         }
 
-        return $jumpToRow;
-    }
+//         return $jumpToRow;
+//     }
 
-    /**
-     * Save translation element with given data.
-     *
-     * @param array $element Translation element data
-     *
-     * @return int|false ID of saved element
-     */
-    private function saveTranslationElement(array $element)
-    {
-        if (!array_key_exists('unclearTranslation', $element)) {
-            $element['unclearTranslation'] = 0;
-        }
+//     /**
+//      * Save translation element with given data.
+//      *
+//      * @param array $element Translation element data
+//      *
+//      * @return int|false ID of saved element
+//      */
+//     private function saveTranslationElement(array $element)
+//     {
+//         if (!array_key_exists('unclearTranslation', $element)) {
+//             $element['unclearTranslation'] = 0;
+//         }
 
-        $translation = null;
+//         $translation = null;
 
-        $data = [
-            'translation_id'      => $element['id'],
-            'base_id'             => $element['baseId'],
-            'locale'              => $element['locale'],
-            'current_translation' => $element['suggestedTranslation'],
-            'unclear_translation' => $element['unclearTranslation'],
-        ];
+//         $data = [
+//             'translation_id'      => $element['id'],
+//             'base_id'             => $element['baseId'],
+//             'locale'              => $element['locale'],
+//             'current_translation' => $element['suggestedTranslation'],
+//             'unclear_translation' => $element['unclearTranslation'],
+//         ];
 
-        if (isset($element['id'])) {
-            $translation = $this->_translationTable->getTranslation($element['id']); // $element['translation_id']
-        }
+//         if (isset($element['id'])) {
+//             $translation = $this->_translationTable->getTranslation($element['id']); // $element['translation_id']
+//         }
 
-        if (!($translation instanceof Translation)) {
-            $translation = new Translation();
-        }
+//         if (!($translation instanceof Translation)) {
+//             $translation = new Translation();
+//         }
 
-        $translation->exchangeArray($data);
+//         $translation->exchangeArray($data);
 
-        return $this->_translationTable->saveTranslation($translation);
-    }
+//         return $this->_translationTable->saveTranslation($translation);
+//     }
 
-    /**
-     * Add a new suggestion
-     *
-     * @param int    $translationId ID of translation
-     * @param string $content       Content of the suggestion
-     *
-     * @return bool
-     */
-    private function addSuggestion(int $translationId, string $content): bool
-    {
-        $suggestion = new Suggestion([
-            'id'            => null,
-            'translationId' => (int) $translationId,
-            'suggestion'    => $content,
-        ]);
+//     /**
+//      * Add a new suggestion
+//      *
+//      * @param int    $translationId ID of translation
+//      * @param string $content       Content of the suggestion
+//      *
+//      * @return bool
+//      */
+//     private function addSuggestion(int $translationId, string $content): bool
+//     {
+//         $suggestion = new Suggestion([
+//             'id'            => null,
+//             'translationId' => (int) $translationId,
+//             'suggestion'    => $content,
+//         ]);
 
-        return (bool) $this->_suggestionTable->saveSuggestion($suggestion);
-    }
+//         return (bool) $this->_suggestionTable->saveSuggestion($suggestion);
+//     }
 }

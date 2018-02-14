@@ -14,19 +14,21 @@
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <?php foreach ($this->container as $page): ?>
-                    <li class="nav-item <?php if ($page->isActive(true)): ?> active<?php endif; ?><?php if ($page->hasPages()): ?> dropdown<?php endif; ?>">
-                        <a class="nav-link<?php if ($page->hasPages()): ?> dropdown-toggle<?php endif; ?>"
+                    <?php if (!$page->isVisible()): continue; endif; ?>
+                    <li class="nav-item <?php if ($page->isActive(true)): ?> active<?php endif; ?><?php if ($page->hasPages(true)): ?> dropdown<?php endif; ?>">
+                        <a class="nav-link<?php if ($page->hasPages(true)): ?> dropdown-toggle<?php endif; ?>"
                             href="<?= $page->getHref() ?>"
-                            <?php if ($page->hasPages()): ?>
+                            <?php if ($page->hasPages(true)): ?>
                                 id="<?= $page->getRoute() ?>Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                             <?php endif; ?>
                         >
                             <?= $this->translate($page->getLabel()) ?>
                         </a>
 
-                        <?php if ($page->hasPages()): ?>
+                        <?php if ($page->hasPages(true)): ?>
                             <div class="dropdown-menu" aria-labelledby="<?= $page->getRoute() ?>Dropdown">
                                 <?php foreach ($page->getPages() as $childPage): ?>
+                                    <?php if (!$childPage->isVisible()): continue; endif; ?>
                                     <a class="dropdown-item" href="<?= $childPage->getHref() ?>"><?= $this->translate($childPage->getLabel()) ?></a>
                                 <?php endforeach; ?>
                             </div>

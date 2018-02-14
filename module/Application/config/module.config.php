@@ -122,11 +122,20 @@ return [
         ],
     ],
 
+    // Navigation used for navbar and breadcrumb
     'navigation' => [
         'default' => [
             'home' => [
                 'label' => 'Home',
                 'route' => 'home',
+                'pages' => [
+                    [
+                        'label'      => 'Edit translation',
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'edit',
+                        'visible'    => false, // Hidden from menu but will be shown in breadcrumb
+                    ],
+                ],
             ],
             'admin' => [
                 'label' => 'Admin',
@@ -140,16 +149,19 @@ return [
                                 'label'      => 'Add locale',
                                 'controller' => Controller\LocaleController::class,
                                 'action'     => 'add',
+                                'visible'    => false,
                             ],
                                         [
                                 'label'      => 'Edit locale',
                                 'controller' => Controller\LocaleController::class,
                                 'action'     => 'edit',
+                                'visible'    => false,
                             ],
                             [
                                 'label'      => 'Delete locale',
                                 'controller' => Controller\LocaleController::class,
                                 'action'    => 'delete',
+                                'visible'    => false,
                             ],
                         ],
                     ],
