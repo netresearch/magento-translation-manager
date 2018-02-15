@@ -76,7 +76,7 @@ return [
             'locale' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route'    => '/locale[/:action][/:id]',
+                    'route'    => '/locale/[:action][/:id]',
                     'defaults' => [
                         'controller' => Controller\LocaleController::class,
                         'action'     => 'index',

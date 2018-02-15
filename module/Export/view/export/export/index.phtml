@@ -55,20 +55,18 @@ $form->prepare();
 </div>
 
 <?php if (count($downloadFiles)): ?>
-    <p>Please download the following files:</p>
-<?php else: ?>
-    <p>No files exported.</p>
+    <div class="card mt-4">
+        <div class="card-header">
+            <?= $this->translate('Please download the following files'); ?>
+        </div>
+        <div class="card-body">
+            <ul>
+                <?php foreach ($downloadFiles as $file): ?>
+                    <li>
+                        <a href="<?= $this->url('export', [ 'action' => 'download'], [ 'query' => [ 'locale' => $file['locale'],  'file' => $file['filename'] ] ]) ?>"><?= $file['locale']?> - <?= $file['filename'] ?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
 <?php endif; ?>
-
-<ul>
-    <?php foreach ($downloadFiles as $file): ?>
-    <li><a href="<?= $this->serverUrl($file['path']) ?>"><?= $file['locale']?> - <?= $file['filename'] ?></a></li>
-    <?php endforeach; ?>
-</ul>
-
-<p>
-    <a href="<?= $this->url('admin') ?>">
-        <span class="fa fa-arrow-left"></span>
-        Back to admin
-    </a>
-</p>

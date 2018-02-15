@@ -3,6 +3,8 @@ namespace Export\Controller;
 
 use \Zend\Mvc\Controller\AbstractActionController;
 use \Zend\View\Model\ViewModel;
+use \Zend\Http\Response\Stream;
+use \Zend\Http\Headers;
 use \Application\Controller\ControllerInterface;
 use \Application\Controller\Traits;
 use \Application\Model\LocaleTable;
@@ -13,7 +15,7 @@ use \Export\Form\ExportForm;
 
 class ExportController extends AbstractActionController implements ControllerInterface
 {
-    const EXPORT_PATH = 'public/csv-export/';
+    const EXPORT_PATH = '/data/export/';
 
     /**
      * @var LocaleTable
@@ -104,7 +106,7 @@ class ExportController extends AbstractActionController implements ControllerInt
     protected function createOutputDirectory(string $locale): string
     {
         // Prepare export folder
-        $outputDirectory = self::EXPORT_PATH . "$locale/";
+        $outputDirectory = getcwd() . self::EXPORT_PATH . "$locale/";
 
         if (!is_dir($outputDirectory)) {
             mkdir($outputDirectory, 0777, true);
@@ -205,5 +207,43 @@ class ExportController extends AbstractActionController implements ControllerInt
             'supportedLocales' => $this->localeTable->fetchAll(),
             'downloadFiles'    => $downloadFiles,
         ]);
+    }
+
+    /**
+     * Action "download".
+     *
+     * @return ViewModel
+     */
+    public function downloadAction()
+    {
+        $file           = $this->params()->fromQuery('file');
+        $locale         = $this->params()->fromQuery('locale');
+        $fileToDownload = realpath(getcwd() . self::EXPORT_PATH . $locale . '/' . $file);
+
+        if (!file_exists($fileToDownload)
+            || (strpos($fileToDownload, self::EXPORT_PATH) === false)
+        ) {
+            $this->flashMessenger()->addErrorMessage('File "' . $file . '" not found');
+            return $this->redirect()->toRoute('export');
+        }
+
+        $response = new Stream();
+        $response->setStream(fopen($fileToDownload, 'r'))
+            ->setStatusCode(200)
+            ->setStreamName(basename($fileToDownload));
+
+        $headers = new Headers();
+        $headers->addHeaders([
+            'Content-Disposition' => 'attachment; filename="' . basename($fileToDownload) .'"',
+            'Content-Type'        => 'application/octet-stream',
+            'Content-Length'      => filesize($fileToDownload),
+            'Expires'             => '@0', // @0, because zf2 parses date as string to \DateTime() object
+            'Cache-Control'       => 'must-revalidate',
+            'Pragma'              => 'public'
+        ]);
+
+        $response->setHeaders($headers);
+
+        return $response;
     }
 }
