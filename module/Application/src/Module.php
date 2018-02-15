@@ -5,6 +5,7 @@ use \Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use \Zend\ModuleManager\Feature\ConfigProviderInterface;
 use \Zend\ModuleManager\Feature\ControllerProviderInterface;
 use \Zend\ModuleManager\Feature\ServiceProviderInterface;
+use \Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use \Zend\Db\Adapter\AdapterInterface;
 use \Zend\Db\ResultSet\ResultSet as ZendResultSet;
 use \Zend\Db\TableGateway\TableGateway;
@@ -15,7 +16,12 @@ use \Zend\EventManager\EventInterface;
 use \Zend\ModuleManager\ModuleManager;
 use \Zend\ModuleManager\ModuleEvent;
 
-class Module implements BootstrapListenerInterface, ConfigProviderInterface, ControllerProviderInterface, ServiceProviderInterface
+class Module implements
+    BootstrapListenerInterface,
+    ConfigProviderInterface,
+    ControllerProviderInterface,
+    ServiceProviderInterface,
+    ViewHelperProviderInterface
 {
     /**
      * Available locales in the application
@@ -195,6 +201,16 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
         ];
     }
 
+    public function getViewHelperConfig()
+    {
+        return [
+            'factories' => [
+                'flag' => function ($sm) {
+                    return new View\Helper\Flag;
+                }
+            ]
+        ];
+   }
     /**
      * Define locale by HTTP Header Accept-Language
      *

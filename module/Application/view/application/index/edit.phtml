@@ -62,7 +62,7 @@
                         <?= $this->translate('Translation') ?>
                         <span class="pull-right">
                             &nbsp;
-                            <img src="<?= $this->basePath('img/flags/' . strtolower(substr($currentLocale, 3, 2))) ?>.png" title="<?= $this->translate($currentLocale) ?>" alt="">
+                            <?= $this->flag($currentLocale); ?>
                         </span>
                         <?php if (empty($translations[$currentLocale]->getTranslation())): ?>
                             <span class="pull-right fa fa-ban text-danger" style="margin-top: 6px;" title="<?= $this->translate('Missing translation') ?>">&nbsp;</span>
@@ -109,7 +109,11 @@
                 <div class="card-header">
                     <strong>Existing suggestions</strong>
                     <span class="badge badge-info pull-right"><?= $currentLocale ?></span>
-                    <span class="pull-right">&nbsp;<img src="<?= $this->basePath('img/flags/' . strtolower(substr($currentLocale, 0, 2))) ?>.png" alt="<?= $currentLocale ?>" />&nbsp;</span>
+                    <span class="pull-right">
+                        &nbsp;
+                        <?= $this->flag($currentLocale); ?>
+                        &nbsp;
+                    </span>
                 </div>
                 <div class="card-body suggestionlist">
                     <?php foreach ($suggestions as $suggestion): ?>
@@ -129,7 +133,11 @@
                 <div class="card-header">
                     <strong>Submit a new suggestion</strong>
                     <span class="badge badge-info pull-right"><?= $currentLocale ?></span>
-                    <span class="pull-right">&nbsp;<img src="<?= $this->basePath('img/flags/' . strtolower(substr($currentLocale, 0, 2))) ?>.png" alt="<?= $currentLocale ?>" />&nbsp;</span>
+                    <span class="pull-right">
+                        &nbsp;
+                        <?= $this->flag($currentLocale); ?>
+                        &nbsp;
+                    </span>
                 </div>
                 <div class="card-body">
                     <div class="input-group col-md-12">
@@ -229,7 +237,7 @@
                             <?php $rowName   = 'row' . $locale; ?>
                             <tr id="<?= $rowName ?>">
                                 <td>
-                                    <img src="<?= $this->basePath('img/flags/' . strtolower(substr($locale, 3, 2))) ?>.png" title="<?= $this->translate($locale) ?>" alt="">
+                                    <?= $this->flag($locale); ?>
                                     <?= $this->escapeHtml($locale) ?>
                                 </td>
                                 <td>
