@@ -12,13 +12,14 @@
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
-<div>
+<ul><li>
 HTML
     )
-    ->setMessageCloseString('</div></div>');
+    ->setMessageCloseString('</li></ul></div>');
 ?>
 
 <?= $flashMessenger->renderCurrent('error', array('alert', 'alert-dismissable', 'alert-danger')); ?>
-<?= $flashMessenger->renderCurrent('info', array('alert', 'alert-dismissable', 'alert-info')); ?>
+<?= $flashMessenger->renderCurrent('warning', array('alert', 'alert-dismissable', 'alert-warning')); ?>
 <?= $flashMessenger->renderCurrent('default', array('alert', 'alert-dismissable', 'alert-warning')); ?>
+<?= $flashMessenger->renderCurrent('info', array('alert', 'alert-dismissable', 'alert-info')); ?>
 <?= $flashMessenger->renderCurrent('success', array('alert', 'alert-dismissable', 'alert-success')); ?>

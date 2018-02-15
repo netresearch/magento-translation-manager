@@ -96,7 +96,7 @@
                         <?php foreach ($translations as $translation): ?>
                             <?php $base      = $translation->getTranslationBase(); ?>
                             <?php $rowName   = 'row' . $base->getId(); ?>
-                            <?php $detailUrl = $this->url('index', [ 'action' => 'edit', 'base_id' => $base->getId() ], [ 'query' => [ 'locale' => $currentLocale ] ]); ?>
+                            <?php $detailUrl = $this->url('index', [ 'action' => 'edit', 'baseId' => $base->getId() ], [ 'query' => [ 'locale' => $currentLocale ] ]); ?>
                             <tr id="<?= $rowName ?>">
                                 <td>
                                     <?= $base->getId() ?>

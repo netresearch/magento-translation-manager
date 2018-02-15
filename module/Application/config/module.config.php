@@ -36,10 +36,10 @@ return [
             'index' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route'    => '/index/[:action][/:base_id]',
+                    'route'    => '/index/[:action][/:baseId]',
                     'constraints' => [
-                        'action'  => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'base_id' => '[0-9]+',
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'baseId' => '[0-9]+',
                     ],
                     'defaults' => [
                         'controller' => Controller\IndexController::class,
@@ -65,7 +65,7 @@ return [
             'ajax' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route'    => '/ajax/[:action][/:base_id]',
+                    'route'    => '/ajax/[:action][/:baseId]',
                     'defaults' => [
                         'controller' => Controller\AjaxController::class,
                         'action'     => 'index',

@@ -18,7 +18,7 @@ class ArrayAccess
     public static function getInt(array $array, string $key, int $default = 0): int
     {
         if (array_key_exists($key, $array)) {
-            return (int) $array[$key];
+            return (int) trim($array[$key]);
         }
 
         return $default;
@@ -36,7 +36,7 @@ class ArrayAccess
     public static function getString(array $array, string $key, ?string $default = null): ?string
     {
         if (array_key_exists($key, $array)) {
-            return (string) $array[$key];
+            return (string) trim($array[$key]);
         }
 
         return $default;
@@ -54,7 +54,7 @@ class ArrayAccess
     public static function getBool(array $array, string $key, bool $default = false): bool
     {
         if (array_key_exists($key, $array)) {
-            return (bool) $array[$key];
+            return (bool) trim($array[$key]);
         }
 
         return $default;

@@ -84,21 +84,44 @@ class IndexController extends AbstractActionController implements ControllerInte
     }
 
     /**
+     * Get the previous base id starting from the given one.
+     *
+     * @param int $baseId Base translation record id
+     *
+     * @return int|bool FALSE if there is no previous key
+     */
+    private function getPreviousBaseId(int $baseId)
+    {
+        $allBaseIds  = $this->_translationBaseTable->fetchAll()->getIds();
+        $minKey      = min(array_keys($allBaseIds));
+        $currentKey  = array_search($baseId, $allBaseIds);
+        $previousKey = $currentKey === false ? 0 : ($currentKey - 1);
+        $previousKey = max($previousKey, $minKey);
+
+        if ($currentKey === $previousKey) {
+            return false;
+        }
+
+        return $allBaseIds[$previousKey];
+    }
+
+    /**
      * Get the next base id starting from the given one.
      *
      * @param int $baseId Base translation record id
      *
-     * @return int
+     * @return int|bool FALSE if there is no next key
      */
-    private function getNextBaseId(int $baseId): int
+    private function getNextBaseId(int $baseId)
     {
         $allBaseIds = $this->_translationBaseTable->fetchAll()->getIds();
-        $currentKey = array_search($baseId, $allBaseIds);
-        $nextKey    = $currentKey === false ? 0 : ($currentKey + 1);
         $maxKey     = max(array_keys($allBaseIds));
+        $currentKey = array_search($baseId, $allBaseIds);
+        $nextKey = $currentKey === false ? $maxKey : ($currentKey + 1);
+        $nextKey = min($nextKey, $maxKey);
 
-        if ($nextKey > $maxKey) {
-            $nextKey = min(array_keys($allBaseIds));
+        if ($currentKey === $nextKey) {
+            return false;
         }
 
         return $allBaseIds[$nextKey];
@@ -106,7 +129,7 @@ class IndexController extends AbstractActionController implements ControllerInte
 
     /**
      * translation detail page
-     * HTTP-Param: base_id
+     * HTTP-Param: baseId
      * HTTP-Param: row_id
      *
      * @return mixed
@@ -114,8 +137,16 @@ class IndexController extends AbstractActionController implements ControllerInte
     public function editAction()
     {
         $this->init();
-        $baseId = $this->params('base_id');
-        $baseTranslation = $this->_translationBaseTable->getTranslationBase($baseId);
+
+        try {
+            $baseId          = $this->params('baseId');
+            $baseTranslation = $this->_translationBaseTable->getTranslationBase($baseId);
+        } catch (\Exception $ex) {
+            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+
+            // Redirect to start page
+            return $this->redirect()->toRoute('home');
+        }
 
         $request = $this->getRequest();
 
@@ -123,112 +154,51 @@ class IndexController extends AbstractActionController implements ControllerInte
             /** @var \Zend\Stdlib\Parameters $data */
             $data = $request->getPost();
 
-            $translation = new Translation();
-            $translation->exchangeArray($data->toArray());
+            if ($translations = $data->get('translations', [])) {
+                $modifiedCount = 0;
 
-            try {
-                if (empty($translation->getTranslation())) {
-                    throw new \Exception('Unable to save empty translation');
+                foreach ($translations as $newTranslation) {
+                    $translation = new Translation();
+                    $translation->exchangeArray($newTranslation);
+
+                    try {
+                        $modified = $this->_translationTable->saveTranslation($translation);
+
+                        if ($modified !== false) {
+                            ++$modifiedCount;
+                        }
+                    } catch (\Exception $ex) {
+                        // Ignore empty translations
+                        if ($ex->getCode() !== 1000) {
+                            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+                        }
+                    }
                 }
 
-                $modified = $this->_translationTable->saveTranslation($translation);
-
-                if ($modified) {
-                    $this->flashMessenger()->addInfoMessage('Changes successfully saved');
-
-                    // Redirect to next translation record on success
-                    return $this->redirect()->toRoute(
-                        'index',
-                        [
-                            'action' => 'edit',
-                            'base_id' => $this->getNextBaseId($data['baseId']),
-                        ],
-                        [
-                            'query' => [
-                                'locale' => $data['locale']
-                            ]
-                        ]
+                if ($modifiedCount) {
+                    $this->flashMessenger()->addSuccessMessage(
+                        sprintf('Successfully modified %d element(s)', $modifiedCount)
                     );
+                } else {
+                    if (!$modifiedCount) {
+                        $this->flashMessenger()->addInfoMessage('No changes');
+                    }
                 }
-
-                $this->flashMessenger()->addInfoMessage('No changes');
-            } catch (\Exception $ex) {
-                $this->flashMessenger()->addErrorMessage($ex->getMessage());
             }
-        }
 
-
-//         // save data
-//         if ($this->params()->fromPost('rowid')) {
-//             // split POST params into rows
-//             $formRows = [ /* rowid => [ field => value ] */ ];
-//             $postParams = $this->params()->fromPost();
-//             foreach ($postParams as $postKey => $postValue) {
-//                 if (preg_match('@(row.{5})_(.+)@', $postKey, $matches)) {
-//                     $formRows[$matches[1]][$matches[2]] = $postValue;
-//                 }
-//             }
-
-
-//             // decide if one or all elements should be saved
-//             if ('all' == $this->params()->fromPost('rowid')) {
-//                 $errors = 0;
-//                 $elementsModified = 0;
-//                 foreach ($formRows as $row) {
-//                     try {
-//                         if (empty($row['suggestedTranslation'])) {
-//                             continue;
-//                         }
-//                         $row['baseId'] = $baseTranslation->getId();
-//                         $modified = $this->saveTranslationElement($row);
-//                         if (false !== $modified) {
-//                             $elementsModified++;
-//                         }
-//                     } catch(\Exception $e) {
-//                         $errors++;
-//                     }
-//                 }
-
-//                 if (0 < $errors) {
-//                     $this->flashMessenger()->addErrorMessage(sprintf('Error saving %d elements', $errors));
-//                 }
-//                 if (0 < $elementsModified) {
-//                     $this->flashMessenger()->addSuccessMessage(sprintf('%d elements modified successfully', $elementsModified));
-//                 }
-//                 if (0 == $elementsModified && 0 == $errors) {
-//                     $this->flashMessenger()->addInfoMessage('No changes.');
-//                 }
-//             } else {
-//                 $rowId = $this->params()->fromPost('rowid');
-//                 $formRows[$rowId]['baseId'] = $baseTranslation->getId();
-//                 try {
-//                     $success = false;
-//                     if (!empty($formRows[$rowId]['suggestedTranslation'])) {
-//                         $success = $this->saveTranslationElement($formRows[$rowId]);
-//                     }
-
-//                     if (false == $success) {
-//                         $this->flashMessenger()->addInfoMessage('No changes.');
-//                     } else {
-//                         $this->flashMessenger()->addSuccessMessage(sprintf('Element saved successfully (element #%d)', $success));
-//                     }
-//                 } catch(\Exception $e) {
-//                     $this->flashMessenger()->addErrorMessage('Error saving element');
-//                 }
-//             }
-//         }
-
-        // prepare previous and next item
-        $allBaseIds = $this->_translationBaseTable->fetchAll()->getIds();
-        $currentKey = array_search($baseId, $allBaseIds);
-        $previousKey = $currentKey - 1;
-        $nextKey = $currentKey + 1;
-        $maxKey = max(array_keys($allBaseIds));
-        if (0 == $currentKey) {
-            $previousKey = $maxKey;
-        }
-        if ($maxKey == $currentKey) {
-            $nextKey = 0;
+            // Redirect to next translation record on success
+//             return $this->redirect()->toRoute(
+//                 'index',
+//                 [
+//                     'action' => 'edit',
+//                     'baseId' => $this->getNextBaseId($baseId),
+//                 ],
+//                 [
+//                     'query' => [
+//                         'locale' => $data['locale']
+//                     ]
+//                 ]
+//             );
         }
 
         $supportedLocales = $this->_supportedLocale->fetchAll();
@@ -240,9 +210,9 @@ class IndexController extends AbstractActionController implements ControllerInte
             'currentTranslationFile' => $this->_translationFileTable->getTranslationFile($baseTranslation->getFileId())->getFilename(),
             'baseTranslation'        => $baseTranslation,
             'translations'           => $translations,
-            'suggestions'            => $this->_suggestionTable->fetchByTranslationId($translations[$this->_currentLocale]->getId()),
-            'previousItemId'         => $allBaseIds[$previousKey],
-            'nextItemId'             => $allBaseIds[$nextKey],
+            //'suggestions'            => $this->_suggestionTable->fetchByTranslationId($translations[$this->_currentLocale]->getId()),
+            'previousItemId'         => $this->getPreviousBaseId($baseId),
+            'nextItemId'             => $this->getNextBaseId($baseId),
         ]);
     }
 
@@ -330,7 +300,7 @@ class IndexController extends AbstractActionController implements ControllerInte
 
 //         $data = [
 //             'translation_id'      => $element['id'],
-//             'base_id'             => $element['baseId'],
+//             'baseId'              => $element['baseId'],
 //             'locale'              => $element['locale'],
 //             'current_translation' => $element['suggestedTranslation'],
 //             'unclear_translation' => $element['unclearTranslation'],

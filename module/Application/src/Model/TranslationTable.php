@@ -189,6 +189,13 @@ class TranslationTable
      */
     public function saveTranslation(Translation $translation)
     {
+        if (empty($translation->getTranslation())) {
+            throw new \Exception(
+                'Unable to save empty translation for locale "' . $translation->getLocale() . '"',
+                1000
+            );
+        }
+
         $data = $translation->toArray();
         $id   = $translation->getId();
 

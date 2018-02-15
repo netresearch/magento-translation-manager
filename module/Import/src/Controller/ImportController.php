@@ -125,7 +125,14 @@ class ImportController extends AbstractActionController implements ControllerInt
                                 ->setUnclear(false)
                                 ->setTranslation($translatedValue);
 
-                            $this->translationTable->saveTranslation($translation);
+                            try {
+                                $this->translationTable->saveTranslation($translation);
+                            } catch (\Exception $ex) {
+                                // Ignore empty translations
+                                if ($ex->getCode() !== 1000) {
+                                    $this->flashMessenger()->addErrorMessage($ex->getMessage());
+                                }
+                            }
                         }
                     }
                 }

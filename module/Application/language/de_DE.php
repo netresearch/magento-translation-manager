@@ -52,8 +52,16 @@ return [
     'Missing translation' => 'Fehlende Übersetzung',
 
     'Save' => 'Speichern',
+    'Save all new translations' => 'Alle neuen Übersetzungen speichern',
+    'Translation is unclear' => 'Übersetzung ist unklar',
+    'String is usually marked as unclear if translation should be reviewed by another person.' => 'Zeichenkette wird normalerweise als unklar markiert, wenn die Übersetzung von einer anderen Person noch einmal überprüft werden soll.',
     'Previous translation' => 'Vorherige Übersetzung',
     'Next translation' => 'Nächste Übersetzung',
+    'Further translations (locales)' => 'Übersetzungen in weitere Sprachen',
+    'Locale' => 'Sprache',
+    'Current translation' => 'Aktuelle Übersetzung',
+    'Status' => 'Status',
+    'New translation' => 'Neue Übersetzung',
 
     'First' => 'Erste',
     'Previous' => 'Vorherige',

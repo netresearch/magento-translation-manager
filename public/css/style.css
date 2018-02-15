@@ -32,3 +32,9 @@ form ul li {
     padding-top: 0px;
     font-size: 75%;
 }
+
+.alert ul {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px 0px;
+}
