@@ -48,15 +48,6 @@ class ImportController extends AbstractActionController implements ControllerInt
     }
 
     /**
-     * Loads the CSV file into array. Removes empty lines.
-     */
-    private function loadCsv($filename)
-    {
-        $csv = array_map('str_getcsv', file($filename));
-        return array_filter($csv, function ($value) { return !empty($value[0]); });
-    }
-
-    /**
      * Action "index".
      *
      * @return mixed
@@ -94,11 +85,21 @@ class ImportController extends AbstractActionController implements ControllerInt
                     }
 
                     // Read file
-                    $csv = $this->loadCsv($file['tmp_name']);
+                    $file = new \SplFileObject($file['tmp_name']);
+                    $file->setFlags(
+                            \SplFileObject::READ_CSV
+                            | \SplFileObject::READ_AHEAD
+                            | \SplFileObject::SKIP_EMPTY
+                            | \SplFileObject::DROP_NEW_LINE
+                    );
 
-                    foreach ($csv as $entry) {
-                        $baseValue       = $entry[0];
-                        $translatedValue = $entry[1];
+                    foreach ($file as $row) {
+                        // Avoid "Undefined offset" errors by padding the array
+                        list($baseValue, $translatedValue) = array_pad($row, 2, null);
+
+                        if (empty($baseValue)) {
+                            continue;
+                        }
 
                         try {
                             $baseRecord = $this->translationBaseTable->fetchByOriginSourceAndFileId($baseValue, $fileId);

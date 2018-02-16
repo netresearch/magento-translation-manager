@@ -79,6 +79,13 @@ class TranslationBaseTable
      */
     public function saveTranslationBase(TranslationBase $translationBase)
     {
+        if (empty($translationBase->getOriginSource())) {
+            throw new \Exception(
+                'Unable to save empty base translation',
+                1001
+            );
+        }
+
         $data = $translationBase->toArray();
         $id   = $translationBase->getId();
 

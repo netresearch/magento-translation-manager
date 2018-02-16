@@ -109,7 +109,7 @@ class Translation
         return $this->translation;
     }
 
-    public function setTranslation(string $translation): self
+    public function setTranslation(?string $translation): self
     {
         $this->translation = $translation;
         return $this;
