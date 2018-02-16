@@ -188,6 +188,15 @@ class ExportController extends AbstractActionController implements ControllerInt
         $form    = $this->getFormInstance();
         $request = $this->getRequest();
 
+        $view = new ViewModel([
+            'form'             => $form,
+            'translationFiles' => $this->translationFileTable->fetchAll(),
+            'supportedLocales' => $this->localeTable->fetchAll(),
+        ]);
+
+        // See "template_map" in "module.config.php"
+        $view->setTemplate('export');
+
         $downloadFiles = [];
 
         if ($request->isPost()) {
@@ -198,21 +207,29 @@ class ExportController extends AbstractActionController implements ControllerInt
                 // Get filtered and validated data
                 $formData      = $form->getData();
                 $downloadFiles = $this->performExport($formData);
+
+                $view->setTemplate('download')
+                    ->setVariable('downloadFiles', $downloadFiles);
+
+                // Add dummy breadcrumb entry for download page
+                $this->breadcrumb()->addBreadcrumb(
+                    'export',
+                    [
+                        'uri'    => $this->getRequest()->getRequestUri(),
+                        'label'  => 'Download',
+                        'active' => true,
+                    ]
+                );
             }
         }
 
-        return new ViewModel([
-            'form'             => $form,
-            'translationFiles' => $this->translationFileTable->fetchAll(),
-            'supportedLocales' => $this->localeTable->fetchAll(),
-            'downloadFiles'    => $downloadFiles,
-        ]);
+        return $view;
     }
 
     /**
      * Action "download".
      *
-     * @return ViewModel
+     * @return mixed
      */
     public function downloadAction()
     {
@@ -245,5 +262,20 @@ class ExportController extends AbstractActionController implements ControllerInt
         $response->setHeaders($headers);
 
         return $response;
+    }
+
+    /**
+     * Action "compress".
+     *
+     * @return mixed
+     */
+    public function compressAction()
+    {
+        $this->flashmessenger()->addInfoMessage('Zip download not yet implemented');
+
+        return $this->redirect()->toRoute('export');
+
+        // TODO
+        //$zip = new \ZipArchive();
     }
 }

@@ -117,11 +117,11 @@ class DebugExportController extends ExportController
             'form' => $form,
         ]);
 
+        // See "template_map" in "module.config.php"
         $debugView->setTemplate('debug');
 
-        // See "template_map" in "module.config.php"
-        $view->setTemplate('export')
-            ->addChild($debugView, 'debugView');
+        // Add child template to view
+        $view->addChild($debugView, 'debugView');
 
         return $view;
     }

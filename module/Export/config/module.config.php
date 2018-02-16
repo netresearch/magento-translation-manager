@@ -26,6 +26,10 @@ return [
         'template_path_stack' => [
              __DIR__ . '/../view',
          ],
+        'template_map' => [
+            'export'   => __DIR__ . '/../../Export/view/export/export/index.phtml',
+            'download' => __DIR__ . '/../../Export/view/export/export/download.phtml',
+         ],
     ],
 
     'navigation' => [

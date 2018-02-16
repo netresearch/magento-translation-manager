@@ -53,20 +53,3 @@ $form->prepare();
         <?= $this->form()->closeTag(); ?>
     </div>
 </div>
-
-<?php if (count($downloadFiles)): ?>
-    <div class="card mt-4">
-        <div class="card-header">
-            <?= $this->translate('Please download the following files'); ?>
-        </div>
-        <div class="card-body">
-            <ul>
-                <?php foreach ($downloadFiles as $file): ?>
-                    <li>
-                        <a href="<?= $this->url('export', [ 'action' => 'download'], [ 'query' => [ 'locale' => $file['locale'],  'file' => $file['filename'] ] ]) ?>"><?= $file['locale']?> - <?= $file['filename'] ?></a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    </div>
-<?php endif; ?>
