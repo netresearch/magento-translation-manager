@@ -151,7 +151,7 @@ return [
                                 'action'     => 'add',
                                 'visible'    => false,
                             ],
-                                        [
+                            [
                                 'label'      => 'Edit locale',
                                 'controller' => Controller\LocaleController::class,
                                 'action'     => 'edit',
@@ -181,7 +181,15 @@ return [
         'factories' => [
             'translator' => TranslatorServiceFactory::class,
             'navigation' => DefaultNavigationFactory::class,
-        ]
+        ],
+    ],
+
+    'controller_plugins' => [
+        'factories' => [
+            'breadcrumb' => function(\Zend\ServiceManager\ServiceManager $sm) {
+                return new Controller\Plugin\Breadcrumb($sm->get('navigation'));
+            },
+        ],
     ],
 
     'translator' => [
