@@ -3,6 +3,7 @@ namespace Export\Controller;
 
 use \Zend\Mvc\Controller\AbstractActionController;
 use \Zend\View\Model\ViewModel;
+use \Zend\Http\Response;
 use \Zend\Http\Response\Stream;
 use \Zend\Http\Headers;
 use \Application\Controller\ControllerInterface;
@@ -16,6 +17,13 @@ use \Export\Form\ExportForm;
 class ExportController extends AbstractActionController implements ControllerInterface
 {
     const EXPORT_PATH = '/data/export/';
+
+    /**
+     * Name of created zip archive.
+     *
+     * @var string
+     */
+    const EXPORT_FILE_PREFIX = 'translations';
 
     /**
      * @var LocaleTable
@@ -227,9 +235,47 @@ class ExportController extends AbstractActionController implements ControllerInt
     }
 
     /**
+     * Sends a file to the user to download.
+     *
+     * @param string $file        File name
+     * @param string $filename    File name of download
+     * @param string $contentType Content type to return
+     *
+     * @return Stream
+     */
+    private function sendFile(string $file, string $filename = null, string $contentType = 'application/octet-stream'): Stream
+    {
+        if ($filename === null) {
+            $filename = $file;
+        }
+
+        $response = new Stream();
+        $response->setStream(fopen($file, 'r'))
+            ->setStatusCode(200)
+            ->setStreamName(basename($file));
+
+        $headers = new Headers();
+        $headers->addHeaders([
+            'Pragma'                    => 'public',
+            'Expires'                   => '@0', // @0, because zf2 parses date as string to \DateTime() object
+            'Cache-Control'             => 'must-revalidate, post-check=0, pre-check=0',
+            'Cache-Control'             => 'public',
+            'Content-Description'       => 'File Transfer',
+            'Content-Type'              => $contentType,
+            'Content-Disposition'       => 'attachment; filename="' . basename($filename) . '"',
+            'Content-Transfer-Encoding' => 'binary',
+            'Content-Length'            => filesize($file),
+        ]);
+
+        $response->setHeaders($headers);
+
+        return $response;
+    }
+
+    /**
      * Action "download".
      *
-     * @return mixed
+     * @return Stream|Response
      */
     public function downloadAction()
     {
@@ -244,38 +290,41 @@ class ExportController extends AbstractActionController implements ControllerInt
             return $this->redirect()->toRoute('export');
         }
 
-        $response = new Stream();
-        $response->setStream(fopen($fileToDownload, 'r'))
-            ->setStatusCode(200)
-            ->setStreamName(basename($fileToDownload));
-
-        $headers = new Headers();
-        $headers->addHeaders([
-            'Content-Disposition' => 'attachment; filename="' . basename($fileToDownload) .'"',
-            'Content-Type'        => 'application/octet-stream',
-            'Content-Length'      => filesize($fileToDownload),
-            'Expires'             => '@0', // @0, because zf2 parses date as string to \DateTime() object
-            'Cache-Control'       => 'must-revalidate',
-            'Pragma'              => 'public'
-        ]);
-
-        $response->setHeaders($headers);
-
-        return $response;
+        return $this->sendFile($fileToDownload);
     }
 
     /**
      * Action "compress".
      *
-     * @return mixed
+     * @return Stream|Response
      */
     public function compressAction()
     {
-        $this->flashmessenger()->addInfoMessage('Zip download not yet implemented');
+        $request = $this->getRequest();
 
-        return $this->redirect()->toRoute('export');
+        if (!$request->isPost()) {
+            return $this->redirect()->toRoute('export');
+        }
 
-        // TODO
-        //$zip = new \ZipArchive();
+        $data    = $request->getPost()->toArray();
+        $zipfile = tempnam(sys_get_temp_dir(), self::EXPORT_FILE_PREFIX);
+
+        // Zip selected files together
+        $zip = new \ZipArchive();
+        $zip->open($zipfile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+        foreach ($data['download'] as $locale => $files) {
+            foreach ($files as $file) {
+                $fileToZip = realpath(getcwd() . self::EXPORT_PATH . $locale . '/' . $file);
+
+                if ($fileToZip) {
+                    $zip->addFile($fileToZip, $locale . '/' . $file);
+                }
+            }
+        }
+
+        $zip->close();
+
+        return $this->sendFile($zipfile, self::EXPORT_FILE_PREFIX . '.zip', 'application/zip');
     }
 }

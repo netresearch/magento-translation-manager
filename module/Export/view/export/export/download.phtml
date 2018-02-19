@@ -33,12 +33,13 @@ $this->headTitle($title);
                             <tr>
                                 <td>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="download[<?php $file['locale'] ?>]" id="download_<?= $this->escapeHtmlAttr($id) ?>" value="<?= $this->escapeHtmlAttr($file['filename']) ?>">
+                                        <input class="form-check-input" type="checkbox" name="download[<?= $file['locale'] ?>][]" id="download_<?= $this->escapeHtmlAttr($id) ?>" value="<?= $this->escapeHtmlAttr($file['filename']) ?>">
                                         <label class="form-check-label" for="download_<?= $this->escapeHtmlAttr($id) ?>"></label>
                                     </div>
                                 </td>
                                 <td>
-                                    <a href="<?= $this->url('export', [ 'action' => 'download'], [ 'query' => [ 'locale' => $file['locale'],  'file' => $file['filename'] ] ]) ?>"><?= $this->escapeHtml($file['filename']) ?></a>
+                                    <?php $downloadUrl = $this->url('export', [ 'action' => 'download'], [ 'query' => [ 'locale' => $file['locale'],  'file' => $file['filename'] ] ]); ?>
+                                    <a href="<?= $downloadUrl ?>"><?= $this->escapeHtml($file['filename']) ?></a>
                                 </td>
                                 <td>
                                     <?= $this->flag($file['locale']) ?>
@@ -49,7 +50,7 @@ $this->headTitle($title);
                     </tbody>
                 </table>
 
-                <button type="submit" value="single" name="rowid" class="btn btn-success pull-right" id="downloadAllButton">
+                <button type="submit" value="zip" name="zipButton" class="btn btn-success pull-right" id="zipButton">
                     <?= $this->translate('Download all selected as zip') ?>
                 </button>
             </div>
@@ -62,7 +63,7 @@ $this->headTitle($title);
 $("document").ready(function () {
     // Toggle all checkboxes
     $(':checkbox[name="selectAll"]').click (function () {
-        $(':checkbox[name="download[]"]').prop('checked', this.checked);
+        $(':checkbox[name^="download["]').prop('checked', this.checked);
     });
 });
 
